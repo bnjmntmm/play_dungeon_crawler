@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EnemyConfig" format=3 uid="uid://dvr7humrbyatx"]
+
+[ext_resource type="Script" uid="uid://belt2hta6ej20" path="res://feature/editor tool/ConfigBase.gd" id="1_yo3e1"]
+
+[resource]
+script = ExtResource("1_yo3e1")
+metadata/_custom_type_script = "uid://belt2hta6ej20"

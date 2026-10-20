@@ -1,0 +1,146 @@
+[gd_scene format=3 uid="uid://b67wubyj4rlpj"]
+
+[ext_resource type="Texture2D" uid="uid://6xto8waiaegk" path="res://feature/shadow outline shader/Shadow_plt_shadow_s01.png" id="1_p04p2"]
+
+[sub_resource type="GDScript" id="GDScript_ie1n7"]
+script/source = "@tool
+extends Control
+
+@onready var save_button: Button = $PanelContainer/VBoxContainer/SaveButton
+
+func _ready() -> void:
+	populate_texture_selection()
+
+func populate_texture_selection():
+	var path = \"res://feature/Cracks/\"
+	var grid_con_path = $MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
+	print(\"populating texture grid\")
+	var dir = DirAccess.open(path)
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		
+		while file_name != \"\":
+			if dir.current_is_dir():
+				print(\"folder: \" + file_name)
+				
+			else:
+				# filter by file ending
+				var img:Image
+				var tex:ImageTexture
+				if file_name.ends_with(\"png\"):
+					print(\"file: \" + file_name)
+					img = Image.load_from_file(path + file_name)
+					tex = ImageTexture.create_from_image(img)
+				
+				# perhaps do normal button plus background instead?
+				
+				var button = TextureButton.new()
+				grid_con_path.add_child(button)
+				button.texture_normal = tex
+				
+				# on button press setze variable (verknüpfe das signal I guess)
+				button.pressed.connect(on_texture_button_clicked)
+			file_name = dir.get_next()
+	else:
+		print(\"Textures Filepath could not be accessed\")
+	
+func on_texture_button_clicked():
+	# how do I know which button it is being pressed?
+	print(\"click\")
+
+#export the config
+func _on_save_button_pressed() -> void:
+	print(\"creating config resource\")
+	var config_file:EnemyConfig = EnemyConfig.new()
+	config_file.author = \"new name\"
+	ResourceSaver.save(config_file,\"res://config.tres\")
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
+font_size = 28
+
+[node name="ToolUi" type="Control" unique_id=1558812303]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ie1n7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1948257166]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=195820763]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=389213448]
+layout_mode = 2
+text = "Enemy Editor"
+label_settings = SubResource("LabelSettings_p04p2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=873798605]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=211927317]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_p04p2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1856025121]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1792880232]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="TextEdit2" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1713452182]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="TextEdit3" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=899199129]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer" unique_id=630466370]
+layout_mode = 2
+text = "Texture Selection"
+label_settings = SubResource("LabelSettings_p04p2")
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1447178299]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1359343169]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer" unique_id=594782071]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1569103048]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Schreib hier deinen Namen rein"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1406486929]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Save"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
