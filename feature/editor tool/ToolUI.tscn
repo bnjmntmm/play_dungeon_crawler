@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b67wubyj4rlpj"]
 
-[ext_resource type="Texture2D" uid="uid://6xto8waiaegk" path="res://feature/shadow outline shader/Shadow_plt_shadow_s01.png" id="1_p04p2"]
+[ext_resource type="Texture2D" uid="uid://5qngx823b77k" path="res://feature/editor tool/Cracks/Cracks_02-512x512.png" id="1_p04p2"]
+[ext_resource type="Texture2D" uid="uid://cx313cyyhra11" path="res://feature/editor tool/Cracks/Cracks_01-512x512.png" id="2_pifnq"]
 
 [sub_resource type="GDScript" id="GDScript_ie1n7"]
 script/source = "@tool
@@ -10,9 +11,9 @@ extends Control
 
 func _ready() -> void:
 	populate_texture_selection()
-
+	
 func populate_texture_selection():
-	var path = \"res://feature/Cracks/\"
+	var path = \"res://feature/editor tool/Cracks/\"
 	var grid_con_path = $MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
 	print(\"populating texture grid\")
 	var dir = DirAccess.open(path)
@@ -28,23 +29,37 @@ func populate_texture_selection():
 				# filter by file ending
 				var img:Image
 				var tex:ImageTexture
+				
 				if file_name.ends_with(\"png\"):
 					print(\"file: \" + file_name)
 					img = Image.load_from_file(path + file_name)
 					tex = ImageTexture.create_from_image(img)
 				
-				# perhaps do normal button plus background instead?
-				
-				var button = TextureButton.new()
-				grid_con_path.add_child(button)
-				button.texture_normal = tex
-				
-				# on button press setze variable (verknüpfe das signal I guess)
-				button.pressed.connect(on_texture_button_clicked)
+					# perhaps do normal button plus background instead?
+					
+					var margin_con = MarginContainer.new()
+					grid_con_path.add_child(margin_con)
+					var margin_value:int = 5
+					margin_con.add_theme_constant_override(\"margin_top\", margin_value)
+					margin_con.add_theme_constant_override(\"margin_left\", margin_value)
+					margin_con.add_theme_constant_override(\"margin_bottom\", margin_value)
+					margin_con.add_theme_constant_override(\"margin_right\", margin_value)
+					margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+					margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
+					
+					var button = TextureButton.new()
+					margin_con.add_child(button)
+					print(\"tex: \", tex)
+					button.texture_normal = tex
+					button.ignore_texture_size = true
+					button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+					
+					# on button press setze variable (verknüpfe das signal I guess)
+					button.pressed.connect(on_texture_button_clicked)
 			file_name = dir.get_next()
 	else:
 		print(\"Textures Filepath could not be accessed\")
-	
+	print_tree_pretty()
 func on_texture_button_clicked():
 	# how do I know which button it is being pressed?
 	print(\"click\")
@@ -96,6 +111,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 0
 texture = ExtResource("1_p04p2")
+expand_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1856025121]
 layout_mode = 2
@@ -127,10 +143,102 @@ size_flags_vertical = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1359343169]
 layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 4
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer" unique_id=594782071]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+columns = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1235115548]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer" unique_id=350229904]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=727697578]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer2" unique_id=1155894825]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1965690275]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer3" unique_id=678330174]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1206838579]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer4" unique_id=952759230]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2022497749]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer5" unique_id=462365529]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer6" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2062224647]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer6" unique_id=1418675036]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer7" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=65616001]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer7" unique_id=1943167143]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="MarginContainer8" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=227467497]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer8" unique_id=2019224706]
+layout_mode = 2
+texture_normal = ExtResource("2_pifnq")
+ignore_texture_size = true
+stretch_mode = 5
 
 [node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1569103048]
 layout_mode = 2
