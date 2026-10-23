@@ -7,16 +7,25 @@
 script/source = "@tool
 extends Control
 
-@onready var save_button: Button = $PanelContainer/VBoxContainer/SaveButton
+@onready var save_button: Button = $MarginContainer/VBoxContainer/SaveButton
+@onready var grid_con = $MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
+@onready var image_dir = \"res://feature/editor tool/Cracks/\"
+@export var grid_columns:int = 4
+@export var grid_item_size:Vector2i = Vector2i(0,250)
+@export var grid_item_margin:int = 5
 
 func _ready() -> void:
+	clear_grid()
 	populate_texture_selection()
 	
+func clear_grid():
+	for child in grid_con.get_children():
+		child.queue_free()
+	
 func populate_texture_selection():
-	var path = \"res://feature/editor tool/Cracks/\"
-	var grid_con_path = $MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
+	grid_con.columns = grid_columns
 	print(\"populating texture grid\")
-	var dir = DirAccess.open(path)
+	var dir = DirAccess.open(image_dir)
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
@@ -32,18 +41,17 @@ func populate_texture_selection():
 				
 				if file_name.ends_with(\"png\"):
 					print(\"file: \" + file_name)
-					img = Image.load_from_file(path + file_name)
+					img = Image.load_from_file(image_dir + file_name)
 					tex = ImageTexture.create_from_image(img)
 				
 					# perhaps do normal button plus background instead?
 					
 					var margin_con = MarginContainer.new()
-					grid_con_path.add_child(margin_con)
-					var margin_value:int = 5
-					margin_con.add_theme_constant_override(\"margin_top\", margin_value)
-					margin_con.add_theme_constant_override(\"margin_left\", margin_value)
-					margin_con.add_theme_constant_override(\"margin_bottom\", margin_value)
-					margin_con.add_theme_constant_override(\"margin_right\", margin_value)
+					grid_con.add_child(margin_con)
+					margin_con.add_theme_constant_override(\"margin_top\", grid_item_margin)
+					margin_con.add_theme_constant_override(\"margin_left\", grid_item_margin)
+					margin_con.add_theme_constant_override(\"margin_bottom\", grid_item_margin)
+					margin_con.add_theme_constant_override(\"margin_right\", grid_item_margin)
 					margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 					margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
 					
@@ -53,13 +61,14 @@ func populate_texture_selection():
 					button.texture_normal = tex
 					button.ignore_texture_size = true
 					button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+					button.custom_minimum_size = grid_item_size
 					
 					# on button press setze variable (verknüpfe das signal I guess)
 					button.pressed.connect(on_texture_button_clicked)
 			file_name = dir.get_next()
 	else:
 		print(\"Textures Filepath could not be accessed\")
-	print_tree_pretty()
+
 func on_texture_button_clicked():
 	# how do I know which button it is being pressed?
 	print(\"click\")
@@ -153,6 +162,7 @@ size_flags_vertical = 3
 columns = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1235115548]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -164,6 +174,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=727697578]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -175,6 +186,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1965690275]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -186,6 +198,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1206838579]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -197,6 +210,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer5" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2022497749]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -208,6 +222,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer6" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2062224647]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -219,6 +234,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer7" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=65616001]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -230,6 +246,7 @@ ignore_texture_size = true
 stretch_mode = 5
 
 [node name="MarginContainer8" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=227467497]
+custom_minimum_size = Vector2(0, 250)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
