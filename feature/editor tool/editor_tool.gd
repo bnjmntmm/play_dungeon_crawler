@@ -11,5 +11,7 @@ func _run() -> void:
 	
 	var scene = levelScene.instantiate() as Control
 	window.add_child(scene)
+	if scene.has_method("initialize"):
+		scene.initialize()
 	
 	window.close_requested.connect(func():window.queue_free())

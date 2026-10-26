@@ -15,6 +15,10 @@ extends Control
 @export var grid_item_margin:int = 5
 
 func _ready() -> void:
+	pass
+
+func initialize():
+	print(\"initializing\")
 	clear_grid()
 	populate_texture_selection()
 	
@@ -43,8 +47,6 @@ func populate_texture_selection():
 					print(\"file: \" + file_name)
 					img = Image.load_from_file(image_dir + file_name)
 					tex = ImageTexture.create_from_image(img)
-				
-					# perhaps do normal button plus background instead?
 					
 					var margin_con = MarginContainer.new()
 					grid_con.add_child(margin_con)
@@ -55,12 +57,13 @@ func populate_texture_selection():
 					margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 					margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
 					
-					var button = TextureButton.new()
+					var button = Button.new()
 					margin_con.add_child(button)
 					print(\"tex: \", tex)
-					button.texture_normal = tex
-					button.ignore_texture_size = true
-					button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+					button.icon = tex
+					button.expand_icon = true
+					button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+					button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 					button.custom_minimum_size = grid_item_size
 					
 					# on button press setze variable (verknüpfe das signal I guess)
@@ -161,101 +164,20 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1235115548]
-custom_minimum_size = Vector2(0, 250)
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=876442287]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer" unique_id=350229904]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer" unique_id=1902660199]
 layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=727697578]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer2" unique_id=1155894825]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1965690275]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer3" unique_id=678330174]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=1206838579]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer4" unique_id=952759230]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2022497749]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer5" unique_id=462365529]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer6" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=2062224647]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer6" unique_id=1418675036]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer7" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=65616001]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer7" unique_id=1943167143]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="MarginContainer8" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=227467497]
-custom_minimum_size = Vector2(0, 250)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer8" unique_id=2019224706]
-layout_mode = 2
-texture_normal = ExtResource("2_pifnq")
-ignore_texture_size = true
-stretch_mode = 5
+icon = ExtResource("2_pifnq")
+icon_alignment = 1
+expand_icon = true
 
 [node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1569103048]
 layout_mode = 2
