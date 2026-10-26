@@ -7,8 +7,8 @@
 script/source = "@tool
 extends Control
 
-@onready var save_button: Button = $MarginContainer/VBoxContainer/SaveButton
-@onready var grid_con = $MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer
+@onready var save_button: Button = $MarginContainer/VBoxContainer/HBoxContainer/SaveButton
+@onready var grid_con = $MarginContainer/VBoxContainer/TabContainer/VBoxContainer/ScrollContainer/GridContainer
 @onready var image_dir = \"res://feature/editor tool/Cracks/\"
 @export var grid_columns:int = 4
 @export var grid_item_size:Vector2i = Vector2i(0,250)
@@ -18,7 +18,7 @@ func _ready() -> void:
 	pass
 
 func initialize():
-	print(\"initializing\")
+	print(\"initializing texture grid\")
 	clear_grid()
 	populate_texture_selection()
 	
@@ -36,7 +36,8 @@ func populate_texture_selection():
 		
 		while file_name != \"\":
 			if dir.current_is_dir():
-				print(\"folder: \" + file_name)
+				pass
+				#print(\"folder: \" + file_name)
 				
 			else:
 				# filter by file ending
@@ -44,7 +45,7 @@ func populate_texture_selection():
 				var tex:ImageTexture
 				
 				if file_name.ends_with(\"png\"):
-					print(\"file: \" + file_name)
+					#print(\"file: \" + file_name)
 					img = Image.load_from_file(image_dir + file_name)
 					tex = ImageTexture.create_from_image(img)
 					
@@ -59,7 +60,7 @@ func populate_texture_selection():
 					
 					var button = Button.new()
 					margin_con.add_child(button)
-					print(\"tex: \", tex)
+					#print(\"tex: \", tex)
 					button.icon = tex
 					button.expand_icon = true
 					button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -116,55 +117,33 @@ layout_mode = 2
 text = "Enemy Editor"
 label_settings = SubResource("LabelSettings_p04p2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=873798605]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=211927317]
-layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("1_p04p2")
-expand_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1856025121]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1792880232]
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer" unique_id=2024299482]
 layout_mode = 2
 size_flags_vertical = 3
-placeholder_text = "Enemy Name"
+current_tab = 0
 
-[node name="TextEdit2" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1713452182]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer" unique_id=1496741337]
 layout_mode = 2
-size_flags_vertical = 3
-placeholder_text = "Enemy Name"
+metadata/_tab_index = 0
 
-[node name="TextEdit3" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=899199129]
-layout_mode = 2
-size_flags_vertical = 3
-placeholder_text = "Enemy Name"
-
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer" unique_id=630466370]
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer" unique_id=630466370]
 layout_mode = 2
 text = "Texture Selection"
 label_settings = SubResource("LabelSettings_p04p2")
 
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1447178299]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer" unique_id=1359343169]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1359343169]
-layout_mode = 2
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 4
+vertical_scroll_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer" unique_id=594782071]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer/ScrollContainer" unique_id=594782071]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer" unique_id=876442287]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer/ScrollContainer/GridContainer" unique_id=876442287]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -173,21 +152,55 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/ScrollContainer/GridContainer/MarginContainer" unique_id=1902660199]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer/ScrollContainer/GridContainer/MarginContainer" unique_id=1902660199]
 layout_mode = 2
 icon = ExtResource("2_pifnq")
 icon_alignment = 1
 expand_icon = true
 
-[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer" unique_id=1569103048]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer" unique_id=873798605]
+visible = false
 layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/TabContainer/HBoxContainer" unique_id=211927317]
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_p04p2")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/HBoxContainer" unique_id=1856025121]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/TabContainer/HBoxContainer/VBoxContainer" unique_id=1792880232]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="TextEdit2" type="TextEdit" parent="MarginContainer/VBoxContainer/TabContainer/HBoxContainer/VBoxContainer" unique_id=1713452182]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="TextEdit3" type="TextEdit" parent="MarginContainer/VBoxContainer/TabContainer/HBoxContainer/VBoxContainer" unique_id=899199129]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Enemy Name"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1049529257]
+layout_mode = 2
+
+[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1569103048]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 placeholder_text = "Schreib hier deinen Namen rein"
 
-[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer" unique_id=1406486929]
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Save"
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
