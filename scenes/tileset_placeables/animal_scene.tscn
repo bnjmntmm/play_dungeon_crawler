@@ -1,3 +1,10 @@
 [gd_scene format=3 uid="uid://brw30a03c54k3"]
 
+[ext_resource type="Script" uid="uid://dw0aycqe0hkeq" path="res://scenes/tileset_placeables/animal_scene.gd" id="1_3k0lt"]
+[ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
+
 [node name="AnimalScene" type="Node2D" unique_id=1055973036]
+script = ExtResource("1_3k0lt")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=128266348]
+texture = ExtResource("1_dn6mg")

@@ -1,0 +1,16 @@
+[gd_resource type="TileSet" format=3 uid="uid://bgcdbug7xbr73"]
+
+[ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="1_ptak3"]
+[ext_resource type="PackedScene" uid="uid://vya4ew8gd6qm" path="res://scenes/tileset_placeables/obstacle_scene.tscn" id="2_yomwq"]
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_subvo"]
+resource_name = "Animals"
+scenes/1/scene = ExtResource("1_ptak3")
+
+[sub_resource type="TileSetScenesCollectionSource" id="TileSetScenesCollectionSource_l3lo2"]
+resource_name = "Obstacles"
+scenes/1/scene = ExtResource("2_yomwq")
+
+[resource]
+sources/0 = SubResource("TileSetScenesCollectionSource_subvo")
+sources/1 = SubResource("TileSetScenesCollectionSource_l3lo2")
