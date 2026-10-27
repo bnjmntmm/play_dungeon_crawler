@@ -13,6 +13,7 @@ texture = ExtResource("1_i7gst")
 offset = Vector2(0, -6.175)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1940550431]
+freeze = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1041089228]
 shape = SubResource("RectangleShape2D_q034m")
