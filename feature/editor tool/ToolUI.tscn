@@ -14,6 +14,10 @@ extends Control
 @export var grid_item_size:Vector2i = Vector2i(0,250)
 @export var grid_item_margin:int = 5
 
+@onready var sprite_2d: Sprite2D = %Sprite2D
+
+var buttonDictionary: Dictionary[Button, ImageTexture]
+
 func _ready() -> void:
 	pass
 
@@ -67,15 +71,21 @@ func populate_texture_selection():
 					button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
 					button.custom_minimum_size = grid_item_size
 					
+					buttonDictionary.get_or_add(button)
+					buttonDictionary.set(button, tex)
+					
 					# on button press setze variable (verknüpfe das signal I guess)
 					button.pressed.connect(on_texture_button_clicked)
 			file_name = dir.get_next()
 	else:
-		print(\"Textures Filepath could not be accessed\")
+		print(\"Textures Filepath \", image_dir , \" could not be accessed\")
+	print(buttonDictionary)
 
 func on_texture_button_clicked():
-	# how do I know which button it is being pressed?
-	print(\"click\")
+	for control:Control in grid_con.get_children():
+		var button := control.get_child(0) as Button
+		if button.is_hovered() == true:
+			sprite_2d.texture = buttonDictionary.get(button)
 
 #export the config
 func _on_save_button_pressed() -> void:
@@ -133,6 +143,7 @@ size = Vector2i(559, 271)
 render_target_update_mode = 4
 
 [node name="Sprite2D" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=30905324]
+unique_name_in_owner = true
 position = Vector2(179, 71)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_hdnnn")
