@@ -3,6 +3,8 @@ extends Node
 signal start_fade(is_in: bool)
 signal change_level(level_data: PackedByteArray)
 
+var nextEntryDoor : LevelDoor
+
 var debug_mode_enabled : bool
 var debug_level : LevelConfig
 
@@ -17,10 +19,6 @@ func _ready() -> void:
 	if debug_mode_enabled:
 		load_new_room()
 	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func room_fade_event(is_in: bool) -> void:
 	start_fade.emit(is_in)
