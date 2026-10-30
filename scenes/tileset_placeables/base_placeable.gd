@@ -3,7 +3,7 @@ extends Node2D
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 
-@export var auto_init: bool = true
+@export var auto_init: bool = false
 @export var config: BaseConfig
 
 func _ready() -> void:
