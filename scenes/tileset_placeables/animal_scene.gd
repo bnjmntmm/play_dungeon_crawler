@@ -15,6 +15,7 @@ var _last_target_pos := Vector2.INF
 var _repath_timer: Timer
 
 func _ready() -> void:
+	super._ready()
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
 	
 func set_movement_target(movement_target: Vector2):
@@ -42,7 +43,8 @@ func _physics_process(delta):
 	else:
 		_on_velocity_computed(new_velocity)
 
-func _change_ai_state():
+func _change_ai_state(new_state: animal_ai_state):
+	
 	pass
 
 func _get_config_source() -> Dictionary:
