@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=3 uid="uid://yqomn35lug1w"]
+
+[ext_resource type="Script" uid="uid://dnr7fpx6ekix5" path="res://assets/scripts/config/AnimalConfig.gd" id="1_0l5wx"]
+[ext_resource type="Script" uid="uid://cep00j5i076v4" path="res://assets/scripts/config/LevelConfig.gd" id="1_mqhhy"]
+[ext_resource type="Resource" uid="uid://bxvrh8w58hh7c" path="res://custom_data/test_kind2/animal/animal_test_kind2.tres" id="2_b5lcb"]
+[ext_resource type="Script" uid="uid://dg684dquf4dwp" path="res://assets/scripts/config/BaseConfig.gd" id="3_r1ot8"]
+[ext_resource type="Resource" uid="uid://d1axup47vsymc" path="res://custom_data/test_kind2/obstacle/obstacle_test_kind2.tres" id="4_7si7m"]
+
+[resource]
+script = ExtResource("1_mqhhy")
+uuid = "1287278127818"
+display_name = "Animal Test"
+tile_map_data = PackedByteArray(0, 0, 9, 0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 0, 9, 0, 5, 0, 1, 0, 0, 0, 0, 0, 1, 0)
+animal_resource_data = Dictionary[Vector2, ExtResource("1_0l5wx")]({
+Vector2(9, 4): ExtResource("2_b5lcb")
+})
+obstacle_resource_data = Dictionary[Vector2, ExtResource("3_r1ot8")]({
+Vector2(9, 5): ExtResource("4_7si7m")
+})
+metadata/_custom_type_script = "uid://cep00j5i076v4"
