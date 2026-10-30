@@ -1,5 +1,5 @@
 @tool
-class_name EditorTool
+class_name AnimalEditorTool
 extends EditorScript
 
 var window:Window = Window.new()
