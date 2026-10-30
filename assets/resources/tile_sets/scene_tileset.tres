@@ -12,5 +12,6 @@ resource_name = "Obstacles"
 scenes/1/scene = ExtResource("2_yomwq")
 
 [resource]
+navigation_layer_0/layers = 1
 sources/0 = SubResource("TileSetScenesCollectionSource_subvo")
 sources/1 = SubResource("TileSetScenesCollectionSource_l3lo2")
