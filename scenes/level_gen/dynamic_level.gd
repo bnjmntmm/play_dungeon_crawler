@@ -8,6 +8,7 @@ signal on_change_level_complete
 @export var debug_entry : LevelDoor
 
 @onready var default_start_door: LevelDoor = $LevelExits/LevelDoor3
+@onready var main_level_layer: TileMapLayer = $TileLayers/MainLevelLayer
 @onready var level_objects_tile_layer: TileMapLayer = $TileLayers/LevelObjectsTileLayer
 @onready var player: PlayerCharacter = $Player
 
@@ -34,5 +35,12 @@ func _process(delta: float) -> void:
 func change_level(level_data: PackedByteArray) -> void:
 	level_objects_tile_layer.clear()
 	level_objects_tile_layer.set_tile_map_data_from_array(level_data)
+	level_objects_tile_layer.update_internals()
+	
+	main_level_layer.notify_runtime_tile_data_update()
+	main_level_layer.update_internals()
+	await get_tree().physics_frame
+	
 	on_change_level_complete.emit()
+	GameManager.on_room_loaded()
 	pass

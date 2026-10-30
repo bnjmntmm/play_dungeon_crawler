@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AnimalConfig" format=3 uid="uid://bxvrh8w58hh7c"]
+
+[ext_resource type="Script" uid="uid://dnr7fpx6ekix5" path="res://assets/scripts/config/AnimalConfig.gd" id="1_8ulet"]
+[ext_resource type="Texture2D" uid="uid://b6lbstk5iobae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 6.png" id="2_58jle"]
+
+[resource]
+script = ExtResource("1_8ulet")
+health = 100
+damage = 100
+speed = 100.0
+attack_speed = 100.0
+detection_range = 100.0
+uuid = "4"
+sprite = ExtResource("2_58jle")
+metadata/_custom_type_script = "uid://dnr7fpx6ekix5"

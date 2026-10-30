@@ -3,6 +3,7 @@ extends Node
 signal start_fade(is_in: bool)
 signal change_level(level_data: PackedByteArray)
 signal player_reposition(new_pos: Vector2)
+signal init_configs()
 
 var nextEntryDoor : LevelDoor
 
@@ -14,8 +15,10 @@ var all_level_configs: Array[LevelConfig]
 var unused_level_configs: Array[LevelConfig]
 var max_room_to_generate: int
 var current_room_index: int
+var current_level_config: LevelConfig
 
 const CUSTOM_DATA_PATH: String = "res://custom_data"
+const RESOURCE_EXTENSIONS: PackedStringArray = ["tres", "res"]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,11 +34,13 @@ func _load_all_configs(dir_path: String) -> Array[LevelConfig]:
 	
 	for file: String in DirAccess.get_files_at(dir_path):
 		var file_name: String = file.trim_suffix(".remap").trim_suffix(".import")
-		var file_path: String = dir_path.path_join(file_name)
-		if !ResourceLoader.exists(file_path, "LevelConfig"):
+		if file_name.get_extension() not in RESOURCE_EXTENSIONS:
 			continue
-		var config : LevelConfig = load(file_path)
-		if config is LevelConfig:
+		var file_path: String = dir_path.path_join(file_name)
+		if !ResourceLoader.exists(file_path):
+			continue
+		var config : LevelConfig = load(file_path) as LevelConfig
+		if config:
 			configs.append(config)
 	return configs
 
@@ -68,8 +73,11 @@ func init_room_change() -> void:
 	start_fade.emit(true)
 
 func _load_new_room() -> void:
-	var chosen_level: LevelConfig = _choose_next_level()
-	change_level.emit(chosen_level.tile_map_data)
+	current_level_config = _choose_next_level()
+	change_level.emit(current_level_config.tile_map_data)
+	pass
+	
+func on_room_loaded() -> void:
+	init_configs.emit()
 	player_reposition.emit(nextEntryDoor.global_position)
 	start_fade.emit(false)
-	pass
