@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://b5d5wutgrruw2"]
+
+[ext_resource type="Script" uid="uid://7sspo37ie605" path="res://scenes/ui/scene_fader/scene_fader.gd" id="1_70u3f"]
+
+[node name="SceneFader" type="Control" unique_id=382022906]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_70u3f")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=812289968]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

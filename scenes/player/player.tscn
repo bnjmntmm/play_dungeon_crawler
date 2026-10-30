@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dad5rvg2vb10d"]
+
+[ext_resource type="Texture2D" uid="uid://bkw5g76nvky8" path="res://icon.svg" id="1_8afob"]
+[ext_resource type="Script" uid="uid://i6t8jjxgsfpa" path="res://scenes/player/player.gd" id="1_dovo2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8ttl3"]
+radius = 14.035668
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_48lqx"]
+radius = 70.00714
+
+[node name="Player" type="CharacterBody2D" unique_id=2108247644]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_dovo2")
+
+[node name="AttackDamageHealth" type="Node" parent="." unique_id=1712468708]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1414600469]
+position = Vector2(4.7683716e-07, -4.7683716e-07)
+scale = Vector2(0.19140625, 0.19140625)
+texture = ExtResource("1_8afob")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1549203928]
+shape = SubResource("CircleShape2D_8ttl3")
+
+[node name="ThrowArea" type="Area2D" parent="." unique_id=710564937]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ThrowArea" unique_id=694434095]
+shape = SubResource("CircleShape2D_48lqx")
+
+[node name="RecheckNearestAnimal" type="Timer" parent="." unique_id=814111372]
+wait_time = 1.2
+autostart = true
+
+[node name="ThrowTimer" type="Timer" parent="." unique_id=1456668592]
+wait_time = 0.3
+autostart = true
+
+[connection signal="timeout" from="RecheckNearestAnimal" to="." method="_on_recheck_nearest_animal_timeout"]
+[connection signal="timeout" from="ThrowTimer" to="." method="_on_throw_timer_timeout"]

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://vya4ew8gd6qm"]
+
+[ext_resource type="Script" uid="uid://but6tg2inwbu1" path="res://scenes/tileset_placeables/obstacle_scene.gd" id="1_aal6r"]
+[ext_resource type="Texture2D" uid="uid://cqpw8auq34nvo" path="res://assets/sprites/Dungeon Gathering Free Version/Structure.png" id="1_i7gst"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q034m"]
+
+[node name="ObstacleScene" type="Node2D" unique_id=879393062]
+script = ExtResource("1_aal6r")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2065844501]
+texture = ExtResource("1_i7gst")
+offset = Vector2(0, -6.175)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1940550431]
+freeze = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1041089228]
+shape = SubResource("RectangleShape2D_q034m")
