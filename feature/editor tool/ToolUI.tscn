@@ -140,8 +140,10 @@ func _on_save_button_pressed() -> void:
 		else:
 			allow = false
 	if allow:
-		ResourceSaver.save(config_file,\"res://config.tres\")
-		print(\"saved file to: res://config.tres\")
+		var file_name:String = Time.get_time_string_from_system()
+		var path:String = \"res://animal_config_\" + file_name + \".tres\"
+		ResourceSaver.save(config_file,path)
+		print(\"saved file to: \", path)
 	else:
 		print(\"Can not save, some values are invalid\")
 
