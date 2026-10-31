@@ -30,9 +30,14 @@ var soundDictionary: Dictionary[int, AudioStream]
 const invalid_color:Color = Color(1,0,0)
 @onready var sprite_2d: Sprite2D = %Sprite2D
 
+
+@onready var grid_container: GridContainer = $MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2/GridContainer
+
+
 var config_file:AnimalConfig
 
 func _ready() -> void:
+	grid_container.print_tree_pretty()
 	pass
 
 func initialize():
@@ -241,7 +246,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
-size = Vector2i(559, 292)
+size = Vector2i(559, 268)
 render_target_update_mode = 4
 
 [node name="Sprite2D" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=30905324]
@@ -250,33 +255,29 @@ position = Vector2(179, 71)
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_hdnnn")
 
-[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1388389838]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2097317905]
 layout_mode = 2
 size_flags_horizontal = 3
-current_tab = 0
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer" unique_id=2097317905]
-layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
-metadata/_tab_index = 0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer" unique_id=92768060]
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer" unique_id=850213073]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 0
+columns = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=1417263086]
+[node name="Health Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=85800958]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=85800958]
-layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 2
 size_flags_vertical = 6
 text = "Health bzw. Hunger"
 
-[node name="Health_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=1730987390]
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=2141802192]
+layout_mode = 2
+
+[node name="Health_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer" unique_id=1730987390]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -284,135 +285,134 @@ size_flags_vertical = 6
 placeholder_text = "Wie viel Hunger hat er?"
 emoji_menu_enabled = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer" unique_id=731290711]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer" unique_id=731290711]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=2015195885]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer/VBoxContainer" unique_id=595064271]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=2015195885]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=1936389039]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=595064271]
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2" unique_id=2033671799]
+[node name="Damage Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=2033671799]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Damage"
 
-[node name="Damage_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2" unique_id=1313984796]
+[node name="BoxContainer3" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1022441110]
+layout_mode = 2
+
+[node name="Damage_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3" unique_id=1313984796]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 placeholder_text = "Wie viel Schaden macht er?"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2" unique_id=1398777008]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3" unique_id=1398777008]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2/VBoxContainer" unique_id=1155992538]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2/VBoxContainer" unique_id=1775305237]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1155992538]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=1986785163]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1775305237]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3" unique_id=447410307]
+[node name="Speed Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=447410307]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Speed"
 
-[node name="Speed_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3" unique_id=1641494396]
+[node name="BoxContainer4" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1727291097]
+layout_mode = 2
+
+[node name="Speed_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4" unique_id=1641494396]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 placeholder_text = "Wie schnell ist es?"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3" unique_id=669454830]
+[node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4" unique_id=669454830]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3/VBoxContainer" unique_id=426035668]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3/VBoxContainer" unique_id=461872552]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=426035668]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=454984263]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=461872552]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4" unique_id=643198895]
+[node name="Attack Speed Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=643198895]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Attack Speed"
 
-[node name="AttackSpeed_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4" unique_id=327957175]
+[node name="BoxContainer5" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=2109588221]
+layout_mode = 2
+
+[node name="AttackSpeed_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5" unique_id=327957175]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 placeholder_text = "Wie schnell greift es an?"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4" unique_id=844066815]
+[node name="VBoxContainer4" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5" unique_id=844066815]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4/VBoxContainer" unique_id=529518658]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4/VBoxContainer" unique_id=731481201]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=529518658]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=26570802]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=731481201]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5" unique_id=1253620146]
+[node name="Detection Range Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1253620146]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Detection Range"
 
-[node name="DetectionRange_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5" unique_id=2110414123]
+[node name="BoxContainer6" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1224855778]
+layout_mode = 2
+
+[node name="DetectionRange_TextEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6" unique_id=2110414123]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 placeholder_text = "Wie weit kann es wahrnehmen?"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5" unique_id=871926486]
+[node name="VBoxContainer5" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6" unique_id=871926486]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5/VBoxContainer" unique_id=3731400]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5/VBoxContainer" unique_id=546946719]
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=3731400]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=159487164]
+[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=546946719]
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer6" unique_id=479894594]
+[node name="Animation Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=479894594]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Animation"
 
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer6" unique_id=1832220064]
+[node name="Animation OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1832220064]
 layout_mode = 2
 size_flags_horizontal = 3
 item_count = 4
@@ -425,172 +425,23 @@ popup/item_2/id = 2
 popup/item_3/text = "Squish"
 popup/item_3/id = 3
 
-[node name="HBoxContainer7" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2" unique_id=1138891228]
+[node name="Sound Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=683215414]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer7" unique_id=683215414]
-layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 2
 size_flags_vertical = 6
 text = "Sound"
 
-[node name="SoundOption" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer7" unique_id=1482348427]
+[node name="BoxContainer2" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer" unique_id=1613996731]
+layout_mode = 2
+
+[node name="SoundOption" type="OptionButton" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2" unique_id=1482348427]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Sound Preview Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer7" unique_id=765996822]
+[node name="Sound Preview Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2" unique_id=765996822]
 layout_mode = 2
 text = "Preview"
-
-[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer" unique_id=1340048255]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-metadata/_tab_index = 1
-
-[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer" unique_id=1608893132]
-layout_mode = 2
-split_offsets = PackedInt32Array(-14)
-split_offset = -14
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer" unique_id=1856025121]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer" unique_id=261129407]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer/MarginContainer2" unique_id=1698386187]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Damage"
-
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer" unique_id=1456572141]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label4" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer/MarginContainer3" unique_id=2131708403]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Speed"
-
-[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer" unique_id=567884362]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label5" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer/MarginContainer4" unique_id=735350604]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Attack Speed"
-
-[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer" unique_id=665275834]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label6" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer/MarginContainer5" unique_id=1444296197]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Detection Range"
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer" unique_id=1520758635]
-layout_mode = 2
-size_flags_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer/MarginContainer" unique_id=1357772456]
-layout_mode = 2
-size_flags_vertical = 6
-text = "Health / Hunger"
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer" unique_id=941039853]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2" unique_id=853762423]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="LineEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2/MarginContainer" unique_id=1784607654]
-layout_mode = 2
-size_flags_vertical = 6
-placeholder_text = "1"
-draw_control_chars = true
-
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2" unique_id=720574964]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="LineEdit2" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2/MarginContainer2" unique_id=969772122]
-layout_mode = 2
-size_flags_vertical = 6
-
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2" unique_id=700834270]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="LineEdit3" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2/MarginContainer3" unique_id=151523848]
-layout_mode = 2
-size_flags_vertical = 6
-placeholder_text = "Enemy Name"
-
-[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2" unique_id=578628549]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="LineEdit4" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2/MarginContainer4" unique_id=1508333189]
-layout_mode = 2
-size_flags_vertical = 6
-placeholder_text = "Enemy Name"
-
-[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2" unique_id=900732688]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="LineEdit5" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/PanelContainer/HSplitContainer/VBoxContainer2/MarginContainer5" unique_id=588848089]
-layout_mode = 2
-size_flags_vertical = 6
-placeholder_text = "Enemy Name"
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer" unique_id=2024299482]
 layout_mode = 2
@@ -636,12 +487,7 @@ expand_icon = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1049529257]
 layout_mode = 2
-
-[node name="TextEdit" type="TextEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1569103048]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-placeholder_text = "Schreib hier deinen Namen rein"
+size_flags_horizontal = 8
 
 [node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
 unique_name_in_owner = true
@@ -658,12 +504,12 @@ text = "Export"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1746640066]
 
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer/Health_TextEdit" to="." method="_on_health_text_edit_text_changed"]
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer2/Damage_TextEdit" to="." method="_on_damage_text_edit_text_changed"]
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer3/Speed_TextEdit" to="." method="_on_speed_text_edit_text_changed"]
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer4/AttackSpeed_TextEdit" to="." method="_on_attack_speed_text_edit_text_changed"]
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer5/DetectionRange_TextEdit" to="." method="_on_detection_range_text_edit_text_changed"]
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer7/SoundOption" to="." method="_on_sound_option_item_selected"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/TabContainer/MarginContainer/VBoxContainer2/HBoxContainer7/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/Health_TextEdit" to="." method="_on_health_text_edit_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/Damage_TextEdit" to="." method="_on_damage_text_edit_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/Speed_TextEdit" to="." method="_on_speed_text_edit_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/AttackSpeed_TextEdit" to="." method="_on_attack_speed_text_edit_text_changed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/DetectionRange_TextEdit" to="." method="_on_detection_range_text_edit_text_changed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2/SoundOption" to="." method="_on_sound_option_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton2" to="." method="_on_save_button_pressed"]
