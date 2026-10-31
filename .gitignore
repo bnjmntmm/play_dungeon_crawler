@@ -28,3 +28,5 @@ Thumbs.db
 .godothub.json
 .godothub/
 /addons/script-ide
+
+*.tmp

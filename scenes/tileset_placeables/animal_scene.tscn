@@ -3,8 +3,17 @@
 [ext_resource type="Script" uid="uid://dw0aycqe0hkeq" path="res://scenes/tileset_placeables/animal_scene.gd" id="1_3k0lt"]
 [ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
 
-[node name="AnimalScene" type="Node2D" unique_id=1055973036]
+[sub_resource type="CircleShape2D" id="CircleShape2D_p52qu"]
+
+[node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
+collision_layer = 2
 script = ExtResource("1_3k0lt")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=56172178]
+debug_enabled = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=466218718]
+shape = SubResource("CircleShape2D_p52qu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=128266348]
 texture = ExtResource("1_dn6mg")
