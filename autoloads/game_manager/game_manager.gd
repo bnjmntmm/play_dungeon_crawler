@@ -4,6 +4,7 @@ signal start_fade(is_in: bool)
 signal change_level(level_data: PackedByteArray)
 signal player_reposition(new_pos: Vector2)
 signal init_configs()
+signal player_died()
 
 var nextEntryDoor : LevelDoor
 
@@ -24,7 +25,6 @@ const RESOURCE_EXTENSIONS: PackedStringArray = ["tres", "res"]
 func _ready() -> void:
 	all_level_configs = _load_all_configs(CUSTOM_DATA_PATH)
 	_reset_run()
-	pass # Replace with function body.
 
 func _load_all_configs(dir_path: String) -> Array[LevelConfig]:
 	var configs : Array[LevelConfig]

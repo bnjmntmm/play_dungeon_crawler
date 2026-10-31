@@ -7,12 +7,13 @@
 radius = 14.035668
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_48lqx"]
-radius = 70.00714
+radius = 135.0
 
 [node name="Player" type="CharacterBody2D" unique_id=2108247644]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_dovo2")
+debug_joy_light = true
 
 [node name="AttackDamageHealth" type="Node" parent="." unique_id=1712468708]
 
@@ -36,7 +37,7 @@ wait_time = 1.2
 autostart = true
 
 [node name="ThrowTimer" type="Timer" parent="." unique_id=1456668592]
-wait_time = 0.3
+wait_time = 0.5
 autostart = true
 
 [connection signal="timeout" from="RecheckNearestAnimal" to="." method="_on_recheck_nearest_animal_timeout"]

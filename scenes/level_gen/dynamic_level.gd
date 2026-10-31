@@ -10,11 +10,14 @@ signal on_change_level_complete
 @onready var default_start_door: LevelDoor = $LevelExits/LevelDoor3
 @onready var main_level_layer: TileMapLayer = $TileLayers/MainLevelLayer
 @onready var level_objects_tile_layer: TileMapLayer = $TileLayers/LevelObjectsTileLayer
+@onready var room_navigation: NavigationRegion2DRuntimeBuilder = $NavigationRegion2D
 @onready var player: PlayerCharacter = $Player
+@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	canvas_layer.show()
 	GameManager.change_level.connect(change_level)
 	GameManager.nextEntryDoor = default_start_door
 	if debug_mode_enabled:
@@ -37,10 +40,12 @@ func change_level(level_data: PackedByteArray) -> void:
 	level_objects_tile_layer.set_tile_map_data_from_array(level_data)
 	level_objects_tile_layer.update_internals()
 	
-	main_level_layer.notify_runtime_tile_data_update()
-	main_level_layer.update_internals()
-	await get_tree().physics_frame
+	await rebuild_navigation()
 	
 	on_change_level_complete.emit()
 	GameManager.on_room_loaded()
 	pass
+
+## Call after changing floor or obstacle tiles during gameplay.
+func rebuild_navigation() -> void:
+	await room_navigation.rebuild($TileLayers)

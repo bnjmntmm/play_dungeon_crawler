@@ -1,22 +1,64 @@
 class_name AnimalScene 
 extends BasePlaceable
 
-enum animal_ai_state {inactive = 0, passive = 1, aggressive = 2}
+enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 
 @export var movement_speed: float = 4.0
 @export var repath_interval: float = 0.25
 @export var repath_min_distance: float = 8.0
+@export var _attack_windup : float = 0.6
+
+@export_group("Behaviour")
+@export var passive_only: bool = false
+@export_range(0.0, 30.0, 0.1) var lose_player_delay: float = 3.0
+@export var roaming_enabled: bool = true
+## Roaming distances are world-space pixels.
+@export_range(1.0, 1000.0, 1.0) var roam_radius: float = 200.0
+@export_range(0.0, 30.0, 0.1) var roam_pause_min: float = 1.0
+@export_range(0.0, 30.0, 0.1) var roam_pause_max: float = 3.0
+@export_range(0.05, 1.0, 0.05) var roam_speed_multiplier: float = 0.5
 
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var character_body: CharacterBody2D = $"."
+@onready var attack_area: Area2D = $AttackArea
+@onready var attack_windup_timer: Timer = $AttackWindupTimer
+@onready var player_detection_area: Area2D = $PlayerDetectionArea
 
-var current_ai_behavior: animal_ai_state = animal_ai_state.inactive
+var current_ai_behaviour: AnimalAiState = AnimalAiState.inactive
+var _pending_ai_state : AnimalAiState
+var _has_pending_ai_state : bool = false
+var _is_attacking : bool = false
+
+var player: PlayerCharacter
+var _player_in_range := false
+var _is_winding_up : bool = false
+
 var _last_target_pos := Vector2.INF
-var _repath_timer: Timer
+var _repath_elapsed := 0.0
+var _pacified := false
+var _player_detected := false
+var _lost_player_elapsed := 0.0
+var _roam_pause_remaining := 0.0
+var _roam_waiting := false
+
+## health / fed amount coming from the config
+var health : int
 
 func _ready() -> void:
 	super._ready()
+	player = get_tree().get_first_node_in_group("player") as PlayerCharacter
+	if player == null:
+		push_error("AnimalScene could not find a PlayerCharacter in the 'player' group")
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
+	_change_ai_state(AnimalAiState.passive)
+
+func init_config() -> void:
+	super.init_config()
+	var anim_config := config as AnimalConfig
+	if anim_config == null:
+		push_error("AnimalScene requires an AnimalConfig")
+		return
+	health = anim_config.health
 	
 func set_movement_target(movement_target: Vector2):
 	navigation_agent.set_target_position(movement_target)
@@ -25,30 +67,174 @@ func _on_velocity_computed(safe_velocity: Vector2):
 	character_body.velocity = safe_velocity
 	character_body.move_and_slide()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
 func _physics_process(delta):
+	if passive_only and current_ai_behaviour == AnimalAiState.aggressive:
+		_change_ai_state(AnimalAiState.passive)
+	_update_player_loss(delta)
+	if _is_winding_up or _is_attacking:
+		_on_velocity_computed(Vector2.ZERO)
+		return
 	# Do not query when the map has never synchronized and is empty.
 	if NavigationServer2D.map_get_iteration_id(navigation_agent.get_navigation_map()) == 0:
 		return
+	_update_chase_target(delta)
+	_update_roaming(delta)
 	if navigation_agent.is_navigation_finished():
+		_on_velocity_computed(Vector2.ZERO)
 		return
 
 	var next_path_position: Vector2 = navigation_agent.get_next_path_position()
-	var new_velocity: Vector2 = global_position.direction_to(next_path_position) * movement_speed
+	var speed := movement_speed
+	if current_ai_behaviour == AnimalAiState.passive:
+		speed *= roam_speed_multiplier
+	var new_velocity: Vector2 = global_position.direction_to(next_path_position) * speed
 	if navigation_agent.avoidance_enabled:
 		navigation_agent.set_velocity(new_velocity)
 	else:
 		_on_velocity_computed(new_velocity)
 
-func _change_ai_state(new_state: animal_ai_state):
-	
-	pass
+func _update_chase_target(delta: float) -> void:
+	if current_ai_behaviour != AnimalAiState.aggressive or not _player_detected or not is_instance_valid(player):
+		return
 
+	_repath_elapsed += delta
+	if _repath_elapsed < repath_interval:
+		return
+	_repath_elapsed = 0.0
+
+	var min_distance_squared := repath_min_distance * repath_min_distance
+	if _last_target_pos == Vector2.INF or player.global_position.distance_squared_to(_last_target_pos) >= min_distance_squared:
+		set_movement_target(player.global_position)
+		_last_target_pos = player.global_position
+
+func _change_ai_state(new_state: AnimalAiState):
+	if passive_only and new_state == AnimalAiState.aggressive:
+		new_state = AnimalAiState.passive
+	if new_state == current_ai_behaviour and not _is_attacking:
+		return
+	if _is_attacking:
+		_pending_ai_state = new_state
+		_has_pending_ai_state = true
+		return
+	current_ai_behaviour = new_state
+	_roam_waiting = false
+	if new_state != AnimalAiState.aggressive:
+		attack_windup_timer.stop()
+		_is_winding_up = false
+	if new_state == AnimalAiState.inactive:
+		set_movement_target(global_position)
+		character_body.velocity = Vector2.ZERO
+	
 func _get_config_source() -> Dictionary:
 	return GameManager.current_level_config.animal_resource_data
 
+
+#region Everything Attack
+func attack_player():
+	if _is_attacking or passive_only or current_ai_behaviour != AnimalAiState.aggressive:
+		return
+	
+	_is_attacking = true
+	if _player_in_range and is_instance_valid(player):
+		player.get_attacked()
+	_on_player_attack_finished()
+
+func _on_player_attack_finished() -> void:
+	_is_attacking = false
+	if _has_pending_ai_state:
+		_has_pending_ai_state = false
+		_change_ai_state(_pending_ai_state)
+	if _player_in_range and is_instance_valid(player):
+		_start_attack_windup()
+
+func _on_attack_windup_timer_timeout() -> void:
+	_is_winding_up = false
+	if _player_in_range and is_instance_valid(player):
+		attack_player()
+
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if body == player:
+		_player_in_range = true
+		_start_attack_windup()
+
+func _start_attack_windup() -> void:
+	if passive_only or current_ai_behaviour != AnimalAiState.aggressive or _is_winding_up or _is_attacking or not _player_in_range or not is_instance_valid(player):
+		return
+	_is_winding_up = true
+	attack_windup_timer.start(_attack_windup)
+
+func _on_attack_area_body_exited(body: Node2D) -> void:
+	if body == player:
+		_player_in_range = false
+		attack_windup_timer.stop()
+		_is_winding_up = false
+#endregion
+
+## this function is called when we hit a animal with a baguette
 func fed():
-	pass
+	print("current health: ", health)
+	if health > 0 and current_ai_behaviour == AnimalAiState.aggressive:
+		health -= 1
+	if health == 0:
+		_pacified = true
+		_change_ai_state(AnimalAiState.inactive)
+
+
+func _on_player_detection_area_body_entered(body: Node2D) -> void:
+	if body != player:
+		return
+	_player_detected = true
+	_lost_player_elapsed = 0.0
+	if passive_only or _pacified:
+		return
+	_last_target_pos = Vector2.INF
+	_repath_elapsed = repath_interval
+	_change_ai_state(AnimalAiState.aggressive)
+	if _player_in_range:
+		_start_attack_windup()
+
+
+func _on_player_detection_area_body_exited(body: Node2D) -> void:
+	if body == player:
+		_player_detected = false
+		_lost_player_elapsed = 0.0
+		if current_ai_behaviour == AnimalAiState.aggressive:
+			# Continue to the last seen position, without tracking an unseen player.
+			set_movement_target(player.global_position)
+
+
+func _update_player_loss(delta: float) -> void:
+	if current_ai_behaviour != AnimalAiState.aggressive:
+		return
+	if _player_detected and is_instance_valid(player):
+		_lost_player_elapsed = 0.0
+		return
+	_lost_player_elapsed += delta
+	if _lost_player_elapsed >= lose_player_delay:
+		_change_ai_state(AnimalAiState.passive)
+
+
+func _update_roaming(delta: float) -> void:
+	if current_ai_behaviour != AnimalAiState.passive or not roaming_enabled:
+		return
+	# Finish the existing walk before selecting a roaming destination.
+	if not navigation_agent.is_navigation_finished():
+		return
+	if not _roam_waiting:
+		_roam_waiting = true
+		_roam_pause_remaining = randf_range(roam_pause_min, maxf(roam_pause_min, roam_pause_max))
+	_roam_pause_remaining -= delta
+	if _roam_pause_remaining > 0.0:
+		return
+	_roam_waiting = false
+	var map := navigation_agent.get_navigation_map()
+	for attempt in 8:
+		var offset := Vector2.from_angle(randf() * TAU) * sqrt(randf()) * roam_radius
+		var destination := NavigationServer2D.map_get_closest_point(map, global_position + offset)
+		if global_position.distance_to(destination) <= navigation_agent.target_desired_distance + 8.0:
+			continue
+		var path := NavigationServer2D.map_get_path(map, global_position, destination, true, navigation_agent.navigation_layers)
+		if path.is_empty() or path[path.size() - 1].distance_to(destination) > 1.0:
+			continue
+		set_movement_target(destination)
+		return

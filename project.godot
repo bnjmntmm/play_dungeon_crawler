@@ -51,6 +51,7 @@ movement_down={
 2d_physics/layer_2="player"
 2d_physics/layer_3="animals"
 2d_physics/layer_4="leveldoor"
+2d_physics/layer_5="projectile"
 
 [rendering]
 
