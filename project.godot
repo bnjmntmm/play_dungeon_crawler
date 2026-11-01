@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://dh8falkf74mr"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="play_dungeon_crawler"

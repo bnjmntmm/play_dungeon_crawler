@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://db0lumpc20jpc"]
 
 [ext_resource type="Script" uid="uid://ugosx3j58q7l" path="res://scenes/level_door/level_door.gd" id="1_4opm4"]
+[ext_resource type="Script" path="res://scenes/level_door/door_progress_ring.gd" id="2_ring"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ttl3"]
 size = Vector2(30, 30)
@@ -13,4 +14,10 @@ script = ExtResource("1_4opm4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=843943335]
 shape = SubResource("RectangleShape2D_8ttl3")
 
+[node name="ProgressRing" type="Node2D" parent="."]
+position = Vector2(0, -24)
+z_index = 10
+script = ExtResource("2_ring")
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

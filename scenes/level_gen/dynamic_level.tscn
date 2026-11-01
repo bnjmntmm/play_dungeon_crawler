@@ -52,17 +52,17 @@ script = ExtResource("10_navigation")
 [node name="LevelExits" type="Node2D" parent="." unique_id=555639378]
 
 [node name="LevelDoor" parent="LevelExits" unique_id=120435420 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(612, 79)
+position = Vector2(607, 47)
 enter_door = NodePath("../LevelDoor3")
 
 [node name="LevelDoor2" parent="LevelExits" unique_id=1431727498 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(1073, 291)
+position = Vector2(1103, 291)
 enter_door = NodePath("../LevelDoor4")
 
 [node name="LevelDoor3" parent="LevelExits" unique_id=410338649 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(612, 558)
+position = Vector2(612, 591)
 enter_door = NodePath("../LevelDoor")
 
 [node name="LevelDoor4" parent="LevelExits" unique_id=144806269 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(79, 291)
+position = Vector2(48, 291)
 enter_door = NodePath("../LevelDoor2")
