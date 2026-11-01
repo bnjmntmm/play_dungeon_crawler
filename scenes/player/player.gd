@@ -57,6 +57,7 @@ func _physics_process(delta: float) -> void:
 func throw_baguette():
 	if nearest_animal:
 		print("throwing baguette at: ", nearest_animal.name)
+		_vibrate_joy()
 		
 		## spawn baguette
 		var bag = BAGUETTE.instantiate() as Baguette
@@ -130,6 +131,10 @@ func _get_direction_light_color(direction: Vector2) -> Color:
 		return _direction_light_color
 	return horizontal.lerp(vertical, absf(direction.y) / total)
 
+func _vibrate_joy():
+	if Input.is_joy_vibrating(_controller_ids[0]):
+		Input.stop_joy_vibration(_controller_ids[0])
+	Input.start_joy_vibration(_controller_ids[0],0,.2,.1)
 
 func _update_joy_light(delta: float, movement: Vector2) -> void:
 	if not debug_joy_light:
