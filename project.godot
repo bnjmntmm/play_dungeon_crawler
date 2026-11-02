@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="play_dungeon_crawler"
+run/main_scene="uid://o61iiilu83u4"
 config/features=PackedStringArray("4.7")
 config/icon="res://icon.svg"
 
@@ -60,3 +61,4 @@ movement_down={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
