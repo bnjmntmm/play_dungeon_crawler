@@ -10,6 +10,7 @@ enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 
 @export_group("Behaviour")
 @export var passive_only: bool = false
+@export var is_random: bool = false
 @export_range(0.0, 30.0, 0.1) var lose_player_delay: float = 3.0
 @export var roaming_enabled: bool = true
 ## Roaming distances are world-space pixels.
@@ -23,6 +24,7 @@ enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 @onready var attack_area: Area2D = $AttackArea
 @onready var attack_windup_timer: Timer = $AttackWindupTimer
 @onready var player_detection_area: Area2D = $PlayerDetectionArea
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 var current_ai_behaviour: AnimalAiState = AnimalAiState.inactive
 var _pending_ai_state : AnimalAiState
@@ -47,10 +49,13 @@ var health : int
 func _ready() -> void:
 	super._ready()
 	player = get_tree().get_first_node_in_group("player") as PlayerCharacter
-	if player == null:
+	if player  == null and not GameManager.gallery_mode:
 		push_error("AnimalScene could not find a PlayerCharacter in the 'player' group")
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
 	_change_ai_state(AnimalAiState.passive)
+	if is_random:
+		config = GameManager.all_animal_configs.pick_random()
+		init_config()
 
 func init_config() -> void:
 	super.init_config()
@@ -177,6 +182,7 @@ func fed():
 		health -= 1
 	if health == 0:
 		_pacified = true
+		collision_shape_2d.set_deferred("disabled", true)
 		_change_ai_state(AnimalAiState.inactive)
 
 
