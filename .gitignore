@@ -27,6 +27,6 @@ Thumbs.db
 # GodotHub project metadata
 .godothub.json
 .godothub/
-/addons/script-ide
 
 *.tmp
+/addons/script-ide

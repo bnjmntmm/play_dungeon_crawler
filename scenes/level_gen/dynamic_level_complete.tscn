@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cwsa6npfl25dv"]
+
+[ext_resource type="PackedScene" uid="uid://de8duu6fbgrx2" path="res://scenes/ui/combined_ui/combined_ui.tscn" id="1_3awpm"]
+[ext_resource type="PackedScene" uid="uid://bibqh5ftmac50" path="res://scenes/level_gen/dynamic_level.tscn" id="2_3c4ur"]
+
+[node name="DynamicLevelNonGalleryWrapper" type="Node2D" unique_id=493701994]
+
+[node name="CombinedUi" parent="." unique_id=1161388375 instance=ExtResource("1_3awpm")]
+
+[node name="DynamicLevel" parent="." unique_id=1100624506 instance=ExtResource("2_3c4ur")]

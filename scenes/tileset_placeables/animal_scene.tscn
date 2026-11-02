@@ -4,10 +4,20 @@
 [ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p52qu"]
+radius = 7.071068
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3k0lt"]
+radius = 16.492422
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n5yd6"]
+radius = 39.319206
 
 [node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
-collision_layer = 2
+collision_layer = 4
+collision_mask = 3
+motion_mode = 1
 script = ExtResource("1_3k0lt")
+movement_speed = 100.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=56172178]
 debug_enabled = true
@@ -17,3 +27,27 @@ shape = SubResource("CircleShape2D_p52qu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=128266348]
 texture = ExtResource("1_dn6mg")
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=371787952]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=143050581]
+shape = SubResource("CircleShape2D_3k0lt")
+
+[node name="AttackWindupTimer" type="Timer" parent="." unique_id=203444783]
+one_shot = true
+
+[node name="PlayerDetectionArea" type="Area2D" parent="." unique_id=518064162]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=149455349]
+shape = SubResource("CircleShape2D_n5yd6")
+debug_color = Color(0.500858, 0.58136106, 1.92523e-07, 0.41960785)
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
+[connection signal="timeout" from="AttackWindupTimer" to="." method="_on_attack_windup_timer_timeout"]
+[connection signal="body_entered" from="PlayerDetectionArea" to="." method="_on_player_detection_area_body_entered"]
+[connection signal="body_exited" from="PlayerDetectionArea" to="." method="_on_player_detection_area_body_exited"]

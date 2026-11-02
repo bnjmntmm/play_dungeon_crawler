@@ -11,12 +11,17 @@ config_version=5
 [application]
 
 config/name="play_dungeon_crawler"
+run/main_scene="uid://o61iiilu83u4"
 config/features=PackedStringArray("4.7")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameManager="*uid://dh8falkf74mr"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [dotnet]
 
@@ -51,7 +56,9 @@ movement_down={
 2d_physics/layer_2="player"
 2d_physics/layer_3="animals"
 2d_physics/layer_4="leveldoor"
+2d_physics/layer_5="projectile"
 
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)
