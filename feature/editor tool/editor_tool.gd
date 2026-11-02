@@ -9,7 +9,7 @@ func _run() -> void:
 	#window.borderless = true
 	#window.always_on_top = true
 	#/4.0 * 3.0
-	EditorInterface.popup_dialog_centered(window, DisplayServer.screen_get_size())
+	EditorInterface.popup_dialog_centered(window, DisplayServer.screen_get_size()/4.0 * 3.0)
 	
 	var scene = levelScene.instantiate() as Control
 	window.add_child(scene)

@@ -21,7 +21,6 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 @onready var attack_speed_text_edit: LineEdit = %AttackSpeed_TextEdit
 @onready var detection_range_text_edit: LineEdit = %DetectionRange_TextEdit
 
-
 @onready var sound_dir = \"res://feature/editor tool/Sounds/\"
 @onready var sound_option: OptionButton = %SoundOption
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
@@ -159,7 +158,7 @@ func _on_sound_preview_button_pressed() -> void:
 func _on_health_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
 		health_text_edit.set_modulate(Color(1,1,1))
-		config_file.health = new_text.bin_to_int()
+		config_file.health = int(new_text)
 	else:
 		health_text_edit.set_modulate(invalid_color)
 	print(\"new health value: \", new_text)
@@ -167,7 +166,7 @@ func _on_health_text_edit_text_changed(new_text: String) -> void:
 func _on_damage_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
 		damage_text_edit.set_modulate(Color(1,1,1))
-		config_file.damage = new_text.bin_to_int()
+		config_file.damage = int(new_text)
 	else:
 		damage_text_edit.set_modulate(invalid_color)
 	print(\"new damage value: \", new_text)
@@ -175,7 +174,7 @@ func _on_damage_text_edit_text_changed(new_text: String) -> void:
 func _on_speed_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
 		speed_text_edit.set_modulate(Color(1,1,1))
-		config_file.speed = new_text.bin_to_int()
+		config_file.speed = int(new_text)
 	else:
 		speed_text_edit.set_modulate(invalid_color)
 	print(\"new speed value: \", new_text)
@@ -183,7 +182,7 @@ func _on_speed_text_edit_text_changed(new_text: String) -> void:
 func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
 		attack_speed_text_edit.set_modulate(Color(1,1,1))
-		config_file.attack_speed = new_text.bin_to_int()
+		config_file.attack_speed = int(new_text)
 	else:
 		attack_speed_text_edit.set_modulate(invalid_color)
 	print(\"new attack speed value: \", new_text)
@@ -191,10 +190,118 @@ func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
 func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
 		detection_range_text_edit.set_modulate(Color(1,1,1))
-		config_file.detection_range = new_text.bin_to_int()
+		config_file.detection_range = int(new_text)
 	else:
 		detection_range_text_edit.set_modulate(invalid_color)
 	print(\"new detection rate value: \", new_text)
+
+func set_value(lineEdit: LineEdit, value: int):
+	lineEdit.text = str(value)
+
+func _on_health_up_button_pressed() -> void:
+	var i:int
+	if health_text_edit.text == \"\":
+		i = 0
+	else:
+		if health_text_edit.text.is_valid_int():
+			i = int(health_text_edit.text)
+	i = i + 1
+	health_text_edit.text = str(i)
+
+func _on_health_down_button_pressed() -> void:
+	var i:int
+	if health_text_edit.text == \"\":
+		i = 0
+	else:
+		if health_text_edit.text.is_valid_int():
+			i = int(health_text_edit.text)
+	i = i - 1
+	health_text_edit.text = str(i)
+	
+func _on_damage_up_button_pressed() -> void:
+	var i:int
+	if damage_text_edit.text == \"\":
+		i = 0
+	else:
+		if damage_text_edit.text.is_valid_int():
+			i = int(damage_text_edit.text)
+	i = i + 1
+	damage_text_edit.text = str(i)
+
+func _on_damage_down_button_pressed() -> void:
+	var i:int
+	if damage_text_edit.text == \"\":
+		i = 0
+	else:
+		if damage_text_edit.text.is_valid_int():
+			i = int(damage_text_edit.text)
+	i = i - 1
+	damage_text_edit.text = str(i)
+
+func _on_speed_up_button_pressed() -> void:
+	var i:int
+	if speed_text_edit.text == \"\":
+		i = 0
+	else:
+		if speed_text_edit.text.is_valid_int():
+			i = int(speed_text_edit.text)
+	i = i + 1
+	speed_text_edit.text = str(i)
+
+
+func _on_speed_down_button_pressed() -> void:
+	var i:int
+	if speed_text_edit.text == \"\":
+		i = 0
+	else:
+		if speed_text_edit.text.is_valid_int():
+			i = int(speed_text_edit.text)
+	i = i - 1
+	speed_text_edit.text = str(i)
+
+
+func _on_attack_speed_up_button_pressed() -> void:
+	var i:int
+	if attack_speed_text_edit.text == \"\":
+		i = 0
+	else:
+		if attack_speed_text_edit.text.is_valid_int():
+			i = int(attack_speed_text_edit.text)
+	i = i + 1
+	attack_speed_text_edit.text = str(i)
+
+
+func _on_attack_speed_down_button_pressed() -> void:
+	var i:int
+	if attack_speed_text_edit.text == \"\":
+		i = 0
+	else:
+		if attack_speed_text_edit.text.is_valid_int():
+			i = int(attack_speed_text_edit.text)
+	i = i - 1
+	attack_speed_text_edit.text = str(i)
+
+
+func _on_detection_range_up_button_pressed() -> void:
+	var i:int
+	if detection_range_text_edit.text == \"\":
+		i = 0
+	else:
+		if detection_range_text_edit.text.is_valid_int():
+			i = int(detection_range_text_edit.text)
+	i = i + 1
+	detection_range_text_edit.text = str(i)
+
+
+func _on_detection_range_down_button_pressed() -> void:
+	var i:int
+	if detection_range_text_edit.text == \"\":
+		i = 0
+	else:
+		if detection_range_text_edit.text.is_valid_int():
+			i = int(detection_range_text_edit.text)
+	i = i - 1
+	detection_range_text_edit.text = str(i)
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
@@ -283,12 +390,12 @@ emoji_menu_enabled = false
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer" unique_id=731290711]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=2015195885]
+[node name="Health_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=2015195885]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 10
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=595064271]
+[node name="Health_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer" unique_id=595064271]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 10
@@ -312,11 +419,11 @@ placeholder_text = "Wie viel Schaden macht er?"
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3" unique_id=1398777008]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1155992538]
+[node name="Damage_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1155992538]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1775305237]
+[node name="Damage_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2" unique_id=1775305237]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -339,11 +446,11 @@ placeholder_text = "Wie schnell ist es?"
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4" unique_id=669454830]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=426035668]
+[node name="Speed_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=426035668]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=461872552]
+[node name="Speed_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3" unique_id=461872552]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -366,11 +473,11 @@ placeholder_text = "Wie schnell greift es an?"
 [node name="VBoxContainer4" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5" unique_id=844066815]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=529518658]
+[node name="AttackSpeed_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=529518658]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=731481201]
+[node name="AttackSpeed_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4" unique_id=731481201]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -393,11 +500,11 @@ placeholder_text = "Wie weit kann es wahrnehmen?"
 [node name="VBoxContainer5" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6" unique_id=871926486]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=3731400]
+[node name="DetectionRange_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=3731400]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button2" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=546946719]
+[node name="DetectionRange_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5" unique_id=546946719]
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -500,10 +607,20 @@ text = "Export"
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1746640066]
 
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/Health_TextEdit" to="." method="_on_health_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer/Health_Up_Button" to="." method="_on_health_up_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer/Health_Down_Button" to="." method="_on_health_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/Damage_TextEdit" to="." method="_on_damage_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2/Damage_Up_Button" to="." method="_on_damage_up_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer3/VBoxContainer2/Damage_Down_Button" to="." method="_on_damage_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/Speed_TextEdit" to="." method="_on_speed_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3/Speed_Up_Button" to="." method="_on_speed_up_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer4/VBoxContainer3/Speed_Down_Button" to="." method="_on_speed_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/AttackSpeed_TextEdit" to="." method="_on_attack_speed_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4/AttackSpeed_Up_Button" to="." method="_on_attack_speed_up_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer5/VBoxContainer4/AttackSpeed_Down_Button" to="." method="_on_attack_speed_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/DetectionRange_TextEdit" to="." method="_on_detection_range_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5/DetectionRange_Up_Button" to="." method="_on_detection_range_up_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer6/VBoxContainer5/DetectionRange_Down_Button" to="." method="_on_detection_range_down_button_pressed"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2/SoundOption" to="." method="_on_sound_option_item_selected"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer2/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
