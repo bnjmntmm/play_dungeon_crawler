@@ -46,6 +46,9 @@ var _roam_waiting := false
 ## health / fed amount coming from the config
 var health : int
 
+# amountof damage done by animal, not being used yet
+var damage : int
+
 func _ready() -> void:
 	super._ready()
 	player = get_tree().get_first_node_in_group("player") as PlayerCharacter
@@ -64,6 +67,9 @@ func init_config() -> void:
 		push_error("AnimalScene requires an AnimalConfig")
 		return
 	health = anim_config.health
+	movement_speed = anim_config.speed
+	attack_windup_timer.wait_time = float(anim_config.attack_speed)
+	damage = anim_config.damage
 	
 func set_movement_target(movement_target: Vector2):
 	navigation_agent.set_target_position(movement_target)

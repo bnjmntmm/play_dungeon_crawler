@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b67wubyj4rlpj"]
 
-[ext_resource type="Texture2D" uid="uid://f7yyvqmuwkw5" path="res://feature/editor tool/Cracks/Cracks_04-512x512.png" id="1_hdnnn"]
-[ext_resource type="Texture2D" uid="uid://cx313cyyhra11" path="res://feature/editor tool/Cracks/Cracks_01-512x512.png" id="2_pifnq"]
+[ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="2_jd8r5"]
+[ext_resource type="Texture2D" uid="uid://cx313cyyhra11" path="res://feature/editor tool/Cracks/Cracks_01-512x512.png" id="3_mt0ab"]
 
 [sub_resource type="GDScript" id="GDScript_ie1n7"]
 script/source = "@tool
@@ -27,7 +27,10 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 var soundDictionary: Dictionary[int, AudioStream]
 
 const invalid_color:Color = Color(1,0,0)
-@onready var sprite_2d: Sprite2D = %Sprite2D
+@onready var animal_scene: AnimalScene = %AnimalScene
+@onready var attack_timer: Timer = %AttackTimer
+
+
 
 var config_file:AnimalConfig
 
@@ -42,7 +45,7 @@ func initialize():
 	
 	if config_file == null:
 		config_file = AnimalConfig.new()
-	
+
 func clear_grid():
 	for child in grid_con.get_children():
 		child.queue_free()
@@ -97,7 +100,9 @@ func on_texture_button_clicked():
 	for control:Control in grid_con.get_children():
 		var button := control.get_child(0) as Button
 		if button.is_hovered() == true:
-			sprite_2d.texture = buttonDictionary.get(button)
+			for child in animal_scene.get_children():
+				if child is Sprite2D:
+					child.texture = buttonDictionary.get(button)
 			config_file.sprite = buttonDictionary.get(button)
 
 func populate_sound_selection():
@@ -186,6 +191,7 @@ func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
 	else:
 		attack_speed_text_edit.set_modulate(invalid_color)
 	print(\"new attack speed value: \", new_text)
+	attack_timer.wait_time = float(config_file.attack_speed)
 
 func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
@@ -194,6 +200,11 @@ func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	else:
 		detection_range_text_edit.set_modulate(invalid_color)
 	print(\"new detection rate value: \", new_text)
+	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
+	var range_shape:CollisionShape2D =nodes[0]
+	if range_shape.shape is CircleShape2D:
+		range_shape.shape.radius = config_file.detection_range
+	
 
 func set_value(lineEdit: LineEdit, value: int):
 	lineEdit.text = str(value)
@@ -269,6 +280,7 @@ func _on_attack_speed_up_button_pressed() -> void:
 			i = int(attack_speed_text_edit.text)
 	i = i + 1
 	attack_speed_text_edit.text = str(i)
+	attack_speed_text_edit.text_changed.emit(str(i))
 
 
 func _on_attack_speed_down_button_pressed() -> void:
@@ -280,7 +292,7 @@ func _on_attack_speed_down_button_pressed() -> void:
 			i = int(attack_speed_text_edit.text)
 	i = i - 1
 	attack_speed_text_edit.text = str(i)
-
+	attack_speed_text_edit.text_changed.emit(str(i))
 
 func _on_detection_range_up_button_pressed() -> void:
 	var i:int
@@ -302,6 +314,10 @@ func _on_detection_range_down_button_pressed() -> void:
 			i = int(detection_range_text_edit.text)
 	i = i - 1
 	detection_range_text_edit.text = str(i)
+
+
+func _on_attack_timer_timeout() -> void:
+	audio_stream_player.play()
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
@@ -351,11 +367,13 @@ handle_input_locally = false
 size = Vector2i(559, 268)
 render_target_update_mode = 4
 
-[node name="Sprite2D" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=30905324]
+[node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
-position = Vector2(179, 71)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("1_hdnnn")
+position = Vector2(224, 110)
+
+[node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
+unique_name_in_owner = true
+autostart = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2097317905]
 layout_mode = 2
@@ -583,7 +601,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/VBoxContainer/ScrollContainer/TextureGrid/MarginContainer" unique_id=1902660199]
 layout_mode = 2
-icon = ExtResource("2_pifnq")
+icon = ExtResource("3_mt0ab")
 icon_alignment = 1
 expand_icon = true
 
@@ -606,6 +624,7 @@ text = "Export"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1746640066]
 
+[connection signal="timeout" from="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport/AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/Health_TextEdit" to="." method="_on_health_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer/Health_Up_Button" to="." method="_on_health_up_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/GridContainer/BoxContainer/VBoxContainer/Health_Down_Button" to="." method="_on_health_down_button_pressed"]
