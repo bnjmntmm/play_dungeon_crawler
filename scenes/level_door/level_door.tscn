@@ -1,10 +1,21 @@
 [gd_scene format=3 uid="uid://db0lumpc20jpc"]
 
 [ext_resource type="Script" uid="uid://ugosx3j58q7l" path="res://scenes/level_door/level_door.gd" id="1_4opm4"]
-[ext_resource type="Script" path="res://scenes/level_door/door_progress_ring.gd" id="2_ring"]
+[ext_resource type="Script" uid="uid://et520k6y13nx" path="res://scenes/level_door/door_progress_ring.gd" id="2_ring"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ttl3"]
 size = Vector2(30, 30)
+
+[sub_resource type="GDScript" id="GDScript_qrrrs"]
+script/source = "@tool
+extends Marker2D
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	var level_door : LevelDoor = get_parent() as LevelDoor
+	position = level_door.player_spawn_offset
+	pass
+"
 
 [node name="LevelDoor" type="Area2D" unique_id=120435420 groups=["LevelDoor"]]
 collision_layer = 0
@@ -14,10 +25,14 @@ script = ExtResource("1_4opm4")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=843943335]
 shape = SubResource("RectangleShape2D_8ttl3")
 
-[node name="ProgressRing" type="Node2D" parent="."]
-position = Vector2(0, -24)
+[node name="ProgressRing" type="Node2D" parent="." unique_id=858242435]
 z_index = 10
+position = Vector2(0, -24)
 script = ExtResource("2_ring")
+
+[node name="PlayerSpawnPosVisualizer" type="Marker2D" parent="." unique_id=1054212317]
+position = Vector2(20, 0)
+script = SubResource("GDScript_qrrrs")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]
