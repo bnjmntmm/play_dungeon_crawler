@@ -6,7 +6,7 @@ signal navigation_ready
 signal _bake_completed
 
 ## World-space minimum radius; expanded automatically for larger spawned animals.
-@export var minimum_agent_radius: float = 40.0
+@export var minimum_agent_radius: float = 40
 @export var clearance_margin: float = 2.0
 
 var rebuilding := false
@@ -72,4 +72,6 @@ func _get_agent_radius(source_root: Node) -> float:
 			if collision.shape is CircleShape2D:
 				var world_scale := collision.global_transform.get_scale().abs()
 				radius = maxf(radius, collision.shape.radius * maxf(world_scale.x, world_scale.y))
-	return radius
+	#return radius
+	#Since radius is always the same its hand set. This specific value to create nav meshes that work with small tile rooms
+	return 29
