@@ -1,0 +1,135 @@
+[gd_scene format=4 uid="uid://o61iiilu83u4"]
+
+[ext_resource type="Script" uid="uid://cil0ljvp5ayss" path="res://scenes/start_room/start_room.gd" id="1_5nnua"]
+[ext_resource type="PackedScene" uid="uid://dad5rvg2vb10d" path="res://scenes/player/player.tscn" id="1_7m6vu"]
+[ext_resource type="TileSet" uid="uid://vdu1ji6k73dm" path="res://assets/resources/tile_sets/placeholder_tileset.tres" id="1_vd8nb"]
+[ext_resource type="PackedScene" uid="uid://db0lumpc20jpc" path="res://scenes/level_door/level_door.tscn" id="4_vd8nb"]
+[ext_resource type="PackedScene" uid="uid://cwsa6npfl25dv" path="res://scenes/level_gen/dynamic_level_complete.tscn" id="5_6jrso"]
+[ext_resource type="PackedScene" uid="uid://cusdp1hq5coda" path="res://scenes/gallery/gallery.tscn" id="6_k1xoi"]
+[ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="7_6jrso"]
+[ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="8_k1xoi"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_k1xoi"]
+vertices = PackedVector2Array(360, 546, 92, 545, 93, 87, 361, 87)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(93, 87, 361, 87, 360, 546, 92, 545)])
+parsed_collision_mask = 4294967264
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_cirjx"]
+vertices = PackedVector2Array(1060, 534, 794, 534, 794, 100, 1061, 100)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(794, 100, 1061, 100, 1060, 534, 794, 534)])
+parsed_collision_mask = 4294967264
+agent_radius = 0.0
+
+[node name="StartRoom" type="Node2D" unique_id=2119270197]
+script = ExtResource("1_5nnua")
+
+[node name="TileLayers" type="Node2D" parent="." unique_id=342212828]
+
+[node name="MainLevelLayer" type="TileMapLayer" parent="TileLayers" unique_id=975842180]
+scale = Vector2(4, 4)
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAFAAAAAAACAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAJAAAAAQARAAUAAAAKAAAAAAACAAAAAAALAAAAAAACAAAAAAAMAAAAAAACAAAAAAARAAAAAAADAAAAAAARAAkAAAADAAIAAAAQAAkAAAACAAIAAAAPAAkAAAACAAIAAAAOAAkAAAACAAIAAAANAAkAAAACAAIAAAAMAAkAAAACAAIAAAALAAkAAAACAAIAAAAKAAkAAAACAAIAAAAJAAkAAQAQAAUAAAAIAAkAAAACAAIAAAAHAAkAAAACAAIAAAAGAAkAAAACAAIAAAAFAAkAAAACAAIAAAAEAAkAAAACAAIAAAADAAkAAAACAAIAAAACAAkAAAACAAIAAAABAAkAAAACAAIAAAAAAAkAAAABAAIAAAAAAAgAAAABAAEAAAAAAAcAAAABAAEAAAAAAAYAAAABAAEAAAAAAAUAAAABAAEAAAAAAAMAAAABAAEAAAAAAAIAAAABAAEAAAAAAAEAAAABAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAAADAAEAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAARAAgAAAADAAEAAAANAAAAAAACAAAAAAAOAAAAAAACAAAAAAAPAAAAAAACAAAAAAAQAAAAAAACAAAAAAAPAAUAAQABAAEAAAAPAAYAAQABAAEAAAAPAAcAAQABAAEAAAAOAAgAAQABAAEAAAAOAAcAAQABAAEAAAAOAAYAAQABAAEAAAAOAAUAAQABAAEAAAAOAAQAAQABAAEAAAAOAAMAAQABAAEAAAAPAAMAAQABAAEAAAAPAAQAAQABAAEAAAAPAAIAAQABAAEAAAAQAAIAAQABAAEAAAAQAAEAAQABAAEAAAAPAAEAAQABAAEAAAAOAAEAAQABAAEAAAANAAEAAQABAAEAAAAMAAEAAQABAAEAAAALAAEAAQAHAAUAAAAKAAEAAQABAAEAAAAJAAEAAQABAAEAAAAIAAEAAQABAAEAAAAHAAEAAQABAAEAAAAGAAEAAQAHAAUAAAAFAAEAAQABAAEAAAAEAAEAAQABAAEAAAADAAEAAQABAAEAAAACAAEAAQABAAEAAAABAAEAAQABAAEAAAABAAIAAQABAAEAAAABAAMAAQABAAEAAAABAAQAAQABAAEAAAABAAUAAQABAAEAAAABAAYAAQABAAEAAAAGAAMAAQAHAAUAAAAGAAIAAQAHAAUAAAAFAAIAAQABAAEAAAAEAAIAAQABAAEAAAADAAIAAQABAAEAAAACAAIAAQABAAEAAAACAAMAAQABAAEAAAACAAQAAQABAAEAAAACAAUAAQABAAEAAAACAAYAAQABAAEAAAACAAcAAQABAAEAAAABAAcAAQABAAEAAAABAAgAAQABAAEAAAACAAgAAQABAAEAAAADAAgAAQABAAEAAAADAAcAAQABAAEAAAADAAYAAQABAAEAAAADAAUAAQABAAEAAAADAAQAAQABAAEAAAADAAMAAQABAAEAAAAEAAMAAQABAAEAAAAEAAQAAQABAAEAAAAEAAUAAQABAAEAAAAEAAYAAQABAAEAAAAEAAcAAQABAAEAAAAEAAgAAQABAAEAAAAFAAgAAQABAAEAAAAFAAcAAQABAAEAAAAFAAYAAQABAAEAAAAFAAUAAQABAAEAAAAFAAQAAQABAAEAAAAFAAMAAQABAAEAAAAGAAQAAQAHAAUAAAAGAAUAAQAHAAUAAAAGAAYAAQAHAAUAAAAGAAcAAQAHAAUAAAAGAAgAAQAHAAUAAAAHAAgAAQABAAEAAAAHAAcAAQABAAEAAAAHAAYAAQABAAEAAAAHAAUAAQABAAEAAAAHAAQAAQABAAEAAAAHAAMAAQABAAEAAAAHAAIAAQABAAEAAAAIAAIAAQABAAEAAAAIAAMAAQABAAEAAAAIAAQAAQABAAEAAAAIAAUAAQABAAEAAAAIAAYAAQABAAEAAAAIAAcAAQABAAEAAAAIAAgAAQABAAEAAAAJAAgAAQABAAEAAAAJAAcAAQABAAEAAAAJAAYAAQABAAEAAAAJAAUAAQABAAEAAAAJAAQAAQABAAEAAAAJAAMAAQABAAEAAAAJAAIAAQABAAEAAAAKAAIAAQABAAEAAAAKAAMAAQABAAEAAAAKAAQAAQABAAEAAAAKAAUAAQABAAEAAAAKAAYAAQABAAEAAAAKAAcAAQABAAEAAAAKAAgAAQABAAEAAAALAAgAAQAHAAUAAAALAAcAAQAHAAUAAAALAAYAAQAHAAUAAAALAAUAAQAHAAUAAAALAAQAAQAHAAUAAAALAAMAAQAHAAUAAAALAAIAAQAHAAUAAAAMAAIAAQABAAEAAAAMAAMAAQABAAEAAAAMAAQAAQABAAEAAAAMAAUAAQABAAEAAAAMAAYAAQABAAEAAAAMAAcAAQABAAEAAAAMAAgAAQABAAEAAAANAAgAAQABAAEAAAANAAcAAQABAAEAAAANAAYAAQABAAEAAAANAAUAAQABAAEAAAANAAQAAQABAAEAAAANAAMAAQABAAEAAAANAAIAAQABAAEAAAAOAAIAAQABAAEAAAAQAAYAAQABAAEAAAAQAAUAAQABAAEAAAAQAAQAAQABAAEAAAAQAAMAAQABAAEAAAAQAAcAAQABAAEAAAAQAAgAAQABAAEAAAAPAAgAAQABAAEAAAAAAAQAAAABAAEAAAAJAP//AQAFAAIAAAAJAAoAAQAFAAIAAAA=")
+tile_set = ExtResource("1_vd8nb")
+navigation_enabled = false
+
+[node name="ObjectLayer" type="TileMapLayer" parent="TileLayers" unique_id=122636715]
+scale = Vector2(4, 4)
+tile_set = ExtResource("1_vd8nb")
+navigation_enabled = false
+
+[node name="Player" parent="." unique_id=2108247644 instance=ExtResource("1_7m6vu")]
+position = Vector2(607, 327)
+
+[node name="LevelDoorUp" parent="." unique_id=120435420 instance=ExtResource("4_vd8nb")]
+position = Vector2(607, 26)
+is_teleport_door = true
+teleport_destination = ExtResource("5_6jrso")
+
+[node name="LevelDoorDown" parent="." unique_id=821743303 instance=ExtResource("4_vd8nb")]
+position = Vector2(607, 615)
+is_teleport_door = true
+teleport_destination = ExtResource("6_k1xoi")
+
+[node name="StartRoomUI" type="CanvasLayer" parent="." unique_id=379083883]
+
+[node name="SceneFader" parent="StartRoomUI" unique_id=382022906 instance=ExtResource("7_6jrso")]
+
+[node name="AnimalScene" parent="." unique_id=775286256 instance=ExtResource("8_k1xoi")]
+position = Vector2(141, 133)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene2" parent="." unique_id=1743604080 instance=ExtResource("8_k1xoi")]
+position = Vector2(220, 163)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene3" parent="." unique_id=2008317902 instance=ExtResource("8_k1xoi")]
+position = Vector2(143, 321)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene4" parent="." unique_id=1988675076 instance=ExtResource("8_k1xoi")]
+position = Vector2(250, 379)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene5" parent="." unique_id=797910467 instance=ExtResource("8_k1xoi")]
+position = Vector2(317, 223)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene6" parent="." unique_id=1277253426 instance=ExtResource("8_k1xoi")]
+position = Vector2(232, 525)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene7" parent="." unique_id=1081607631 instance=ExtResource("8_k1xoi")]
+position = Vector2(934, 110)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene8" parent="." unique_id=822173101 instance=ExtResource("8_k1xoi")]
+position = Vector2(1037, 163)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene9" parent="." unique_id=1627892494 instance=ExtResource("8_k1xoi")]
+position = Vector2(917, 268)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene10" parent="." unique_id=1986069088 instance=ExtResource("8_k1xoi")]
+position = Vector2(1025, 365)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene11" parent="." unique_id=437133975 instance=ExtResource("8_k1xoi")]
+position = Vector2(924, 491)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="AnimalScene12" parent="." unique_id=1446742355 instance=ExtResource("8_k1xoi")]
+position = Vector2(868, 393)
+scale = Vector2(4, 4)
+passive_only = true
+is_random = true
+
+[node name="NavigationRegionLeft" type="NavigationRegion2D" parent="." unique_id=933267632]
+navigation_polygon = SubResource("NavigationPolygon_k1xoi")
+
+[node name="NavigationRegionRight" type="NavigationRegion2D" parent="." unique_id=1326449532]
+navigation_polygon = SubResource("NavigationPolygon_cirjx")
