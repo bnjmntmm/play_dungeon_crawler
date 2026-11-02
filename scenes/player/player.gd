@@ -74,7 +74,7 @@ func get_attacked():
 	_damage_cooldown_active = true
 	cake_slices -= 1
 	if cake_slices == 0:
-		GameManager.player_died.emit()
+		GameManager.on_player_died()
 
 	await get_tree().create_timer(damage_cooldown).timeout
 	_damage_cooldown_active = false
@@ -85,6 +85,8 @@ func get_nearest_animal() -> AnimalScene:
 	
 	for animal in throw_area.get_overlapping_bodies():
 		if animal is AnimalScene:
+			if animal.current_ai_behaviour != animal.AnimalAiState.aggressive:
+				continue
 			var distance : float = global_position.distance_squared_to(animal.global_position)
 			if distance < nearest_distance:
 				nearest_distance = distance
