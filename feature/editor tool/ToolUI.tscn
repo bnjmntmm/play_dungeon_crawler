@@ -30,14 +30,9 @@ var soundDictionary: Dictionary[int, AudioStream]
 const invalid_color:Color = Color(1,0,0)
 @onready var sprite_2d: Sprite2D = %Sprite2D
 
-
-@onready var grid_container: GridContainer = $MarginContainer/VBoxContainer/HBoxContainer2/MarginContainer/VBoxContainer2/GridContainer
-
-
 var config_file:AnimalConfig
 
 func _ready() -> void:
-	grid_container.print_tree_pretty()
 	pass
 
 func initialize():
