@@ -205,7 +205,6 @@ func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	var range_shape:CollisionShape2D =nodes[0]
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
-	
 
 func set_value(lineEdit: LineEdit, value: int):
 	lineEdit.text = str(value)
@@ -219,6 +218,7 @@ func _on_health_up_button_pressed() -> void:
 			i = int(health_text_edit.text)
 	i = i + 1
 	health_text_edit.text = str(i)
+	health_text_edit.text_changed.emit(str(i))
 
 func _on_health_down_button_pressed() -> void:
 	var i:int
@@ -229,6 +229,7 @@ func _on_health_down_button_pressed() -> void:
 			i = int(health_text_edit.text)
 	i = i - 1
 	health_text_edit.text = str(i)
+	health_text_edit.text_changed.emit(str(i))
 	
 func _on_damage_up_button_pressed() -> void:
 	var i:int
@@ -239,6 +240,7 @@ func _on_damage_up_button_pressed() -> void:
 			i = int(damage_text_edit.text)
 	i = i + 1
 	damage_text_edit.text = str(i)
+	damage_text_edit.text_changed.emit(str(i))
 
 func _on_damage_down_button_pressed() -> void:
 	var i:int
@@ -249,6 +251,7 @@ func _on_damage_down_button_pressed() -> void:
 			i = int(damage_text_edit.text)
 	i = i - 1
 	damage_text_edit.text = str(i)
+	damage_text_edit.text_changed.emit(str(i))
 
 func _on_speed_up_button_pressed() -> void:
 	var i:int
@@ -259,7 +262,7 @@ func _on_speed_up_button_pressed() -> void:
 			i = int(speed_text_edit.text)
 	i = i + 1
 	speed_text_edit.text = str(i)
-
+	speed_text_edit.text_changed.emit(str(i))
 
 func _on_speed_down_button_pressed() -> void:
 	var i:int
@@ -270,7 +273,7 @@ func _on_speed_down_button_pressed() -> void:
 			i = int(speed_text_edit.text)
 	i = i - 1
 	speed_text_edit.text = str(i)
-
+	speed_text_edit.text_changed.emit(str(i))
 
 func _on_attack_speed_up_button_pressed() -> void:
 	var i:int
@@ -282,7 +285,6 @@ func _on_attack_speed_up_button_pressed() -> void:
 	i = i + 1
 	attack_speed_text_edit.text = str(i)
 	attack_speed_text_edit.text_changed.emit(str(i))
-
 
 func _on_attack_speed_down_button_pressed() -> void:
 	var i:int
@@ -302,9 +304,13 @@ func _on_detection_range_up_button_pressed() -> void:
 	else:
 		if detection_range_text_edit.text.is_valid_int():
 			i = int(detection_range_text_edit.text)
-	i = i + 1
+	i = i + 10
 	detection_range_text_edit.text = str(i)
-
+	config_file.detection_range = i
+	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
+	var range_shape:CollisionShape2D =nodes[0]
+	if range_shape.shape is CircleShape2D:
+		range_shape.shape.radius = config_file.detection_range
 
 func _on_detection_range_down_button_pressed() -> void:
 	var i:int
@@ -313,8 +319,13 @@ func _on_detection_range_down_button_pressed() -> void:
 	else:
 		if detection_range_text_edit.text.is_valid_int():
 			i = int(detection_range_text_edit.text)
-	i = i - 1
+	i = i - 10
 	detection_range_text_edit.text = str(i)
+	config_file.detection_range = i
+	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
+	var range_shape:CollisionShape2D =nodes[0]
+	if range_shape.shape is CircleShape2D:
+		range_shape.shape.radius = config_file.detection_range
 
 
 func _on_attack_timer_timeout() -> void:
@@ -323,6 +334,12 @@ func _on_attack_timer_timeout() -> void:
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
 font_size = 28
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_vf8p1"]
+color = Color(1, 1, 1, 1)
+grow_begin = -10.0
+grow_end = -10.0
+thickness = 2
 
 [node name="ToolUi" type="Control" unique_id=1558812303]
 layout_mode = 3
@@ -479,7 +496,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Speed_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer" unique_id=426035668]
+[node name="Speed_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer" unique_id=461872552]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -493,7 +510,7 @@ size_flags_vertical = 6
 placeholder_text = "1 - 10"
 alignment = 1
 
-[node name="Speed_Down_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer" unique_id=461872552]
+[node name="Speed_Up_Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer" unique_id=426035668]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -610,10 +627,18 @@ theme_override_styles/panel = ExtResource("2_vf8p1")
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1496741337]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=630466370]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=69238394]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=630466370]
 layout_mode = 2
 text = "Texture Selection"
 label_settings = SubResource("LabelSettings_p04p2")
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1064551612]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_vf8p1")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1359343169]
 layout_mode = 2
@@ -669,9 +694,9 @@ text = "Export"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Damage Settings/HBoxContainer/Damage_Down_Button" to="." method="_on_damage_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Damage Settings/HBoxContainer/Damage_TextEdit" to="." method="_on_damage_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Damage Settings/HBoxContainer/Damage_Up_Button" to="." method="_on_damage_up_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer/Speed_Up_Button" to="." method="_on_speed_up_button_pressed"]
-[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer/Speed_TextEdit" to="." method="_on_speed_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer/Speed_Down_Button" to="." method="_on_speed_down_button_pressed"]
+[connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer/Speed_TextEdit" to="." method="_on_speed_text_edit_text_changed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/BoxContainer4/HBoxContainer/Speed_Up_Button" to="." method="_on_speed_up_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Attack Speed Settings/HBoxContainer/AttackSpeed_Down_Button" to="." method="_on_attack_speed_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Attack Speed Settings/HBoxContainer/AttackSpeed_TextEdit" to="." method="_on_attack_speed_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Attack Speed Settings/HBoxContainer/AttackSpeed_Up_Button" to="." method="_on_attack_speed_up_button_pressed"]
