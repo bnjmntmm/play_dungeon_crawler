@@ -357,22 +357,27 @@ label_settings = SubResource("LabelSettings_p04p2")
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1859606228]
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1654267999]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("2_vf8p1")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2" unique_id=1859606228]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer" unique_id=801851304]
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
-size = Vector2i(559, 268)
+size = Vector2i(549, 261)
 render_target_update_mode = 4
 
-[node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
+[node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
 position = Vector2(224, 110)
 
-[node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
+[node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
 unique_name_in_owner = true
 autostart = true
 
@@ -657,7 +662,7 @@ text = "Export"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1746640066]
 
-[connection signal="timeout" from="MarginContainer/VBoxContainer/HBoxContainer2/SubViewportContainer/SubViewport/AttackTimer" to="." method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport/AttackTimer" to="." method="_on_attack_timer_timeout"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Health Settings/HBoxContainer/Health_Down_Button" to="." method="_on_health_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Health Settings/HBoxContainer/Health_TextEdit" to="." method="_on_health_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Health Settings/HBoxContainer/Health_Up_Button" to="." method="_on_health_up_button_pressed"]
