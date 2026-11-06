@@ -141,6 +141,8 @@ func _get_direction_light_color(direction: Vector2) -> Color:
 	return horizontal.lerp(vertical, absf(direction.y) / total)
 
 func _vibrate_joy():
+	if not Input.has_joy_vibration(_controller_ids[0]):
+		return
 	if Input.is_joy_vibrating(_controller_ids[0]):
 		Input.stop_joy_vibration(_controller_ids[0])
 	Input.start_joy_vibration(_controller_ids[0],0,.2,.1)
