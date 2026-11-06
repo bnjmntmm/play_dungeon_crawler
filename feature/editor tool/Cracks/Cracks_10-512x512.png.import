@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgoydst5bvtif"
-path="res://.godot/imported/Cracks_14-512x512.png-1161f58cc5db37b2c6aba2a16432260b.ctex"
+uid="uid://c0uj2e57fsd42"
+path="res://.godot/imported/Cracks_10-512x512.png-51ffefcd0de184a62f5c6c43934a507b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://feature/Cracks/Cracks_14-512x512.png"
-dest_files=["res://.godot/imported/Cracks_14-512x512.png-1161f58cc5db37b2c6aba2a16432260b.ctex"]
+source_file="res://feature/editor tool/Cracks/Cracks_10-512x512.png"
+dest_files=["res://.godot/imported/Cracks_10-512x512.png-51ffefcd0de184a62f5c6c43934a507b.ctex"]
 
 [params]
 
