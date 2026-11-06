@@ -170,49 +170,42 @@ func _on_sound_option_item_selected(index: int) -> void:
 func _on_sound_preview_button_pressed() -> void:
 	audio_stream_player.play()
 
-func _on_health_text_edit_text_changed(new_text: String) -> void:
-	if new_text.is_valid_int():
-		var i = int(new_text)
-		var max:int = 10
-		var min:int = 1
-		health_text_edit.set_modulate(Color(1,1,1))
-		config_file.health = int(new_text)
+func change_value(text:LineEdit, new_text:String):
+	if new_text.is_valid_int() and int(new_text) >0:
+		text.set_modulate(Color(1,1,1))
+		return true
 	else:
-		health_text_edit.set_modulate(invalid_color)
-	print(\"new health value: \", new_text)
+		text.set_modulate(invalid_color)
+		return false
+		
+func _on_health_text_edit_text_changed(new_text: String) -> void:
+	if change_value(health_text_edit, new_text):
+		config_file.health = int(new_text)
+		print(\"new health value: \", config_file.health)
 
 func _on_damage_text_edit_text_changed(new_text: String) -> void:
-	if new_text.is_valid_int():
-		damage_text_edit.set_modulate(Color(1,1,1))
+	if change_value(damage_text_edit, new_text):
 		config_file.damage = int(new_text)
-	else:
-		damage_text_edit.set_modulate(invalid_color)
-	print(\"new damage value: \", new_text)
+		print(\"new damage value: \", config_file.damage)
 
 func _on_speed_text_edit_text_changed(new_text: String) -> void:
-	if new_text.is_valid_int():
-		speed_text_edit.set_modulate(Color(1,1,1))
+	if change_value(speed_text_edit, new_text):
 		config_file.speed = int(new_text)
-	else:
-		speed_text_edit.set_modulate(invalid_color)
-	print(\"new speed value: \", new_text)
+		print(\"new speed value: \", config_file.speed)
 
 func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
-	if new_text.is_valid_int():
-		attack_speed_text_edit.set_modulate(Color(1,1,1))
+	if change_value(attack_speed_text_edit, new_text):
 		config_file.attack_speed = int(new_text)
+		print(\"new attack speed value: \", config_file.attack_speed)
+		attack_timer.autostart = true
+		attack_timer.wait_time = float(config_file.attack_speed)
 	else:
-		attack_speed_text_edit.set_modulate(invalid_color)
-	print(\"new attack speed value: \", new_text)
-	attack_timer.wait_time = float(config_file.attack_speed)
+		attack_timer.autostart = false
 
 func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
-	if new_text.is_valid_int():
-		detection_range_text_edit.set_modulate(Color(1,1,1))
+	if change_value(detection_range_text_edit, new_text):
 		config_file.detection_range = int(new_text)
-	else:
-		detection_range_text_edit.set_modulate(invalid_color)
-	print(\"new detection rate value: \", new_text)
+		print(\"new detection rate value: \", config_file.detection_range)
 	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
 	var range_shape:CollisionShape2D =nodes[0]
 	if range_shape.shape is CircleShape2D:
