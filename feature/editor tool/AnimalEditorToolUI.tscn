@@ -20,6 +20,7 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 @onready var damage_text_edit: LineEdit = %Damage_TextEdit
 @onready var speed_text_edit: LineEdit = %Speed_TextEdit
 @onready var attack_speed_text_edit: LineEdit = %AttackSpeed_TextEdit
+@onready var attack_speed_progress_bar: ProgressBar = %\"Attack Speed ProgressBar\"
 @onready var detection_range_text_edit: LineEdit = %DetectionRange_TextEdit
 
 @onready var sound_dir = \"res://feature/editor tool/Sounds/\"
@@ -27,16 +28,20 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 var soundDictionary: Dictionary[int, AudioStream]
 
+@onready var info_label: Label = %InfoLabel
+
 const invalid_color:Color = Color(1,0,0)
 @onready var animal_scene: AnimalScene = %AnimalScene
 @onready var attack_timer: Timer = %AttackTimer
-
-
 
 var config_file:AnimalConfig
 
 func _ready() -> void:
 	pass
+
+func _process(delta: float) -> void:
+	attack_speed_progress_bar.max_value = attack_timer.wait_time
+	attack_speed_progress_bar.value = attack_timer.time_left
 
 func initialize():
 	print(\"initializing texture grid\")
@@ -144,16 +149,20 @@ func _on_save_button_pressed() -> void:
 				allow = false
 		else:
 			allow = false
-	if allow:
+			
+	if allow && sound_option.get_selected_id() != -1 && config_file.sprite != null:
 		var file_name:String = Time.get_time_string_from_system()
 		var path:String = \"res://animal_config_\" + file_name + \".tres\"
 		ResourceSaver.save(config_file,path)
 		print(\"saved file to: \", path)
+		info_label.add_theme_color_override(\"font_color\", Color(1,1,1))
+		info_label.text = \"saved file to: \"+ path + file_name
 	else:
 		print(\"Can not save, some values are invalid\")
+		info_label.add_theme_color_override(\"font_color\", Color(1,0,0))
+		info_label.text = \"Can not save, some values are invalid\"
 
 func _on_sound_option_item_selected(index: int) -> void:
-	# does not work
 	audio_stream_player.stream = soundDictionary.get(index)
 	audio_stream_player.play()
 	config_file.sound = soundDictionary.get(index)
@@ -163,6 +172,9 @@ func _on_sound_preview_button_pressed() -> void:
 
 func _on_health_text_edit_text_changed(new_text: String) -> void:
 	if new_text.is_valid_int():
+		var i = int(new_text)
+		var max:int = 10
+		var min:int = 1
 		health_text_edit.set_modulate(Color(1,1,1))
 		config_file.health = int(new_text)
 	else:
@@ -206,130 +218,59 @@ func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
-func set_value(lineEdit: LineEdit, value: int):
-	lineEdit.text = str(value)
+func text_increment(text:LineEdit, value: int):
+	var i:int
+	if text.text == \"\":
+		i = 0
+	if text.text.is_valid_int():
+		i = int(text.text)
+	i += value
+	if i >= 0:
+		text.text = str(i)
+		text.text_changed.emit(str(i))
+		return i
 
 func _on_health_up_button_pressed() -> void:
-	var i:int
-	if health_text_edit.text == \"\":
-		i = 0
-	else:
-		if health_text_edit.text.is_valid_int():
-			i = int(health_text_edit.text)
-	i = i + 1
-	health_text_edit.text = str(i)
-	health_text_edit.text_changed.emit(str(i))
+	text_increment(health_text_edit, 1)
 
 func _on_health_down_button_pressed() -> void:
-	var i:int
-	if health_text_edit.text == \"\":
-		i = 0
-	else:
-		if health_text_edit.text.is_valid_int():
-			i = int(health_text_edit.text)
-	i = i - 1
-	health_text_edit.text = str(i)
-	health_text_edit.text_changed.emit(str(i))
-	
+	text_increment(health_text_edit, -1)
+
 func _on_damage_up_button_pressed() -> void:
-	var i:int
-	if damage_text_edit.text == \"\":
-		i = 0
-	else:
-		if damage_text_edit.text.is_valid_int():
-			i = int(damage_text_edit.text)
-	i = i + 1
-	damage_text_edit.text = str(i)
-	damage_text_edit.text_changed.emit(str(i))
+	text_increment(damage_text_edit, 1)
 
 func _on_damage_down_button_pressed() -> void:
-	var i:int
-	if damage_text_edit.text == \"\":
-		i = 0
-	else:
-		if damage_text_edit.text.is_valid_int():
-			i = int(damage_text_edit.text)
-	i = i - 1
-	damage_text_edit.text = str(i)
-	damage_text_edit.text_changed.emit(str(i))
+	text_increment(damage_text_edit, -1)
 
 func _on_speed_up_button_pressed() -> void:
-	var i:int
-	if speed_text_edit.text == \"\":
-		i = 0
-	else:
-		if speed_text_edit.text.is_valid_int():
-			i = int(speed_text_edit.text)
-	i = i + 1
-	speed_text_edit.text = str(i)
-	speed_text_edit.text_changed.emit(str(i))
+	text_increment(speed_text_edit, 1)
 
 func _on_speed_down_button_pressed() -> void:
-	var i:int
-	if speed_text_edit.text == \"\":
-		i = 0
-	else:
-		if speed_text_edit.text.is_valid_int():
-			i = int(speed_text_edit.text)
-	i = i - 1
-	speed_text_edit.text = str(i)
-	speed_text_edit.text_changed.emit(str(i))
+	text_increment(speed_text_edit, -1)
 
 func _on_attack_speed_up_button_pressed() -> void:
-	var i:int
-	if attack_speed_text_edit.text == \"\":
-		i = 0
-	else:
-		if attack_speed_text_edit.text.is_valid_int():
-			i = int(attack_speed_text_edit.text)
-	i = i + 1
-	attack_speed_text_edit.text = str(i)
-	attack_speed_text_edit.text_changed.emit(str(i))
+	text_increment(attack_speed_text_edit, 1)
 
 func _on_attack_speed_down_button_pressed() -> void:
-	var i:int
-	if attack_speed_text_edit.text == \"\":
-		i = 0
-	else:
-		if attack_speed_text_edit.text.is_valid_int():
-			i = int(attack_speed_text_edit.text)
-	i = i - 1
-	attack_speed_text_edit.text = str(i)
-	attack_speed_text_edit.text_changed.emit(str(i))
+	text_increment(attack_speed_text_edit, -1)
 
 func _on_detection_range_up_button_pressed() -> void:
-	var i:int
-	if detection_range_text_edit.text == \"\":
-		i = 0
-	else:
-		if detection_range_text_edit.text.is_valid_int():
-			i = int(detection_range_text_edit.text)
-	i = i + 10
-	detection_range_text_edit.text = str(i)
-	config_file.detection_range = i
+	config_file.detection_range = text_increment(detection_range_text_edit, 10)
 	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
 	var range_shape:CollisionShape2D =nodes[0]
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
 func _on_detection_range_down_button_pressed() -> void:
-	var i:int
-	if detection_range_text_edit.text == \"\":
-		i = 0
-	else:
-		if detection_range_text_edit.text.is_valid_int():
-			i = int(detection_range_text_edit.text)
-	i = i - 10
-	detection_range_text_edit.text = str(i)
-	config_file.detection_range = i
+	config_file.detection_range = text_increment(detection_range_text_edit, -10)
 	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
 	var range_shape:CollisionShape2D =nodes[0]
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
-
 func _on_attack_timer_timeout() -> void:
-	audio_stream_player.play()
+	if sound_option.is_hovered() == false and sound_option.get_popup().visible == false:
+		audio_stream_player.play()
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
@@ -387,12 +328,12 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
-size = Vector2i(549, 261)
+size = Vector2i(549, 269)
 render_target_update_mode = 4
 
 [node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
-position = Vector2(224, 110)
+position = Vector2(236, 129)
 
 [node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
 unique_name_in_owner = true
@@ -549,6 +490,16 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "+"
 
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=874304488]
+layout_mode = 2
+
+[node name="Attack Speed ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=781897377]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+max_value = 1.0
+show_percentage = false
+
 [node name="Detection Range Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=1253620146]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -671,6 +622,12 @@ expand_icon = true
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1049529257]
 layout_mode = 2
 size_flags_horizontal = 8
+
+[node name="InfoLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1865273834]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0, 0, 1)
 
 [node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
 unique_name_in_owner = true
