@@ -46,9 +46,6 @@ var _roam_waiting := false
 ## health / fed amount coming from the config
 var health : int
 
-# amountof damage done by animal, not being used yet
-var damage : int
-
 func _ready() -> void:
 	super._ready()
 	player = get_tree().get_first_node_in_group("player") as PlayerCharacter
@@ -59,6 +56,7 @@ func _ready() -> void:
 	if is_random:
 		config = GameManager.all_animal_configs.pick_random()
 		init_config()
+	GameManager.register_animal(self)
 
 func init_config() -> void:
 	super.init_config()
@@ -67,9 +65,6 @@ func init_config() -> void:
 		push_error("AnimalScene requires an AnimalConfig")
 		return
 	health = anim_config.health
-	movement_speed = anim_config.speed
-	attack_windup_timer.wait_time = float(anim_config.attack_speed)
-	damage = anim_config.damage
 	
 func set_movement_target(movement_target: Vector2):
 	navigation_agent.set_target_position(movement_target)
@@ -205,6 +200,15 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	if _player_in_range:
 		_start_attack_windup()
 
+func set_passive_state(is_passive: bool)->void :
+	if (AnimalAiState.inactive):
+		return
+	passive_only = is_passive
+	_change_ai_state(AnimalAiState.passive) if is_passive else _change_ai_state(AnimalAiState.aggressive)
+	#Prevents bodyblocking at the door
+	character_body.set_collision_mask_value(2, false if is_passive else true)
+	character_body.set_collision_layer_value(3, false if is_passive else true)
+	_on_velocity_computed(Vector2.ZERO)
 
 func _on_player_detection_area_body_exited(body: Node2D) -> void:
 	if body == player:
@@ -224,7 +228,6 @@ func _update_player_loss(delta: float) -> void:
 	_lost_player_elapsed += delta
 	if _lost_player_elapsed >= lose_player_delay:
 		_change_ai_state(AnimalAiState.passive)
-
 
 func _update_roaming(delta: float) -> void:
 	if current_ai_behaviour != AnimalAiState.passive or not roaming_enabled:

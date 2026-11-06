@@ -8,6 +8,7 @@ const JUMP_VELOCITY = -400.0
 ## cake slices are our lives
 @export var cake_slices = 4
 @export var damage_cooldown: float = 1.0
+@export var use_slice_count_from_manager: bool = false
 
 @export_group("Controller Light")
 @export var debug_joy_light: bool = false
@@ -24,6 +25,7 @@ var _direction_light_color: Color
 var nearest_animal : AnimalScene
 var _movement_lock: bool = false
 var _damage_cooldown_active: bool = false
+var safe_zone_count : int = 0
 
 ## used for instantiating baguette
 var current_level_scene = null
@@ -37,10 +39,13 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	current_level_scene = get_tree().current_scene
 	GameManager.player_reposition.connect(player_room_reset)
+	GameManager.entered_end_room.connect(store_slices_to_manager)
 	_joy_light_color = joy_light_down
 	_direction_light_color = joy_light_down
 	_refresh_joy_lights()
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
+	if (use_slice_count_from_manager):
+		cake_slices = GameManager.player_final_cake_slices
 
 func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector("movement_left", "movement_right","movement_up","movement_down")
@@ -73,8 +78,10 @@ func get_attacked():
 	# Set the guard before awaiting so simultaneous hits only remove one slice.
 	_damage_cooldown_active = true
 	cake_slices -= 1
+	print("slices left: ", cake_slices)
 	if cake_slices == 0:
 		GameManager.on_player_died()
+		set_movement_lock(true)
 
 	await get_tree().create_timer(damage_cooldown).timeout
 	_damage_cooldown_active = false
@@ -137,6 +144,10 @@ func _vibrate_joy():
 	if Input.is_joy_vibrating(_controller_ids[0]):
 		Input.stop_joy_vibration(_controller_ids[0])
 	Input.start_joy_vibration(_controller_ids[0],0,.2,.1)
+	
+func store_slices_to_manager()-> void:
+	GameManager.player_final_cake_slices = cake_slices;
+	pass
 
 func _update_joy_light(delta: float, movement: Vector2) -> void:
 	if not debug_joy_light:

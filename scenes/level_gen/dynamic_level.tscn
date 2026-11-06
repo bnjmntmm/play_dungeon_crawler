@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://bxvrh8w58hh7c" path="res://custom_data/test_kind2/animal/animal_test_kind2.tres" id="8_a3nlj"]
 [ext_resource type="Resource" uid="uid://d1axup47vsymc" path="res://custom_data/test_kind2/obstacle/obstacle_test_kind2.tres" id="9_arqpn"]
 [ext_resource type="Script" uid="uid://bmwpujhyef6jc" path="res://scenes/level_gen/runtime_navigation.gd" id="10_navigation"]
+[ext_resource type="PackedScene" uid="uid://c88w75pb5xu4h" path="res://scenes/util/safe_area.tscn" id="11_a3nlj"]
 
 [node name="DynamicLevel" type="Node2D" unique_id=1100624506]
 script = ExtResource("1_ebv8c")
@@ -38,6 +39,21 @@ obstacle_config_to_spawn = ExtResource("9_arqpn")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1428946343]
 script = ExtResource("10_navigation")
+
+[node name="SafeAreas" type="Node2D" parent="." unique_id=1612479251]
+position = Vector2(1120, 289.00003)
+scale = Vector2(8.839996, 8.08)
+
+[node name="SafeArea" parent="SafeAreas" unique_id=521000747 instance=ExtResource("11_a3nlj")]
+position = Vector2(-58.0317, 38.242577)
+
+[node name="SafeArea2" parent="SafeAreas" unique_id=1443511539 instance=ExtResource("11_a3nlj")]
+position = Vector2(-58.0317, -31.311888)
+
+[node name="SafeArea3" parent="SafeAreas" unique_id=1707402177 instance=ExtResource("11_a3nlj")]
+position = Vector2(-122.39825, 0)
+
+[node name="SafeArea4" parent="SafeAreas" unique_id=1244036859 instance=ExtResource("11_a3nlj")]
 
 [node name="LevelExits" type="Node2D" parent="." unique_id=555639378]
 

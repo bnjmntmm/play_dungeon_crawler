@@ -1,7 +1,5 @@
 extends Node2D
 
-#no const to avoid circular dependency issue
-var main_scene: PackedScene = load("res://scenes/start_room/start_room.tscn") 
 @onready var scene_fader: SceneFader = $CanvasLayer/SceneFader
 
 # Called when the node enters the scene tree for the first time.
@@ -26,4 +24,4 @@ func on_right_pressed() -> void:
 	
 func on_up_pressed() -> void:
 	scene_fader.start_fade(true)
-	GameManager.init_scene_change(main_scene)
+	GameManager.init_start_room_return()

@@ -26,6 +26,7 @@ navigation_enabled = false
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("3_wc4q1")]
 position = Vector2(609, 554)
+use_slice_count_from_manager = true
 
 [node name="EndRoomUI" type="CanvasLayer" parent="." unique_id=1488534486]
 

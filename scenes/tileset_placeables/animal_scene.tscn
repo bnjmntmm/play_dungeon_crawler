@@ -10,7 +10,7 @@ radius = 7.071068
 radius = 16.492422
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5yd6"]
-radius = 1.0
+radius = 39.319206
 
 [node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
 collision_layer = 4
@@ -42,7 +42,7 @@ one_shot = true
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=149455349 groups=["detection_range"]]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=149455349]
 shape = SubResource("CircleShape2D_n5yd6")
 debug_color = Color(0.500858, 0.58136106, 1.92523e-07, 0.41960785)
 
