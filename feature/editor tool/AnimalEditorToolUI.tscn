@@ -264,6 +264,11 @@ func _on_detection_range_down_button_pressed() -> void:
 func _on_attack_timer_timeout() -> void:
 	if sound_option.is_hovered() == false and sound_option.get_popup().visible == false:
 		audio_stream_player.play()
+
+func _on_refresh_pressed() -> void:
+	clear_grid()
+	populate_texture_selection()
+	pass # Replace with function body.
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
@@ -635,6 +640,13 @@ size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Export"
 
+[node name="Refresh" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=181829075]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Refresh"
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1746640066]
 
 [connection signal="timeout" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport/AttackTimer" to="." method="_on_attack_timer_timeout"]
@@ -657,3 +669,4 @@ text = "Export"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton2" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
