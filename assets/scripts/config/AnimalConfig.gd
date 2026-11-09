@@ -18,3 +18,5 @@ extends BaseConfig
 
 ## Sound: The sfx the animal uses
 @export var sound : AudioStreamWAV
+
+@export var animation: Enums.AnimalAnimationType
