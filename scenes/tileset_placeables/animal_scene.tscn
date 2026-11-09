@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dw0aycqe0hkeq" path="res://scenes/tileset_placeables/animal_scene.gd" id="1_3k0lt"]
 [ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
+[ext_resource type="Script" uid="uid://dpiw2yp0cunfg" path="res://scenes/util/sprite_cap_size.gd" id="3_n5yd6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p52qu"]
 radius = 7.071068
@@ -226,6 +227,7 @@ shape = SubResource("CircleShape2D_p52qu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=128266348]
 texture = ExtResource("1_dn6mg")
+script = ExtResource("3_n5yd6")
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=371787952]
 collision_layer = 0
