@@ -5,14 +5,22 @@ extends Control
 
 const LEVEL_SCENE_PATH: String = "res://scenes/level_gen/dynamic_level.tscn"
 const CUSTOM_DATA_PATH: String = "res://custom_data"
-const LEVEL_PATH_TEMPLATE: String = "res://custom_data/%s/level/level_%s.tres"
 const PREVIEW_SCENE_PATH: String = "res://feature/level_editor/level_preview.tscn"
+signal saved(code: String)
+
 const CONFIG_EXTENSIONS: PackedStringArray = ["tres", "res"]
 
-const SAFE_COLOR: Color = Color(0.35, 0.85, 0.45, 0.3)
+## Red, because the bright green zones looked like the place to put things.
+const SAFE_COLOR: Color = Color(0.95, 0.2, 0.15, 0.35)
 const HOVER_COLOR: Color = Color(1, 1, 1, 0.35)
+const HOVER_BLOCKED_COLOR: Color = Color(1, 0.2, 0.15, 0.6)
+const ANIMAL_COLOR: Color = Color(0.55, 0.32, 0.12)
+const OBSTACLE_COLOR: Color = Color(0.16, 0.3, 0.5)
+const MESSAGE_SECONDS: float = 1.6
 
-@onready var palette_grid: GridContainer = %PaletteGrid
+@onready var animal_grid: GridContainer = %AnimalGrid
+@onready var obstacle_grid: GridContainer = %ObstacleGrid
+@onready var identity_box: Control = %IdentityBox
 @onready var eraser_button: Button = %EraserButton
 @onready var room_view: Control = %RoomView
 @onready var room_root: Node2D = %RoomRoot
@@ -33,6 +41,8 @@ var palette_group: ButtonGroup = ButtonGroup.new()
 var loaded_path: String = ""
 var loaded_uuid: String = ""
 var preview_pid: int = -1
+var last_message: String = ""
+var last_message_time: int = 0
 
 ## Inside the Godot editor LevelEditorTool calls initialize(), so opening this scene stays harmless.
 func _ready() -> void:
@@ -140,9 +150,11 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 	return rect
 
 func build_palette() -> void:
-	for button: Node in palette_grid.get_children():
-		button.free()
+	for grid: GridContainer in [animal_grid, obstacle_grid]:
+		for button: Node in grid.get_children():
+			button.free()
 	for config: BaseConfig in _collect_configs(CUSTOM_DATA_PATH):
+		var is_animal: bool = config is AnimalConfig
 		var button: Button = Button.new()
 		button.toggle_mode = true
 		button.button_group = palette_group
@@ -150,11 +162,47 @@ func build_palette() -> void:
 		button.expand_icon = true
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-		button.custom_minimum_size = Vector2(96, 112)
-		button.text = "Tier" if config is AnimalConfig else "Hindernis"
-		button.tooltip_text = config.resource_path.get_file()
+		button.custom_minimum_size = Vector2(120, 120)
+		button.text = _get_config_name(config)
+		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		button.tooltip_text = button.text
+		_style_palette_button(button, ANIMAL_COLOR if is_animal else OBSTACLE_COLOR)
+		button.set_meta("config_path", config.resource_path)
 		button.pressed.connect(_select_config.bind(config))
-		palette_grid.add_child(button)
+		(animal_grid if is_animal else obstacle_grid).add_child(button)
+		if selected_config and selected_config.resource_path == config.resource_path:
+			button.button_pressed = true
+			selected_config = config
+
+func _get_config_name(config: BaseConfig) -> String:
+	if config is AnimalConfig and not (config as AnimalConfig).display_name.is_empty():
+		return (config as AnimalConfig).display_name
+	return "Tier" if config is AnimalConfig else "Hindernis"
+
+func _style_palette_button(button: Button, color: Color) -> void:
+	var styles: Dictionary[String, Color] = {
+		"normal": color,
+		"hover": color.lightened(0.15),
+		"pressed": color.lightened(0.3),
+		"hover_pressed": color.lightened(0.3),
+	}
+	for style_name: String in styles:
+		var style: StyleBoxFlat = StyleBoxFlat.new()
+		style.bg_color = styles[style_name]
+		style.set_corner_radius_all(8)
+		style.set_content_margin_all(6)
+		if style_name.ends_with("pressed"):
+			style.border_color = Color.WHITE
+			style.set_border_width_all(4)
+		button.add_theme_stylebox_override(style_name, style)
+
+## Selects a palette entry by file, e.g. the animal a kid just saved in the other tab.
+func select_config_path(path: String) -> void:
+	for grid: GridContainer in [animal_grid, obstacle_grid]:
+		for button: Button in grid.get_children():
+			if button.get_meta("config_path") == path:
+				button.button_pressed = true
+				button.pressed.emit()
 
 func _collect_configs(dir_path: String) -> Array[BaseConfig]:
 	var configs: Array[BaseConfig] = []
@@ -163,7 +211,8 @@ func _collect_configs(dir_path: String) -> Array[BaseConfig]:
 			configs.append_array(_collect_configs(dir_path.path_join(sub_dir)))
 	for file: String in DirAccess.get_files_at(dir_path):
 		if file.get_extension() in CONFIG_EXTENSIONS:
-			var config: BaseConfig = load(dir_path.path_join(file)) as BaseConfig
+			## REPLACE keeps placed configs valid while picking up changes from the animal tab.
+			var config: BaseConfig = ResourceLoader.load(dir_path.path_join(file), "", ResourceLoader.CACHE_MODE_REPLACE) as BaseConfig
 			if config:
 				configs.append(config)
 	return configs
@@ -196,7 +245,7 @@ func _place_cell(cell: Vector2i) -> void:
 	if cell not in floor_cells:
 		return
 	if cell in safe_cells:
-		_set_status("Vor den Türen muss Platz bleiben.")
+		_notify("Hier nicht! Vor den Türen muss Platz bleiben.")
 		return
 	if draft.get_config(cell) == selected_config:
 		return
@@ -224,6 +273,7 @@ func _update_preview(cell: Vector2i) -> void:
 
 func _show_hover(cell: Vector2i) -> void:
 	hover_rect.visible = cell in floor_cells
+	hover_rect.color = HOVER_BLOCKED_COLOR if cell in safe_cells and selected_config else HOVER_COLOR
 	hover_rect.position = Vector2(cell) * tile_size
 
 func _hide_hover() -> void:
@@ -237,6 +287,21 @@ func _on_clear_button_pressed() -> void:
 	_clear_room()
 	_set_status("Der Raum ist wieder leer.")
 
+## The station picks the kid folder in its header, so the code row here is only for the standalone tool.
+func set_identity_visible(is_visible: bool) -> void:
+	identity_box.visible = is_visible
+
+## Opens the room saved in this kid folder, or an empty room for a new kid.
+func use_kid(code: String) -> void:
+	kid_id_edit.text = code
+	_clear_room()
+	loaded_path = ""
+	loaded_uuid = ""
+	if ResourceLoader.exists(KidFolders.get_level_path(code)):
+		_on_load_button_pressed()
+	else:
+		_set_status("Wähle links etwas aus und klicke es in den Raum.")
+
 func _suggest_code() -> void:
 	kid_id_edit.text = LevelCode.create_unused(CUSTOM_DATA_PATH)
 
@@ -249,7 +314,7 @@ func _on_load_button_pressed() -> void:
 	if kid_id.is_empty():
 		_set_status("Gib zuerst deinen Code ein.")
 		return
-	var path: String = LEVEL_PATH_TEMPLATE % [kid_id, kid_id]
+	var path: String = KidFolders.get_level_path(kid_id)
 	if not ResourceLoader.exists(path):
 		_set_status("Zu diesem Code gibt es noch kein Level.")
 		return
@@ -268,7 +333,7 @@ func _on_load_button_pressed() -> void:
 func _on_try_button_pressed() -> void:
 	var problem: String = _find_room_problem()
 	if not problem.is_empty():
-		_set_status(problem)
+		_notify(problem)
 		return
 	if not _write_preview_level():
 		_set_status("Ausprobieren hat nicht geklappt. Sag dem Dev-Team Bescheid.")
@@ -303,14 +368,14 @@ func _on_save_button_pressed() -> void:
 func _save_level() -> bool:
 	var problem: String = _find_save_problem()
 	if not problem.is_empty():
-		_set_status(problem)
+		_notify(problem)
 		return false
 
 	var kid_id: String = _read_kid_id()
-	var path: String = LEVEL_PATH_TEMPLATE % [kid_id, kid_id]
+	var path: String = KidFolders.get_level_path(kid_id)
 	var level: LevelConfig = LevelConfig.new()
 	level.uuid = loaded_uuid if path == loaded_path else str(ResourceUID.create_id())
-	level.display_name = kid_id
+	level.display_name = KidFolders.get_display_name(kid_id) if KidFolders.load_animal(kid_id) else kid_id
 	draft.apply_to(level, scene_tile_set)
 
 	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
@@ -322,6 +387,7 @@ func _save_level() -> bool:
 	if Engine.is_editor_hint():
 		EditorInterface.get_resource_filesystem().scan()
 	_set_status("Gespeichert! Dein Code ist: %s" % kid_id)
+	saved.emit(kid_id)
 	return true
 
 func _find_save_problem() -> String:
@@ -331,7 +397,7 @@ func _find_save_problem() -> String:
 	var problem: String = _find_room_problem()
 	if not problem.is_empty():
 		return problem
-	var path: String = LEVEL_PATH_TEMPLATE % [kid_id, kid_id]
+	var path: String = KidFolders.get_level_path(kid_id)
 	if path != loaded_path and FileAccess.file_exists(path):
 		return "Diesen Code gibt es schon. Lade dein Level oder nimm einen anderen."
 	return ""
@@ -351,3 +417,32 @@ func _read_kid_id() -> String:
 
 func _set_status(message: String) -> void:
 	status_label.text = message
+
+## The status line alone went unnoticed, so problems also float up from the mouse for a moment.
+func _notify(message: String) -> void:
+	_set_status(message)
+	var now: int = Time.get_ticks_msec()
+	if message == last_message and now - last_message_time < MESSAGE_SECONDS * 1000.0:
+		return
+	last_message = message
+	last_message_time = now
+
+	var label: Label = Label.new()
+	label.text = message
+	label.add_theme_font_size_override("font_size", 30)
+	label.add_theme_color_override("font_color", Color(1, 0.9, 0.3))
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 10)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	room_view.add_child(label)
+	var mouse_position: Vector2 = room_view.get_local_mouse_position()
+	if not Rect2(Vector2.ZERO, room_view.size).has_point(mouse_position):
+		mouse_position = room_view.size / 2.0
+	label.reset_size()
+	label.position = (mouse_position - Vector2(label.size.x / 2.0, label.size.y + 16)).clamp(
+		Vector2.ZERO, room_view.size - label.size)
+
+	var tween: Tween = label.create_tween().set_parallel()
+	tween.tween_property(label, "position:y", label.position.y - 60.0, MESSAGE_SECONDS)
+	tween.tween_property(label, "modulate:a", 0.0, MESSAGE_SECONDS).set_delay(MESSAGE_SECONDS / 2.0)
+	tween.chain().tween_callback(label.queue_free)
