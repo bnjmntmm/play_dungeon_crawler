@@ -2,6 +2,9 @@
 class_name AnimalConfig
 extends BaseConfig
 
+## Display Name: the name the kid gave the animal, shown in the editors
+@export var display_name : String
+
 ## Health: (or Hunger) is the stat how much an animal has to be fed, before they are not attacking anymore
 @export var health : int
 

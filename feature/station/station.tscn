@@ -4,20 +4,68 @@
 [ext_resource type="PackedScene" uid="uid://b67wubyj4rlpj" path="res://feature/editor tool/AnimalEditorToolUI.tscn" id="2_animal"]
 [ext_resource type="PackedScene" path="res://feature/level_editor/level_editor.tscn" id="3_level"]
 
-[node name="Station" type="TabContainer"]
+[node name="Station" type="VBoxContainer"]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+theme_override_constants/separation = 0
 script = ExtResource("1_station")
 
-[node name="Tier" parent="." instance=ExtResource("2_animal")]
+[node name="Header" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Header"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="KidLabel" type="Label" parent="Header/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Dein Tier:"
+
+[node name="KidOption" type="OptionButton" parent="Header/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+fit_to_longest_item = false
+
+[node name="CodeLabel" type="Label" parent="Header/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+
+[node name="Spacer" type="Control" parent="Header/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NextButton" type="Button" parent="Header/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="Tabs" type="TabContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 22
+current_tab = 0
+
+[node name="Tier" parent="Tabs" instance=ExtResource("2_animal")]
+unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="Raum" parent="." instance=ExtResource("3_level")]
+[node name="Raum" parent="Tabs" instance=ExtResource("3_level")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
