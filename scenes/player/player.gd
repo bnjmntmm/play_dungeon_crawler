@@ -70,14 +70,14 @@ func throw_baguette():
 		bag.global_position = global_position
 		bag.direction = global_position.direction_to(nearest_animal.global_position)
 
-func get_attacked():
+func get_attacked(dmg: int):
 	print("got attacked")
 	if _damage_cooldown_active or cake_slices <= 0:
 		return
 
 	# Set the guard before awaiting so simultaneous hits only remove one slice.
 	_damage_cooldown_active = true
-	cake_slices -= 1
+	cake_slices -= dmg
 	print("slices left: ", cake_slices)
 	if cake_slices == 0:
 		GameManager.on_player_died()
