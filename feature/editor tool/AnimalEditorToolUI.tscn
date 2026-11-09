@@ -100,19 +100,16 @@ func populate_texture_selection():
 					buttonDictionary.set(button, tex)
 					
 					# on button press setze variable (verknüpfe das signal I guess)
-					button.pressed.connect(on_texture_button_clicked)
+					button.pressed.connect(on_texture_button_clicked.bind(button))
 			file_name = dir.get_next()
 	else:
 		print(\"Textures Filepath \", image_dir , \" could not be accessed\")
 
-func on_texture_button_clicked():
-	for control:Control in grid_con.get_children():
-		var button := control.get_child(0) as Button
-		if button.is_hovered() == true:
-			for child in animal_scene.get_children():
-				if child is Sprite2D:
-					child.texture = buttonDictionary.get(button)
-			config_file.sprite = buttonDictionary.get(button)
+func on_texture_button_clicked(button:Button):
+	for child in animal_scene.get_children():
+		if child is Sprite2D:
+			child.texture = buttonDictionary.get(button)
+	config_file.sprite = buttonDictionary.get(button)
 
 func populate_sound_selection():
 	print(\"populating sound selection\")
@@ -333,12 +330,17 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
+canvas_item_default_texture_filter = 0
 size = Vector2i(549, 269)
 render_target_update_mode = 4
 
 [node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
 position = Vector2(236, 129)
+
+[node name="Camera2D" type="Camera2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=1859606229]
+position = Vector2(236, 129)
+zoom = Vector2(6, 6)
 
 [node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
 unique_name_in_owner = true
