@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dpe8ten1b60js" path="res://scenes/gallery/gallery.gd" id="1_xl3bd"]
 [ext_resource type="PackedScene" uid="uid://bibqh5ftmac50" path="res://scenes/level_gen/dynamic_level.tscn" id="2_6ursi"]
 [ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="3_5jo7c"]
+[ext_resource type="PackedScene" uid="uid://cjirrmnant0ty" path="res://scenes/ui/gallery_searcher/gallery_searcher.tscn" id="5_67yfb"]
 
 [node name="Gallery" type="Node2D" unique_id=2038479238]
 script = ExtResource("1_xl3bd")
@@ -27,6 +28,8 @@ tile_set = ExtResource("1_cfwji")
 metadata/_edit_group_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1727913442]
+
+[node name="GallerySearcher" parent="CanvasLayer" unique_id=2104103872 instance=ExtResource("5_67yfb")]
 
 [node name="SceneFader" parent="CanvasLayer" unique_id=511355906 instance=ExtResource("3_5jo7c")]
 use_game_manager_callbacks = false
