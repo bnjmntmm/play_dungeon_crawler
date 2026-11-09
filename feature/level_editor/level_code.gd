@@ -22,3 +22,10 @@ static func create_unused(custom_data_path: String) -> String:
 		if not DirAccess.dir_exists_absolute(custom_data_path.path_join(code)):
 			return code
 	return ""
+
+static func clean(text: String) -> String:
+	var code: String = ""
+	for character: String in text.strip_edges().to_lower().replace(" ", "_"):
+		if character == "_" or character.is_valid_ascii_identifier() or character.is_valid_int():
+			code += character
+	return code

@@ -6,12 +6,8 @@ extends Control
 const LEVEL_SCENE_PATH: String = "res://scenes/level_gen/dynamic_level.tscn"
 const CUSTOM_DATA_PATH: String = "res://custom_data"
 const LEVEL_PATH_TEMPLATE: String = "res://custom_data/%s/level/level_%s.tres"
-## The dev team merges every kid folder that has this file.
-const READY_PATH_TEMPLATE: String = "res://custom_data/%s/ready.txt"
 const PREVIEW_SCENE_PATH: String = "res://feature/level_editor/level_preview.tscn"
 const CONFIG_EXTENSIONS: PackedStringArray = ["tres", "res"]
-## The animal editor saves its files straight into the project root with this prefix.
-const TOOL_ANIMAL_PREFIX: String = "animal_config_"
 
 const SAFE_COLOR: Color = Color(0.35, 0.85, 0.45, 0.3)
 const HOVER_COLOR: Color = Color(1, 1, 1, 0.35)
@@ -26,7 +22,6 @@ const HOVER_COLOR: Color = Color(1, 1, 1, 0.35)
 var draft: LevelDraft = LevelDraft.new()
 var selected_config: BaseConfig
 var scene_tile_set: TileSet
-var floor_layer: TileMapLayer
 var floor_cells: Array[Vector2i] = []
 var door_cells: Array[Vector2i] = []
 var safe_cells: Array[Vector2i] = []
@@ -60,31 +55,73 @@ func initialize() -> void:
 	_suggest_code()
 	_set_status("Wähle links etwas aus und klicke es in den Raum.")
 
-## Reads floor, doors and tile sets from the real level scene, so the editor always matches the game.
+## Reads walls, doors and safe areas from the real level scene, so the editor always matches the game.
 func _load_room() -> void:
 	var level_scene: Node = (load(LEVEL_SCENE_PATH) as PackedScene).instantiate()
-	var main_layer: TileMapLayer = level_scene.get_node("TileLayers/MainLevelLayer") as TileMapLayer
+	room_root.add_child(level_scene.get_node("TileLayers/MainLevelLayer").duplicate())
 	var objects_layer: TileMapLayer = level_scene.get_node("TileLayers/LevelObjectsTileLayer") as TileMapLayer
 	scene_tile_set = objects_layer.tile_set
+	tile_size = Vector2(scene_tile_set.tile_size) * objects_layer.scale
 
-	floor_layer = TileMapLayer.new()
-	floor_layer.tile_set = main_layer.tile_set
-	floor_layer.set_tile_map_data_from_array(main_layer.get_tile_map_data_as_array())
-	floor_layer.collision_enabled = false
-	floor_layer.navigation_enabled = false
-	floor_layer.occlusion_enabled = false
-	room_root.add_child(floor_layer)
+	var wall_rects: Array[Rect2] = _get_shape_rects(level_scene, "TileLayers/RoomCollisions")
+	room_rect = wall_rects[0]
+	for wall_rect: Rect2 in wall_rects:
+		room_rect = room_rect.merge(wall_rect)
+	var inner_rect: Rect2 = _get_inner_rect(wall_rects, room_rect.get_center())
+	var first_cell: Vector2i = Vector2i((inner_rect.position / tile_size).floor())
+	var last_cell: Vector2i = Vector2i((inner_rect.end / tile_size).ceil())
+	for x: int in range(first_cell.x, last_cell.x):
+		for y: int in range(first_cell.y, last_cell.y):
+			if inner_rect.has_point(_get_cell_center(Vector2i(x, y))):
+				floor_cells.append(Vector2i(x, y))
 
-	tile_size = Vector2(main_layer.tile_set.tile_size)
-	var used_rect: Rect2i = main_layer.get_used_rect()
-	room_rect = Rect2(Vector2(used_rect.position) * tile_size, Vector2(used_rect.size) * tile_size)
-	for cell: Vector2i in main_layer.get_used_cells():
-		if main_layer.get_cell_tile_data(cell).get_collision_polygons_count(0) == 0:
-			floor_cells.append(cell)
-	for door: Node in level_scene.get_node("LevelExits").get_children():
-		door_cells.append(main_layer.local_to_map((door as Node2D).position / main_layer.scale))
-	safe_cells = LevelRules.get_safe_cells(floor_cells, door_cells)
+	for door: Node2D in level_scene.get_node("LevelExits").get_children():
+		door_cells.append(_get_nearest_floor_cell(door.position + door.get("player_spawn_offset")))
+	var safe_rects: Array[Rect2] = _get_shape_rects(level_scene, "SafeAreas")
+	for cell: Vector2i in floor_cells:
+		var center: Vector2 = _get_cell_center(cell)
+		if safe_rects.any(func(safe_rect: Rect2) -> bool: return safe_rect.has_point(center)):
+			safe_cells.append(cell)
 	level_scene.free()
+
+func _get_shape_rects(level_scene: Node, parent_path: String) -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for shape_node: Node in level_scene.get_node(parent_path).find_children("*", "CollisionShape2D", true, false):
+		var shape_transform: Transform2D = Transform2D.IDENTITY
+		var node: Node = shape_node
+		while node != level_scene:
+			shape_transform = (node as Node2D).transform * shape_transform
+			node = node.get_parent()
+		var shape_size: Vector2 = ((shape_node as CollisionShape2D).shape as RectangleShape2D).size
+		rects.append(shape_transform * Rect2(-shape_size / 2.0, shape_size))
+	return rects
+
+## The walls leave gaps for the doors, so the floor is the space between the innermost wall edges.
+func _get_inner_rect(wall_rects: Array[Rect2], room_center: Vector2) -> Rect2:
+	var inner_start: Vector2 = -Vector2.INF
+	var inner_end: Vector2 = Vector2.INF
+	for wall_rect: Rect2 in wall_rects:
+		var wall_center: Vector2 = wall_rect.get_center()
+		if wall_rect.size.y > wall_rect.size.x:
+			if wall_center.x < room_center.x:
+				inner_start.x = maxf(inner_start.x, wall_rect.end.x)
+			else:
+				inner_end.x = minf(inner_end.x, wall_rect.position.x)
+		elif wall_center.y < room_center.y:
+			inner_start.y = maxf(inner_start.y, wall_rect.end.y)
+		else:
+			inner_end.y = minf(inner_end.y, wall_rect.position.y)
+	return Rect2(inner_start, inner_end - inner_start)
+
+func _get_cell_center(cell: Vector2i) -> Vector2:
+	return (Vector2(cell) + Vector2(0.5, 0.5)) * tile_size
+
+func _get_nearest_floor_cell(point: Vector2) -> Vector2i:
+	var nearest: Vector2i = floor_cells[0]
+	for cell: Vector2i in floor_cells:
+		if _get_cell_center(cell).distance_to(point) < _get_cell_center(nearest).distance_to(point):
+			nearest = cell
+	return nearest
 
 func _build_safe_overlay() -> void:
 	for cell: Vector2i in safe_cells:
@@ -103,7 +140,7 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 	return rect
 
 func _build_palette() -> void:
-	for config: BaseConfig in _collect_configs(CUSTOM_DATA_PATH) + _collect_tool_animals():
+	for config: BaseConfig in _collect_configs(CUSTOM_DATA_PATH):
 		var button: Button = Button.new()
 		button.toggle_mode = true
 		button.button_group = palette_group
@@ -125,15 +162,6 @@ func _collect_configs(dir_path: String) -> Array[BaseConfig]:
 	for file: String in DirAccess.get_files_at(dir_path):
 		if file.get_extension() in CONFIG_EXTENSIONS:
 			var config: BaseConfig = load(dir_path.path_join(file)) as BaseConfig
-			if config:
-				configs.append(config)
-	return configs
-
-func _collect_tool_animals() -> Array[BaseConfig]:
-	var configs: Array[BaseConfig] = []
-	for file: String in DirAccess.get_files_at("res://"):
-		if file.begins_with(TOOL_ANIMAL_PREFIX) and file.get_extension() in CONFIG_EXTENSIONS:
-			var config: AnimalConfig = load("res://".path_join(file)) as AnimalConfig
 			if config:
 				configs.append(config)
 	return configs
@@ -186,7 +214,7 @@ func _update_preview(cell: Vector2i) -> void:
 		return
 	var sprite: Sprite2D = Sprite2D.new()
 	sprite.texture = config.sprite
-	sprite.position = floor_layer.map_to_local(cell)
+	sprite.position = _get_cell_center(cell)
 	sprite.scale = Vector2.ONE * tile_size.x / maxf(config.sprite.get_width(), config.sprite.get_height())
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	room_root.add_child(sprite)
@@ -270,17 +298,6 @@ func _stop_preview() -> void:
 func _on_save_button_pressed() -> void:
 	_save_level()
 
-func _on_finish_button_pressed() -> void:
-	if not _save_level():
-		return
-	var kid_id: String = _read_kid_id()
-	var ready_file: FileAccess = FileAccess.open(READY_PATH_TEMPLATE % kid_id, FileAccess.WRITE)
-	if ready_file == null:
-		_set_status("Speichern hat nicht geklappt. Sag dem Dev-Team Bescheid.")
-		return
-	ready_file.store_line(Time.get_datetime_string_from_system())
-	_set_status("Fertig! Das Dev-Team holt dein Level jetzt ab. Dein Code ist: %s" % kid_id)
-
 func _save_level() -> bool:
 	var problem: String = _find_save_problem()
 	if not problem.is_empty():
@@ -328,11 +345,7 @@ func _find_room_problem() -> String:
 	return ""
 
 func _read_kid_id() -> String:
-	var kid_id: String = ""
-	for character: String in kid_id_edit.text.strip_edges().to_lower().replace(" ", "_"):
-		if character == "_" or character.is_valid_ascii_identifier() or character.is_valid_int():
-			kid_id += character
-	return kid_id
+	return LevelCode.clean(kid_id_edit.text)
 
 func _set_status(message: String) -> void:
 	status_label.text = message

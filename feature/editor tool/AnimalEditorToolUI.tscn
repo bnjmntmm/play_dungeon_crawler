@@ -29,12 +29,14 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 var soundDictionary: Dictionary[int, AudioStream]
 
 @onready var info_label: Label = %InfoLabel
+@onready var code_edit: LineEdit = %CodeEdit
 
 const invalid_color:Color = Color(1,0,0)
 @onready var animal_scene: AnimalScene = %AnimalScene
 @onready var attack_timer: Timer = %AttackTimer
 
 var config_file:AnimalConfig
+var saved_path:String = \"\"
 
 func _ready() -> void:
 	pass
@@ -51,6 +53,7 @@ func initialize():
 	
 	if config_file == null:
 		config_file = AnimalConfig.new()
+	code_edit.text = LevelCode.create_unused(\"res://custom_data\")
 
 func clear_grid():
 	for child in grid_con.get_children():
@@ -150,13 +153,20 @@ func _on_save_button_pressed() -> void:
 		else:
 			allow = false
 			
-	if allow && sound_option.get_selected_id() != -1 && config_file.sprite != null:
-		var file_name:String = Time.get_time_string_from_system()
-		var path:String = \"res://animal_config_\" + file_name + \".tres\"
+	var code:String = LevelCode.clean(code_edit.text)
+	var path:String = \"res://custom_data/\" + code + \"/animal/animal_\" + code + \".tres\"
+	if code == \"\" or (path != saved_path and FileAccess.file_exists(path)):
+		info_label.add_theme_color_override(\"font_color\", Color(1,0,0))
+		info_label.text = \"Can not save, the code is empty or already used\"
+	elif allow && sound_option.get_selected_id() != -1 && config_file.sprite != null:
+		DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 		ResourceSaver.save(config_file,path)
+		saved_path = path
+		if Engine.is_editor_hint():
+			EditorInterface.get_resource_filesystem().scan()
 		print(\"saved file to: \", path)
 		info_label.add_theme_color_override(\"font_color\", Color(1,1,1))
-		info_label.text = \"saved file to: \"+ path + file_name
+		info_label.text = \"saved file to: \"+ path
 	else:
 		print(\"Can not save, some values are invalid\")
 		info_label.add_theme_color_override(\"font_color\", Color(1,0,0))
@@ -626,6 +636,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0, 0, 1)
+
+[node name="CodeEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486930]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_vertical = 8
+placeholder_text = "Code"
 
 [node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
 unique_name_in_owner = true

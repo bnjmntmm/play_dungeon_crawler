@@ -3,24 +3,12 @@ class_name LevelRules
 extends RefCounted
 ## Checks that keep a kid's room playable. Works on plain cells, so it needs no scene.
 
-const SAFE_RADIUS: int = 2
-
 const NEIGHBOURS: Array[Vector2i] = [
 	Vector2i.UP,
 	Vector2i.RIGHT,
 	Vector2i.DOWN,
 	Vector2i.LEFT,
 ]
-
-static func get_safe_cells(floor_cells: Array[Vector2i], door_cells: Array[Vector2i]) -> Array[Vector2i]:
-	var safe_cells: Array[Vector2i] = []
-	for cell: Vector2i in floor_cells:
-		for door_cell: Vector2i in door_cells:
-			var distance: Vector2i = (cell - door_cell).abs()
-			if maxi(distance.x, distance.y) <= SAFE_RADIUS:
-				safe_cells.append(cell)
-				break
-	return safe_cells
 
 static func get_unreachable_doors(
 	floor_cells: Array[Vector2i],
