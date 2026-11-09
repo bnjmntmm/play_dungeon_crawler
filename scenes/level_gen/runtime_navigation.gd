@@ -11,6 +11,7 @@ signal _bake_completed
 
 var rebuilding := false
 var _rebuild_requested := false
+var _bake_finished := false
 
 func rebuild(source_root: Node2D) -> void:
 	_rebuild_requested = true
@@ -24,12 +25,13 @@ func rebuild(source_root: Node2D) -> void:
 		enabled = false
 		# Tile scene instances and queued deletions must settle before parsing.
 		await get_tree().process_frame
-		for child in source_root.get_children():
-			if child is TileMapLayer:
-				child.update_internals()
+		var tile_layers := source_root.find_children("*", "TileMapLayer", true, false)
+		for tile_layer: TileMapLayer in tile_layers:
+			tile_layer.update_internals()
 		await get_tree().process_frame
 
-		for animal in source_root.find_children("*", "CharacterBody2D", true, false):
+		var character_bodies := source_root.find_children("*", "CharacterBody2D", true, false)
+		for animal in character_bodies:
 			if animal is AnimalScene and animal.is_physics_processing():
 				paused_animals.append(animal)
 				animal.set_physics_process(false)
@@ -40,8 +42,11 @@ func rebuild(source_root: Node2D) -> void:
 		polygon.parsed_collision_mask = 1 # World only; exclude player/animal/trigger shapes.
 		var source := NavigationMeshSourceGeometryData2D.new()
 		NavigationServer2D.parse_source_geometry_data(polygon, source, source_root)
+		_bake_finished = false
 		NavigationServer2D.bake_from_source_geometry_data_async(polygon, source, _on_bake_completed)
-		await _bake_completed
+		# Small or empty inputs can invoke the callback before the call returns.
+		if not _bake_finished:
+			await _bake_completed
 
 		var previous_region_iteration := NavigationServer2D.region_get_iteration_id(get_rid())
 		navigation_polygon = polygon
@@ -62,6 +67,7 @@ func rebuild(source_root: Node2D) -> void:
 	navigation_ready.emit()
 
 func _on_bake_completed() -> void:
+	_bake_finished = true
 	_bake_completed.emit()
 
 func _get_agent_radius(source_root: Node) -> float:

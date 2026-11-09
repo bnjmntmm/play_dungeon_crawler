@@ -5,6 +5,7 @@ signal change_level(level_data: PackedByteArray)
 signal player_reposition(new_pos: Vector2)
 signal init_configs()
 signal loaded_new_room(room_name: String)
+signal room_cleared
 signal entered_end_room()
 signal player_died()
 
@@ -30,6 +31,8 @@ var all_animal_configs: Array[AnimalConfig]
 
 var player_final_cake_slices: int = 0
 var animal_register: Array[AnimalScene] = []
+var room_is_cleared: bool = false
+var _room_ready_for_clear_check: bool = false
 
 #no const to avoid circular dependency issue
 var main_scene: PackedScene = load("res://scenes/start_room/start_room.tscn")
@@ -84,6 +87,8 @@ func reset_run() -> void:
 	all_animal_configs = _load_all_animal_configs(CUSTOM_DATA_PATH)
 	unused_level_configs.clear()
 	animal_register.clear()
+	room_is_cleared = false
+	_room_ready_for_clear_check = false
 	unused_level_configs.append_array(all_level_configs)
 	current_room_index = 0
 	GameManager.gallery_mode = false
@@ -132,11 +137,15 @@ func init_room_change() -> void:
 func _load_new_room() -> void:
 	current_level_config = _choose_next_level()
 	animal_register.clear()
+	room_is_cleared = false
+	_room_ready_for_clear_check = false
 	change_level.emit(current_level_config.tile_map_data)
 	pass
 	
 func on_room_loaded() -> void:
 	init_configs.emit()
+	_room_ready_for_clear_check = true
+	_check_room_clear()
 	player_reposition.emit(nextEntryDoor.global_position + nextEntryDoor.player_spawn_offset)
 	loaded_new_room.emit(current_level_config.display_name)
 	start_fade.emit(false)
@@ -191,4 +200,19 @@ func set_all_enemy_passive(passive: bool)->void :
 		animal.set_passive_state(passive)
 
 func register_animal(scene: AnimalScene)-> void:
+	if animal_register.has(scene):
+		return
 	animal_register.append(scene)
+	if not scene.pacified.is_connected(_check_room_clear):
+		scene.pacified.connect(_check_room_clear)
+	if _room_ready_for_clear_check:
+		call_deferred("_check_room_clear")
+
+func _check_room_clear() -> void:
+	if not _room_ready_for_clear_check or room_is_cleared:
+		return
+	for animal: AnimalScene in animal_register:
+		if is_instance_valid(animal) and not animal.is_pacified():
+			return
+	room_is_cleared = true
+	room_cleared.emit()
