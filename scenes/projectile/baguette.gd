@@ -6,6 +6,10 @@ extends Area2D
 
 var direction : Vector2 = Vector2.ZERO
 
+func _ready() -> void:
+	#Clear on screen change
+	GameManager.change_level.connect(queue_free.unbind(1))
+
 func _physics_process(delta: float) -> void:
 	global_position += direction * speed * delta
 	rotation_degrees -= spin_speed * delta
