@@ -45,7 +45,7 @@ func _exit_tree() -> void:
 func initialize() -> void:
 	_load_room()
 	_build_safe_overlay()
-	_build_palette()
+	build_palette()
 	eraser_button.button_group = palette_group
 	eraser_button.pressed.connect(_select_config.bind(null))
 	room_view.gui_input.connect(_on_room_view_gui_input)
@@ -139,7 +139,9 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return rect
 
-func _build_palette() -> void:
+func build_palette() -> void:
+	for button: Node in palette_grid.get_children():
+		button.free()
 	for config: BaseConfig in _collect_configs(CUSTOM_DATA_PATH):
 		var button: Button = Button.new()
 		button.toggle_mode = true

@@ -216,8 +216,7 @@ func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	if change_value(detection_range_text_edit, new_text):
 		config_file.detection_range = int(new_text)
 		print(\"new detection rate value: \", config_file.detection_range)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
@@ -259,15 +258,13 @@ func _on_attack_speed_down_button_pressed() -> void:
 
 func _on_detection_range_up_button_pressed() -> void:
 	config_file.detection_range = text_increment(detection_range_text_edit, 10)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
 func _on_detection_range_down_button_pressed() -> void:
 	config_file.detection_range = text_increment(detection_range_text_edit, -10)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
