@@ -1,9 +1,8 @@
-[gd_scene format=4 uid="uid://bibqh5ftmac50"]
+[gd_scene format=3 uid="uid://bibqh5ftmac50"]
 
 [ext_resource type="Script" uid="uid://bnjjcwxeu2dd1" path="res://scenes/level_gen/dynamic_level.gd" id="1_ebv8c"]
 [ext_resource type="Resource" uid="uid://hu6tf4its7hj" path="res://custom_data/test_kind3/level/level_test_kind3.tres" id="2_3g0j8"]
 [ext_resource type="Resource" uid="uid://yqomn35lug1w" path="res://custom_data/animal_test/level/level_animal_test.tres" id="2_a3nlj"]
-[ext_resource type="TileSet" uid="uid://vdu1ji6k73dm" path="res://assets/resources/tile_sets/placeholder_tileset.tres" id="3_tre45"]
 [ext_resource type="TileSet" uid="uid://bgcdbug7xbr73" path="res://assets/resources/tile_sets/scene_tileset.tres" id="3_u3gwp"]
 [ext_resource type="Script" uid="uid://de3up38p1nh4a" path="res://assets/scripts/debug/tile_map_parser.gd" id="5_m30r8"]
 [ext_resource type="PackedScene" uid="uid://db0lumpc20jpc" path="res://scenes/level_door/level_door.tscn" id="6_m30r8"]
@@ -12,6 +11,13 @@
 [ext_resource type="Resource" uid="uid://d1axup47vsymc" path="res://custom_data/test_kind2/obstacle/obstacle_test_kind2.tres" id="9_arqpn"]
 [ext_resource type="Script" uid="uid://bmwpujhyef6jc" path="res://scenes/level_gen/runtime_navigation.gd" id="10_navigation"]
 [ext_resource type="PackedScene" uid="uid://c88w75pb5xu4h" path="res://scenes/util/safe_area.tscn" id="11_a3nlj"]
+[ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arqpn"]
+size = Vector2(65, 286)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hgjwy"]
+size = Vector2(65, 496.99997)
 
 [node name="DynamicLevel" type="Node2D" unique_id=1100624506]
 script = ExtResource("1_ebv8c")
@@ -19,11 +25,11 @@ debug_level = ExtResource("2_a3nlj")
 
 [node name="TileLayers" type="Node2D" parent="." unique_id=1141214810]
 
-[node name="MainLevelLayer" type="TileMapLayer" parent="TileLayers" unique_id=269505042]
-scale = Vector2(4, 4)
-tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAFAAAAAAACAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAJAAAAAQARAAUAAAAKAAAAAAACAAAAAAALAAAAAAACAAAAAAAMAAAAAAACAAAAAAARAAAAAAADAAAAAAARAAkAAAADAAIAAAAQAAkAAAACAAIAAAAPAAkAAAACAAIAAAAOAAkAAAACAAIAAAANAAkAAAACAAIAAAAMAAkAAAACAAIAAAALAAkAAAACAAIAAAAKAAkAAAACAAIAAAAJAAkAAQAQAAUAAAAIAAkAAAACAAIAAAAHAAkAAAACAAIAAAAGAAkAAAACAAIAAAAFAAkAAAACAAIAAAAEAAkAAAACAAIAAAADAAkAAAACAAIAAAACAAkAAAACAAIAAAABAAkAAAACAAIAAAAAAAkAAAABAAIAAAAAAAgAAAABAAEAAAAAAAcAAAABAAEAAAAAAAYAAAABAAEAAAAAAAUAAAABAAEAAAAAAAMAAAABAAEAAAAAAAIAAAABAAEAAAAAAAEAAAABAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAQAQAAYAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAARAAgAAAADAAEAAAANAAAAAAACAAAAAAAOAAAAAAACAAAAAAAPAAAAAAACAAAAAAAQAAAAAAACAAAAAAAPAAUAAQABAAEAAAAPAAYAAQABAAEAAAAPAAcAAQABAAEAAAAOAAgAAQABAAEAAAAOAAcAAQABAAEAAAAOAAYAAQABAAEAAAAOAAUAAQABAAEAAAAOAAQAAQABAAEAAAAOAAMAAQABAAEAAAAPAAMAAQABAAEAAAAPAAQAAQABAAEAAAAPAAIAAQABAAEAAAAQAAIAAQABAAEAAAAQAAEAAQABAAEAAAAPAAEAAQABAAEAAAAOAAEAAQABAAEAAAANAAEAAQABAAEAAAAMAAEAAQABAAEAAAALAAEAAQABAAEAAAAKAAEAAQABAAEAAAAJAAEAAQABAAEAAAAIAAEAAQABAAEAAAAHAAEAAQABAAEAAAAGAAEAAQABAAEAAAAFAAEAAQABAAEAAAAEAAEAAQABAAEAAAADAAEAAQABAAEAAAACAAEAAQABAAEAAAABAAEAAQABAAEAAAABAAIAAQABAAEAAAABAAMAAQABAAEAAAABAAQAAQABAAEAAAABAAUAAQABAAEAAAABAAYAAQABAAEAAAAGAAMAAQABAAEAAAAGAAIAAQABAAEAAAAFAAIAAQABAAEAAAAEAAIAAQABAAEAAAADAAIAAQABAAEAAAACAAIAAQABAAEAAAACAAMAAQABAAEAAAACAAQAAQABAAEAAAACAAUAAQABAAEAAAACAAYAAQABAAEAAAACAAcAAQABAAEAAAABAAcAAQABAAEAAAABAAgAAQABAAEAAAACAAgAAQABAAEAAAADAAgAAQABAAEAAAADAAcAAQABAAEAAAADAAYAAQABAAEAAAADAAUAAQABAAEAAAADAAQAAQABAAEAAAADAAMAAQABAAEAAAAEAAMAAQABAAEAAAAEAAQAAQABAAEAAAAEAAUAAQABAAEAAAAEAAYAAQABAAEAAAAEAAcAAQABAAEAAAAEAAgAAQABAAEAAAAFAAgAAQABAAEAAAAFAAcAAQABAAEAAAAFAAYAAQABAAEAAAAFAAUAAQABAAEAAAAFAAQAAQABAAEAAAAFAAMAAQABAAEAAAAGAAQAAQABAAEAAAAGAAUAAQABAAEAAAAGAAYAAQABAAEAAAAGAAcAAQABAAEAAAAGAAgAAQABAAEAAAAHAAgAAQABAAEAAAAHAAcAAQABAAEAAAAHAAYAAQABAAEAAAAHAAUAAQABAAEAAAAHAAQAAQABAAEAAAAHAAMAAQABAAEAAAAHAAIAAQABAAEAAAAIAAIAAQABAAEAAAAIAAMAAQABAAEAAAAIAAQAAQABAAEAAAAIAAUAAQABAAEAAAAIAAYAAQABAAEAAAAIAAcAAQABAAEAAAAIAAgAAQABAAEAAAAJAAgAAQABAAEAAAAJAAcAAQABAAEAAAAJAAYAAQABAAEAAAAJAAUAAQABAAEAAAAJAAQAAQABAAEAAAAJAAMAAQABAAEAAAAJAAIAAQABAAEAAAAKAAIAAQABAAEAAAAKAAMAAQABAAEAAAAKAAQAAQABAAEAAAAKAAUAAQABAAEAAAAKAAYAAQABAAEAAAAKAAcAAQABAAEAAAAKAAgAAQABAAEAAAALAAgAAQABAAEAAAALAAcAAQABAAEAAAALAAYAAQABAAEAAAALAAUAAQABAAEAAAALAAQAAQABAAEAAAALAAMAAQABAAEAAAALAAIAAQABAAEAAAAMAAIAAQABAAEAAAAMAAMAAQABAAEAAAAMAAQAAQABAAEAAAAMAAUAAQABAAEAAAAMAAYAAQABAAEAAAAMAAcAAQABAAEAAAAMAAgAAQABAAEAAAANAAgAAQABAAEAAAANAAcAAQABAAEAAAANAAYAAQABAAEAAAANAAUAAQABAAEAAAANAAQAAQABAAEAAAANAAMAAQABAAEAAAANAAIAAQABAAEAAAAOAAIAAQABAAEAAAAQAAYAAQABAAEAAAAQAAUAAQABAAEAAAAQAAQAAQABAAEAAAAQAAMAAQABAAEAAAAQAAcAAQABAAEAAAAQAAgAAQABAAEAAAAPAAgAAQABAAEAAAAAAAQAAQARAAYAAAAJAP//AAACAAIAAAASAAQAAAACAAIAAAAJAAoAAAACAAIAAAD//wQAAAACAAIAAAA=")
-tile_set = ExtResource("3_tre45")
-navigation_enabled = false
+[node name="MainLevelLayer" type="Sprite2D" parent="TileLayers" unique_id=279505042]
+position = Vector2(576, 324)
+rotation = 1.5707964
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("bg_hintergrund")
 
 [node name="LevelObjectsTileLayer" type="TileMapLayer" parent="TileLayers" unique_id=1089033190]
 scale = Vector2(4, 4)
@@ -37,6 +43,48 @@ animal_config_to_spawn = ExtResource("8_a3nlj")
 add_test_obstacle = false
 obstacle_config_to_spawn = ExtResource("9_arqpn")
 
+[node name="RoomCollisions" type="Node2D" parent="TileLayers" unique_id=2132534810]
+
+[node name="Wall" type="StaticBody2D" parent="TileLayers/RoomCollisions" unique_id=287821066]
+position = Vector2(44, 183)
+collision_mask = 22
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=2054619772]
+position = Vector2(22.5, -38)
+shape = SubResource("RectangleShape2D_arqpn")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=620998285]
+position = Vector2(23, 337)
+shape = SubResource("RectangleShape2D_arqpn")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1107713994]
+position = Vector2(1050, 337)
+shape = SubResource("RectangleShape2D_arqpn")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1601741155]
+position = Vector2(1050, -38)
+shape = SubResource("RectangleShape2D_arqpn")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1047769397]
+position = Vector2(236.5, 423)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_hgjwy")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=775632431]
+position = Vector2(817, 423)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_hgjwy")
+
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1383796102]
+position = Vector2(228, -127)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_hgjwy")
+
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=162938274]
+position = Vector2(812, -127)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_hgjwy")
+
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1428946343]
 script = ExtResource("10_navigation")
 
@@ -45,36 +93,44 @@ position = Vector2(1120, 289.00003)
 scale = Vector2(8.839996, 8.08)
 
 [node name="SafeArea" parent="SafeAreas" unique_id=521000747 instance=ExtResource("11_a3nlj")]
-position = Vector2(-58.0317, 38.242577)
+position = Vector2(-62.1041, 33.66336)
 
 [node name="SafeArea2" parent="SafeAreas" unique_id=1443511539 instance=ExtResource("11_a3nlj")]
-position = Vector2(-58.0317, -31.311888)
+position = Vector2(-63.00908, -25.86634)
 
 [node name="SafeArea3" parent="SafeAreas" unique_id=1707402177 instance=ExtResource("11_a3nlj")]
-position = Vector2(-122.39825, 0)
+position = Vector2(-115.49779, 4.9504914)
 
 [node name="SafeArea4" parent="SafeAreas" unique_id=1244036859 instance=ExtResource("11_a3nlj")]
+position = Vector2(-8.031678, 4.9504914)
 
 [node name="LevelExits" type="Node2D" parent="." unique_id=555639378]
 
 [node name="LevelDoor" parent="LevelExits" unique_id=120435420 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(608, 19)
+position = Vector2(563, 56)
 enter_door = NodePath("../LevelDoor3")
+door_fade_duration = null
 player_spawn_offset = Vector2(0, 45)
 
 [node name="LevelDoor2" parent="LevelExits" unique_id=1431727498 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(1133, 288)
+position = Vector2(1094, 329)
 enter_door = NodePath("../LevelDoor4")
+door_fade_duration = null
+sprite_rotation_degrees = 90.0
 player_spawn_offset = Vector2(-45, 0)
 
 [node name="LevelDoor3" parent="LevelExits" unique_id=410338649 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(609, 621)
+position = Vector2(571, 606)
 enter_door = NodePath("../LevelDoor")
+door_fade_duration = null
+sprite_rotation_degrees = 180.0
 player_spawn_offset = Vector2(0, -45)
 
 [node name="LevelDoor4" parent="LevelExits" unique_id=144806269 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(17, 288)
+position = Vector2(52, 329)
 enter_door = NodePath("../LevelDoor2")
+door_fade_duration = null
+sprite_rotation_degrees = -90.0
 player_spawn_offset = Vector2(47.29, 0)
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("7_wkt00")]

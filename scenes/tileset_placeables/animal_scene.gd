@@ -1,6 +1,8 @@
 class_name AnimalScene 
 extends BasePlaceable
 
+signal pacified
+
 enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 
 @export var movement_speed: float = 4.0
@@ -203,10 +205,14 @@ func fed():
 	print("current health: ", health)
 	if health > 0 and current_ai_behaviour == AnimalAiState.aggressive:
 		health -= 1
-	if health == 0:
+	if health == 0 and not _pacified:
 		_pacified = true
 		collision_shape_2d.set_deferred("disabled", true)
 		_change_ai_state(AnimalAiState.inactive)
+		pacified.emit()
+
+func is_pacified() -> bool:
+	return _pacified
 
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
