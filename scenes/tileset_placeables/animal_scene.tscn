@@ -10,7 +10,206 @@ radius = 7.071068
 radius = 16.492422
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n5yd6"]
-radius = 39.319206
+radius = 40.0
+
+[sub_resource type="Animation" id="Animation_3k0lt"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:skew")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_n5yd6"]
+resource_name = "idle"
+length = 5.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.26666668, 2.2666667, 2.6333332, 4.5666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -0.755), Vector2(0, -0.755), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.26666668, 2.233333, 2.6333332, 4.5666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.917, 1.1), Vector2(0.917, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_o7d5c"]
+resource_name = "jump"
+length = 0.8438
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.112500004, 0.28125, 0.45000002, 0.61875004, 0.78749996, 0.8438),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 1.315), Vector2(0, -3.6), Vector2(0, -3.8), Vector2(0, -3.6), Vector2(0, -1.445), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.112500004, 0.28125, 0.45000002, 0.61875004, 0.78749996, 0.84375),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 0.8), Vector2(1, 1.1), Vector2(1, 1.15), Vector2(1, 1.1), Vector2(1, 1.2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_yvrkb"]
+resource_name = "squish"
+length = 1.125
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.375, 0.525, 0.675, 0.97499996, 1.125),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0.71), Vector2(0.42, 0), Vector2(0.56, -0.67), Vector2(0, 0.71), Vector2(-0.42, 0), Vector2(-0.56, -0.67), Vector2(0, 0.71)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.375, 0.525, 0.675, 0.97499996, 1.125),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1.1), Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1.1), Vector2(1, 0.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:skew")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.375, 0.525, 0.675, 0.97499996, 1.125),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.08726646259971647, 0.10471975511965978, 0.0, -0.08726646259971647, -0.10471975511965978, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_0ds48"]
+resource_name = "woble"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.40000004, 0.5, 0.65000004, 0.90000004, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0.705), Vector2(0.72, 0), Vector2(0.995, -0.69), Vector2(0, 0.705), Vector2(-0.72, 0), Vector2(-0.995, -0.69), Vector2(0, 0.705)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.40000004, 0.5, 0.65000004, 0.90000004, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1.1), Vector2(1, 0.9), Vector2(1, 1), Vector2(1, 1.1), Vector2(1, 0.9)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.40000004, 0.5, 0.65000004, 0.90000004, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.13962634015954636, 0.17453292519943295, 0.0, -0.13962634015954636, -0.17453292519943295, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o7d5c"]
+_data = {
+&"RESET": SubResource("Animation_3k0lt"),
+&"idle": SubResource("Animation_n5yd6"),
+&"jump": SubResource("Animation_o7d5c"),
+&"squish": SubResource("Animation_yvrkb"),
+&"woble": SubResource("Animation_0ds48")
+}
 
 [node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
 collision_layer = 4
@@ -42,9 +241,15 @@ one_shot = true
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=149455349]
+[node name="DetectionShape" type="CollisionShape2D" parent="PlayerDetectionArea" unique_id=149455349]
 shape = SubResource("CircleShape2D_n5yd6")
 debug_color = Color(0.500858, 0.58136106, 1.92523e-07, 0.41960785)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=322952373]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=677015676]
+libraries/ = SubResource("AnimationLibrary_o7d5c")
+playback_default_blend_time = 0.2
 
 [connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
 [connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]
