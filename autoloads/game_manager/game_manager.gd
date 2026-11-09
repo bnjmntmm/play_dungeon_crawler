@@ -4,6 +4,7 @@ signal start_fade(is_in: bool)
 signal change_level(level_data: PackedByteArray)
 signal player_reposition(new_pos: Vector2)
 signal init_configs()
+signal loaded_new_room(room_name: String)
 signal entered_end_room()
 signal player_died()
 
@@ -23,6 +24,7 @@ var all_level_configs: Array[LevelConfig]
 var unused_level_configs: Array[LevelConfig]
 var current_room_index: int
 var current_level_config: LevelConfig
+var scripted_level_config: LevelConfig = null
 
 var all_animal_configs: Array[AnimalConfig]
 
@@ -39,8 +41,6 @@ const END_ROOM = preload("uid://brkub0ovdbfcx")
  
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	all_level_configs = _load_all_level_configs(CUSTOM_DATA_PATH)
-	all_animal_configs = _load_all_animal_configs(CUSTOM_DATA_PATH)
 	reset_run()
 
 func _load_all_level_configs(dir_path: String) -> Array[LevelConfig]:
@@ -80,6 +80,8 @@ func _load_all_animal_configs(dir_path: String) -> Array[AnimalConfig]:
 	return configs
 
 func reset_run() -> void:
+	all_level_configs = _load_all_level_configs(CUSTOM_DATA_PATH)
+	all_animal_configs = _load_all_animal_configs(CUSTOM_DATA_PATH)
 	unused_level_configs.clear()
 	animal_register.clear()
 	unused_level_configs.append_array(all_level_configs)
@@ -94,8 +96,10 @@ func _room_fade_event(is_in: bool) -> void:
 func _choose_next_level() -> LevelConfig:
 	if debug_mode_enabled && debug_level:
 		return debug_level
+	if scripted_level_config:
+		return scripted_level_config
 	if gallery_mode:
-		return all_level_configs[gallery_index]
+			return all_level_configs[gallery_index]
 	if unused_level_configs.size() < 1:
 		unused_level_configs.clear()
 		unused_level_configs.append_array(all_level_configs)
@@ -134,8 +138,11 @@ func _load_new_room() -> void:
 func on_room_loaded() -> void:
 	init_configs.emit()
 	player_reposition.emit(nextEntryDoor.global_position + nextEntryDoor.player_spawn_offset)
+	loaded_new_room.emit(current_level_config.display_name)
 	start_fade.emit(false)
 	is_in_load = false
+	if not gallery_mode && scripted_level_config:
+		scripted_level_config = null
 	print ("loaded")
 	
 func on_player_died() -> void:
@@ -167,6 +174,14 @@ func gallery_switch(is_right: bool)-> void:
 		return
 	gallery_index += 1 if is_right else -1
 	gallery_index = posmod(gallery_index, all_level_configs.size())
+	is_in_load = true
+	init_room_change()
+	pass
+	
+func gallery_search(new_index: int)-> void:
+	if is_in_load:
+		return
+	gallery_index = new_index
 	is_in_load = true
 	init_room_change()
 	pass

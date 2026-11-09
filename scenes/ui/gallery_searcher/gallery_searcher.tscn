@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://cjirrmnant0ty"]
+
+[ext_resource type="Script" uid="uid://6uuy2koro742" path="res://scenes/ui/gallery_searcher/gallery_searcher.gd" id="1_dpma0"]
+
+[node name="GallerySearcher" type="Control" unique_id=2104103872]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dpma0")
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1186151798]
+layout_mode = 0
+offset_left = 376.5
+offset_top = 526.0
+offset_right = 775.5
+offset_bottom = 565.0
+text = "LevelSSLSLSLSLSLSLSLSLS"
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1164073911]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -78.40503
+offset_right = 300.0
+offset_bottom = -43.745056
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 0.7411765)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=335811537]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ErrorType" type="Label" parent="ColorRect/MarginContainer" unique_id=1279539694]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.99999994, 0.22220251, 0.23155007, 1)
+theme_override_font_sizes/font_size = 14
+text = "Mehrere Level mit diesem Suchbegriff gefunden! Bitte den Begriff anpassen."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
