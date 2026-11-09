@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://feature/station/station.gd" id="1_station"]
+[ext_resource type="PackedScene" uid="uid://b67wubyj4rlpj" path="res://feature/editor tool/AnimalEditorToolUI.tscn" id="2_animal"]
+[ext_resource type="PackedScene" path="res://feature/level_editor/level_editor.tscn" id="3_level"]
+
+[node name="Station" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+script = ExtResource("1_station")
+
+[node name="Tier" parent="." instance=ExtResource("2_animal")]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="Raum" parent="." instance=ExtResource("3_level")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

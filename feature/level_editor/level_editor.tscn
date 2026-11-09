@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://feature/level_editor/level_editor.gd" id="1_level_editor"]
+
+[node name="LevelEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_level_editor")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Workspace" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="PaletteColumn" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Workspace"]
+custom_minimum_size = Vector2(224, 0)
+layout_mode = 2
+
+[node name="PaletteLabel" type="Label" parent="MarginContainer/VBoxContainer/Workspace/PaletteColumn"]
+layout_mode = 2
+text = "Was willst du platzieren?"
+
+[node name="EraserButton" type="Button" parent="MarginContainer/VBoxContainer/Workspace/PaletteColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "Radierer"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer/Workspace/PaletteColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PaletteGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/Workspace/PaletteColumn/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="RoomView" type="Control" parent="MarginContainer/VBoxContainer/Workspace"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RoomRoot" type="Node2D" parent="MarginContainer/VBoxContainer/Workspace/RoomView"]
+unique_name_in_owner = true
+
+[node name="Footer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="KidIdLabel" type="Label" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Dein Code:"
+
+[node name="KidIdEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/Footer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+placeholder_text = "z. B. roter_fuchs_7"
+
+[node name="NewCodeButton" type="Button" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Neuer Code"
+
+[node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Laden"
+
+[node name="ClearButton" type="Button" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Alles löschen"
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TryButton" type="Button" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Ausprobieren"
+
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/Footer"]
+layout_mode = 2
+text = "Speichern"
+
+[node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Footer/NewCodeButton" to="." method="_on_new_code_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Footer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Footer/ClearButton" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Footer/TryButton" to="." method="_on_try_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Footer/SaveButton" to="." method="_on_save_button_pressed"]

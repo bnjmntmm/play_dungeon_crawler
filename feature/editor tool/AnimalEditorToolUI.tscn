@@ -29,12 +29,14 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 var soundDictionary: Dictionary[int, AudioStream]
 
 @onready var info_label: Label = %InfoLabel
+@onready var code_edit: LineEdit = %CodeEdit
 
 const invalid_color:Color = Color(1,0,0)
 @onready var animal_scene: AnimalScene = %AnimalScene
 @onready var attack_timer: Timer = %AttackTimer
 
 var config_file:AnimalConfig
+var saved_path:String = \"\"
 
 func _ready() -> void:
 	pass
@@ -51,6 +53,7 @@ func initialize():
 	
 	if config_file == null:
 		config_file = AnimalConfig.new()
+	code_edit.text = LevelCode.create_unused(\"res://custom_data\")
 
 func clear_grid():
 	for child in grid_con.get_children():
@@ -97,19 +100,16 @@ func populate_texture_selection():
 					buttonDictionary.set(button, tex)
 					
 					# on button press setze variable (verknüpfe das signal I guess)
-					button.pressed.connect(on_texture_button_clicked)
+					button.pressed.connect(on_texture_button_clicked.bind(button))
 			file_name = dir.get_next()
 	else:
 		print(\"Textures Filepath \", image_dir , \" could not be accessed\")
 
-func on_texture_button_clicked():
-	for control:Control in grid_con.get_children():
-		var button := control.get_child(0) as Button
-		if button.is_hovered() == true:
-			for child in animal_scene.get_children():
-				if child is Sprite2D:
-					child.texture = buttonDictionary.get(button)
-			config_file.sprite = buttonDictionary.get(button)
+func on_texture_button_clicked(button:Button):
+	for child in animal_scene.get_children():
+		if child is Sprite2D:
+			child.texture = buttonDictionary.get(button)
+	config_file.sprite = buttonDictionary.get(button)
 
 func populate_sound_selection():
 	print(\"populating sound selection\")
@@ -150,13 +150,20 @@ func _on_save_button_pressed() -> void:
 		else:
 			allow = false
 			
-	if allow && sound_option.get_selected_id() != -1 && config_file.sprite != null:
-		var file_name:String = Time.get_time_string_from_system()
-		var path:String = \"res://animal_config_\" + file_name + \".tres\"
+	var code:String = LevelCode.clean(code_edit.text)
+	var path:String = \"res://custom_data/\" + code + \"/animal/animal_\" + code + \".tres\"
+	if code == \"\" or (path != saved_path and FileAccess.file_exists(path)):
+		info_label.add_theme_color_override(\"font_color\", Color(1,0,0))
+		info_label.text = \"Can not save, the code is empty or already used\"
+	elif allow && sound_option.get_selected_id() != -1 && config_file.sprite != null:
+		DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 		ResourceSaver.save(config_file,path)
+		saved_path = path
+		if Engine.is_editor_hint():
+			EditorInterface.get_resource_filesystem().scan()
 		print(\"saved file to: \", path)
 		info_label.add_theme_color_override(\"font_color\", Color(1,1,1))
-		info_label.text = \"saved file to: \"+ path + file_name
+		info_label.text = \"saved file to: \"+ path
 	else:
 		print(\"Can not save, some values are invalid\")
 		info_label.add_theme_color_override(\"font_color\", Color(1,0,0))
@@ -206,8 +213,7 @@ func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
 	if change_value(detection_range_text_edit, new_text):
 		config_file.detection_range = int(new_text)
 		print(\"new detection rate value: \", config_file.detection_range)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
@@ -249,15 +255,13 @@ func _on_attack_speed_down_button_pressed() -> void:
 
 func _on_detection_range_up_button_pressed() -> void:
 	config_file.detection_range = text_increment(detection_range_text_edit, 10)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
 func _on_detection_range_down_button_pressed() -> void:
 	config_file.detection_range = text_increment(detection_range_text_edit, -10)
-	var nodes =  animal_scene.get_tree().get_nodes_in_group(\"detection_range\")
-	var range_shape:CollisionShape2D =nodes[0]
+	var range_shape:CollisionShape2D = animal_scene.get_node(\"PlayerDetectionArea/DetectionShape\")
 	if range_shape.shape is CircleShape2D:
 		range_shape.shape.radius = config_file.detection_range
 
@@ -326,12 +330,17 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
+canvas_item_default_texture_filter = 0
 size = Vector2i(549, 269)
 render_target_update_mode = 4
 
 [node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
 position = Vector2(236, 129)
+
+[node name="Camera2D" type="Camera2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=1859606229]
+position = Vector2(236, 129)
+zoom = Vector2(6, 6)
 
 [node name="AttackTimer" type="Timer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=273348902]
 unique_name_in_owner = true
@@ -626,6 +635,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0, 0, 1)
+
+[node name="CodeEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486930]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+size_flags_vertical = 8
+placeholder_text = "Code"
 
 [node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
 unique_name_in_owner = true
