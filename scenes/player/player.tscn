@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bkw5g76nvky8" path="res://icon.svg" id="1_8afob"]
 [ext_resource type="Script" uid="uid://i6t8jjxgsfpa" path="res://scenes/player/player.gd" id="1_dovo2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/virtual_joystick.tscn" id="2_joystick"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ttl3"]
 radius = 14.035668
@@ -15,6 +16,8 @@ collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_dovo2")
 debug_joy_light = true
+
+[node name="VirtualJoystickLayer" parent="." unique_id=2141596835 instance=ExtResource("2_joystick")]
 
 [node name="AttackDamageHealth" type="Node" parent="." unique_id=1712468708]
 

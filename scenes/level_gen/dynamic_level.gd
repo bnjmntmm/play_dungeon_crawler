@@ -10,10 +10,15 @@ signal on_change_level_complete
 @export var no_player : bool
 
 @onready var default_start_door: LevelDoor = $LevelExits/LevelDoor3
-@onready var main_level_layer: TileMapLayer = $TileLayers/MainLevelLayer
 @onready var level_objects_tile_layer: TileMapLayer = $TileLayers/LevelObjectsTileLayer
 @onready var room_navigation: NavigationRegion2DRuntimeBuilder = $NavigationRegion2D
 @onready var player: PlayerCharacter = $Player
+@onready var level_doors: Array[LevelDoor] = [
+	$LevelExits/LevelDoor,
+	$LevelExits/LevelDoor2,
+	$LevelExits/LevelDoor3,
+	$LevelExits/LevelDoor4,
+]
 #@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 
@@ -23,6 +28,7 @@ func _ready() -> void:
 	if no_player:
 		player.queue_free()
 	GameManager.change_level.connect(change_level)
+	GameManager.room_cleared.connect(_on_room_cleared)
 	GameManager.nextEntryDoor = default_start_door
 	if debug_mode_enabled:
 		GameManager.debug_mode_enabled = debug_mode_enabled
@@ -30,6 +36,7 @@ func _ready() -> void:
 			GameManager.debug_level = debug_level
 		if debug_entry:
 			GameManager.nextEntryDoor = debug_entry
+	_update_door_visuals()
 	GameManager.init_room_change()
 	pass # Replace with function body.
 
@@ -40,6 +47,7 @@ func _process(delta: float) -> void:
 	pass
 
 func change_level(level_data: PackedByteArray) -> void:
+	_update_door_visuals()
 	level_objects_tile_layer.clear()
 	level_objects_tile_layer.set_tile_map_data_from_array(level_data)
 	level_objects_tile_layer.update_internals()
@@ -50,6 +58,14 @@ func change_level(level_data: PackedByteArray) -> void:
 	GameManager.on_room_loaded()
 	pass
 
+func _on_room_cleared() -> void:
+	_update_door_visuals()
+	await rebuild_navigation()
+
+func _update_door_visuals() -> void:
+	for door in level_doors:
+		door.set_door_open(GameManager.room_is_cleared or door == GameManager.nextEntryDoor)
+
 ## Call after changing floor or obstacle tiles during gameplay.
 func rebuild_navigation() -> void:
-	await room_navigation.rebuild($TileLayers)
+	await room_navigation.rebuild(self)

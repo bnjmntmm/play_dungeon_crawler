@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://c50qowea5417o"]
+
+[ext_resource type="Script" uid="uid://d0bsjph1s5n45" path="res://scenes/ui/virtual_joystick_layer.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pakk4"]
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xi2ug"]
+bg_color = Color(0.6, 0.6, 0.6, 0.4627451)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+
+[node name="VirtualJoystickLayer" type="CanvasLayer" unique_id=1273039306]
+layer = 10
+script = ExtResource("1")
+
+[node name="VirtualJoystick" type="VirtualJoystick" parent="." unique_id=1265147715]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = -28.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/normal_tip = SubResource("StyleBoxFlat_pakk4")
+theme_override_styles/pressed_tip = SubResource("StyleBoxFlat_xi2ug")
+joystick_size = 144.0
+tip_size = 56.0
+action_left = &"movement_left"
+action_right = &"movement_right"
+action_up = &"movement_up"
+action_down = &"movement_down"

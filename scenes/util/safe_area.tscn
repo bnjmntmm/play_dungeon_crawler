@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c88w75pb5xu4h"]
+
+[ext_resource type="Script" uid="uid://byaaot6xc46nu" path="res://scenes/util/safe_area.gd" id="1_ee6xp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_06rox"]
+
+[node name="SafeArea" type="Area2D" unique_id=1443511539]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_ee6xp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=898160492]
+shape = SubResource("RectangleShape2D_06rox")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -1,6 +1,8 @@
 class_name AnimalScene 
 extends BasePlaceable
 
+signal pacified
+
 enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 
 @export var movement_speed: float = 4.0
@@ -25,6 +27,9 @@ enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 @onready var attack_windup_timer: Timer = $AttackWindupTimer
 @onready var player_detection_area: Area2D = $PlayerDetectionArea
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var detection_shape: CollisionShape2D = $PlayerDetectionArea/DetectionShape
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 var current_ai_behaviour: AnimalAiState = AnimalAiState.inactive
 var _pending_ai_state : AnimalAiState
@@ -42,9 +47,15 @@ var _player_detected := false
 var _lost_player_elapsed := 0.0
 var _roam_pause_remaining := 0.0
 var _roam_waiting := false
+var _current_anim : String = ""
 
+## From Config
 ## health / fed amount coming from the config
-var health : int
+var health : int = 1
+var attack_speed : int = 1
+var damage : int = 1
+var sound : AudioStreamWAV
+var moveAnimType: Enums.AnimalAnimationType = 0
 
 func _ready() -> void:
 	super._ready()
@@ -56,6 +67,7 @@ func _ready() -> void:
 	if is_random:
 		config = GameManager.all_animal_configs.pick_random()
 		init_config()
+	GameManager.register_animal(self)
 
 func init_config() -> void:
 	super.init_config()
@@ -64,6 +76,15 @@ func init_config() -> void:
 		push_error("AnimalScene requires an AnimalConfig")
 		return
 	health = anim_config.health
+	damage = anim_config.damage
+	#Factor?
+	_attack_windup  = anim_config.attack_speed
+	movement_speed = anim_config.speed
+	var detection_circle := detection_shape.shape as CircleShape2D
+	print(detection_circle.radius)
+	detection_circle.set_radius(anim_config.detection_range) 
+	sound = anim_config.sound
+	moveAnimType = anim_config.animation
 	
 func set_movement_target(movement_target: Vector2):
 	navigation_agent.set_target_position(movement_target)
@@ -71,6 +92,7 @@ func set_movement_target(movement_target: Vector2):
 func _on_velocity_computed(safe_velocity: Vector2):
 	character_body.velocity = safe_velocity
 	character_body.move_and_slide()
+	setWalkAnimation(character_body.velocity.length() > 0.1)
 
 func _physics_process(delta):
 	if passive_only and current_ai_behaviour == AnimalAiState.aggressive:
@@ -141,7 +163,10 @@ func attack_player():
 	
 	_is_attacking = true
 	if _player_in_range and is_instance_valid(player):
-		player.get_attacked()
+		if sound:
+			audio_stream_player.stream = sound
+			audio_stream_player.play()
+		player.get_attacked(damage)
 	_on_player_attack_finished()
 
 func _on_player_attack_finished() -> void:
@@ -180,10 +205,14 @@ func fed():
 	print("current health: ", health)
 	if health > 0 and current_ai_behaviour == AnimalAiState.aggressive:
 		health -= 1
-	if health == 0:
+	if health == 0 and not _pacified:
 		_pacified = true
 		collision_shape_2d.set_deferred("disabled", true)
 		_change_ai_state(AnimalAiState.inactive)
+		pacified.emit()
+
+func is_pacified() -> bool:
+	return _pacified
 
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
@@ -199,6 +228,15 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	if _player_in_range:
 		_start_attack_windup()
 
+func set_passive_state(is_passive: bool)->void :
+	if (AnimalAiState.inactive):
+		return
+	passive_only = is_passive
+	_change_ai_state(AnimalAiState.passive) if is_passive else _change_ai_state(AnimalAiState.aggressive)
+	#Prevents bodyblocking at the door
+	character_body.set_collision_mask_value(2, false if is_passive else true)
+	character_body.set_collision_layer_value(3, false if is_passive else true)
+	_on_velocity_computed(Vector2.ZERO)
 
 func _on_player_detection_area_body_exited(body: Node2D) -> void:
 	if body == player:
@@ -218,7 +256,6 @@ func _update_player_loss(delta: float) -> void:
 	_lost_player_elapsed += delta
 	if _lost_player_elapsed >= lose_player_delay:
 		_change_ai_state(AnimalAiState.passive)
-
 
 func _update_roaming(delta: float) -> void:
 	if current_ai_behaviour != AnimalAiState.passive or not roaming_enabled:
@@ -244,3 +281,28 @@ func _update_roaming(delta: float) -> void:
 			continue
 		set_movement_target(destination)
 		return
+
+func setWalkAnimation(is_walking: bool) -> void:
+	if moveAnimType == 0:
+		return
+
+	var target := "idle"
+	if is_walking:
+		match moveAnimType:
+			Enums.AnimalAnimationType.woble:
+				target = "woble"
+			Enums.AnimalAnimationType.jump:
+				target = "jump"
+			Enums.AnimalAnimationType.squish:
+				target = "squish"
+
+	if target == _current_anim:
+		return
+
+	if target == "idle":
+		animation_player.play("RESET")
+		animation_player.advance(0)  # apply RESET immediately
+
+	animation_player.play(target)
+	_current_anim = target
+		

@@ -16,3 +16,8 @@ extends BaseConfig
 
 ## Detection Range: how near / far the animal detects the player around itself
 @export var detection_range : float
+
+## Sound: The sfx the animal uses
+@export var sound : AudioStreamWAV
+
+@export var animation: Enums.AnimalAnimationType
