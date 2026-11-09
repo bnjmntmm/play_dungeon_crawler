@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://de8duu6fbgrx2"]
 
+[ext_resource type="PackedScene" uid="uid://3dqtf02foq2i" path="res://scenes/ui/level_name_display/level_name_display.tscn" id="1_b0vy5"]
 [ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="1_drlwo"]
 
 [node name="CombinedUi" type="CanvasLayer" unique_id=1161388375]
+
+[node name="LevelNameDisplay" parent="." unique_id=1170360218 instance=ExtResource("1_b0vy5")]
 
 [node name="SceneFader" parent="." unique_id=382022906 instance=ExtResource("1_drlwo")]
