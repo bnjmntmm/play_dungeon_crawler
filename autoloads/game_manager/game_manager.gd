@@ -29,6 +29,8 @@ var scripted_level_config: LevelConfig = null
 
 var all_animal_configs: Array[AnimalConfig]
 
+var all_obstacle_configs: Array[BaseConfig] = []
+
 var player_final_cake_slices: int = 0
 var animal_register: Array[AnimalScene] = []
 var room_is_cleared: bool = false
@@ -59,7 +61,7 @@ func _load_all_level_configs(dir_path: String) -> Array[LevelConfig]:
 		var file_path: String = dir_path.path_join(file_name)
 		if !ResourceLoader.exists(file_path):
 			continue
-		var config : LevelConfig = load(file_path) as LevelConfig
+		var config : LevelConfig = ResourceLoader.load(file_path, "", ResourceLoader.CACHE_MODE_REPLACE_DEEP) as LevelConfig
 		if config:
 			configs.append(config)
 	return configs
@@ -77,14 +79,37 @@ func _load_all_animal_configs(dir_path: String) -> Array[AnimalConfig]:
 		var file_path: String = dir_path.path_join(file_name)
 		if !ResourceLoader.exists(file_path):
 			continue
-		var config : AnimalConfig = load(file_path) as AnimalConfig
+		var config : AnimalConfig = ResourceLoader.load(file_path, "", ResourceLoader.CACHE_MODE_REPLACE) as AnimalConfig
 		if config:
 			configs.append(config)
 	return configs
 
+func _load_all_obstacle_configs(dir_path: String) -> Array[BaseConfig]:
+	var result: Array[BaseConfig] = []
+
+	for sub_dir: String in DirAccess.get_directories_at(dir_path):
+		result.append_array(_load_all_obstacle_configs(dir_path.path_join(sub_dir)))
+
+	for file: String in DirAccess.get_files_at(dir_path):
+		var file_name: String = file.trim_suffix(".remap").trim_suffix(".import")
+		if file_name.get_extension() not in RESOURCE_EXTENSIONS:
+			continue
+		var file_path: String = dir_path.path_join(file_name)
+		if not ResourceLoader.exists(file_path):
+			continue
+		# Peek at the type first so levels and animals aren't needlessly replaced
+		var peek: Resource = ResourceLoader.load(file_path, "", ResourceLoader.CACHE_MODE_REUSE)
+		if peek is BaseConfig and not peek is AnimalConfig:
+			var fresh := ResourceLoader.load(file_path, "", ResourceLoader.CACHE_MODE_REPLACE) as BaseConfig
+			if fresh:
+				result.append(fresh)
+	return result
+
 func reset_run() -> void:
 	all_level_configs = _load_all_level_configs(CUSTOM_DATA_PATH)
 	all_animal_configs = _load_all_animal_configs(CUSTOM_DATA_PATH)
+	all_obstacle_configs = _load_all_obstacle_configs(CUSTOM_DATA_PATH)
+	reread_sprites()
 	unused_level_configs.clear()
 	animal_register.clear()
 	room_is_cleared = false
@@ -93,7 +118,34 @@ func reset_run() -> void:
 	current_room_index = 0
 	GameManager.gallery_mode = false
 	#Stat Resets etc here
-	
+
+func _collect_base_configs(dir_path: String) -> Array[BaseConfig]:
+	var result: Array[BaseConfig] = []
+
+	for sub_dir: String in DirAccess.get_directories_at(dir_path):
+		result.append_array(_collect_base_configs(dir_path.path_join(sub_dir)))
+
+	for file: String in DirAccess.get_files_at(dir_path):
+		var file_name: String = file.trim_suffix(".remap").trim_suffix(".import")
+		if file_name.get_extension() not in RESOURCE_EXTENSIONS:
+			continue
+		var file_path: String = dir_path.path_join(file_name)
+		if not ResourceLoader.exists(file_path):
+			continue
+		var res: Resource = ResourceLoader.load(
+			file_path, "", ResourceLoader.CACHE_MODE_REPLACE)
+		if res is BaseConfig:
+			result.append(res)
+	return result
+
+func reread_sprites() -> void:
+	for config: BaseConfig in all_animal_configs:
+		if not config.refresh_sprite():
+			push_warning("No sprite refresh for %s" % config.resource_path)
+	for config: BaseConfig in all_obstacle_configs:
+		if not config.refresh_sprite():
+			push_warning("No sprite refresh for %s" % config.resource_path)
+
 func _room_fade_event(is_in: bool) -> void:
 	start_fade.emit(is_in)
 	pass
@@ -146,7 +198,7 @@ func on_room_loaded() -> void:
 	init_configs.emit()
 	_room_ready_for_clear_check = true
 	_check_room_clear()
-	player_reposition.emit(nextEntryDoor.global_position + nextEntryDoor.player_spawn_offset)
+	player_reposition.emit(nextEntryDoor.player_spawn_pos_visualizer.global_position)
 	loaded_new_room.emit(current_level_config.display_name)
 	start_fade.emit(false)
 	is_in_load = false

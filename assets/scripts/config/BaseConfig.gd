@@ -14,3 +14,13 @@ extends Resource
 ## Sprite: this is the relevant sprite to be displayed for the specific object
 ## we need a way to identify it, add it to our tileset and place it when a person adds a new drawn sprite
 @export var sprite : Texture2D
+@export var source_png: String
+
+func refresh_sprite() -> bool:
+	if source_png.is_empty():
+		return false
+	var img := Image.load_from_file(source_png)
+	if img == null or img.is_empty():
+		return false
+	sprite = ImageTexture.create_from_image(img)
+	return true
