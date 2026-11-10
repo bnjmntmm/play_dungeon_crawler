@@ -10,10 +10,12 @@ size = Vector2(16, 16)
 [node name="ObstacleScene" type="Node2D" unique_id=879393062]
 script = ExtResource("1_aal6r")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2065844501]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2065844501 node_paths=PackedStringArray("sprite")]
+unique_name_in_owner = true
 texture = ExtResource("1_i7gst")
 offset = Vector2(0, -6.175)
 script = ExtResource("3_3gxm3")
+sprite = NodePath(".")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1940550431]
 

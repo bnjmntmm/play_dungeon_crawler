@@ -5,7 +5,6 @@ extends BasePlaceable
 func _get_config_source() -> Dictionary:
 	return GameManager.current_level_config.obstacle_resource_data
 
-
 func retrieve_config(pos: Vector2i):
 	config = _get_config_source().get(pos)
 	if config:
