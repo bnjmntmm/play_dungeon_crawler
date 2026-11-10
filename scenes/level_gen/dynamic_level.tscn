@@ -13,11 +13,17 @@
 [ext_resource type="PackedScene" uid="uid://c88w75pb5xu4h" path="res://scenes/util/safe_area.tscn" id="11_a3nlj"]
 [ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_arqpn"]
-size = Vector2(65, 286)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p52qu"]
+size = Vector2(544, 64)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hgjwy"]
-size = Vector2(65, 496.99997)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_anga4"]
+size = Vector2(544, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ngav"]
+size = Vector2(64, 224)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a3nlj"]
+size = Vector2(64, 128)
 
 [node name="DynamicLevel" type="Node2D" unique_id=1100624506]
 script = ExtResource("1_ebv8c")
@@ -26,7 +32,7 @@ debug_level = ExtResource("2_a3nlj")
 [node name="TileLayers" type="Node2D" parent="." unique_id=1141214810]
 
 [node name="MainLevelLayer" type="Sprite2D" parent="TileLayers" unique_id=279505042]
-position = Vector2(576, 324)
+position = Vector2(576, 320)
 rotation = 1.5707964
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("bg_hintergrund")
@@ -50,87 +56,105 @@ position = Vector2(44, 183)
 collision_mask = 22
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=2054619772]
-position = Vector2(22.5, -38)
-shape = SubResource("RectangleShape2D_arqpn")
+position = Vector2(228, -151)
+shape = SubResource("RectangleShape2D_p52qu")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=620998285]
-position = Vector2(23, 337)
-shape = SubResource("RectangleShape2D_arqpn")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1664220053]
+position = Vector2(836, -151)
+shape = SubResource("RectangleShape2D_anga4")
 
-[node name="CollisionShape2D5" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1107713994]
-position = Vector2(1050, 337)
-shape = SubResource("RectangleShape2D_arqpn")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=326079090]
+position = Vector2(228, 425)
+shape = SubResource("RectangleShape2D_p52qu")
 
-[node name="CollisionShape2D6" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1601741155]
-position = Vector2(1050, -38)
-shape = SubResource("RectangleShape2D_arqpn")
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=394436814]
+position = Vector2(836, 425)
+shape = SubResource("RectangleShape2D_anga4")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1047769397]
-position = Vector2(236.5, 423)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_hgjwy")
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=154086589]
+position = Vector2(-12, 281)
+shape = SubResource("RectangleShape2D_1ngav")
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=775632431]
-position = Vector2(817, 423)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_hgjwy")
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=795031998]
+position = Vector2(-12, -7)
+shape = SubResource("RectangleShape2D_1ngav")
 
-[node name="CollisionShape2D7" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1383796102]
-position = Vector2(228, -127)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_hgjwy")
+[node name="CollisionShape2D7" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=152288644]
+position = Vector2(1076, 281)
+shape = SubResource("RectangleShape2D_1ngav")
 
-[node name="CollisionShape2D8" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=162938274]
-position = Vector2(812, -127)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_hgjwy")
+[node name="CollisionShape2D8" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=2022593378]
+position = Vector2(1076, -7)
+shape = SubResource("RectangleShape2D_1ngav")
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1428946343]
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1418119117]
+position = Vector2(1140, 137)
+shape = SubResource("RectangleShape2D_a3nlj")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=988118766]
+position = Vector2(-76, 137)
+shape = SubResource("RectangleShape2D_a3nlj")
+
+[node name="CollisionShape2D11" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1253892936]
+position = Vector2(532, 489)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_a3nlj")
+
+[node name="CollisionShape2D12" type="CollisionShape2D" parent="TileLayers/RoomCollisions/Wall" unique_id=1977902694]
+position = Vector2(532, -215)
+rotation = -1.5707964
+shape = SubResource("RectangleShape2D_a3nlj")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1428946343 node_paths=PackedStringArray("floor_polygon")]
 script = ExtResource("10_navigation")
+floor_polygon = NodePath("../FloorArea")
+
+[node name="FloorArea" type="Polygon2D" parent="." unique_id=2139087960]
+color = Color(1, 1, 1, 0)
+polygon = PackedVector2Array(1088, 576, 64, 576, 64, 64, 1088, 64, 1088, 576)
 
 [node name="SafeAreas" type="Node2D" parent="." unique_id=1612479251]
 position = Vector2(1120, 289.00003)
-scale = Vector2(8.839996, 8.08)
 
 [node name="SafeArea" parent="SafeAreas" unique_id=521000747 instance=ExtResource("11_a3nlj")]
-position = Vector2(-62.1041, 33.66336)
+position = Vector2(-544, 286.99997)
 
 [node name="SafeArea2" parent="SafeAreas" unique_id=1443511539 instance=ExtResource("11_a3nlj")]
-position = Vector2(-63.00908, -25.86634)
+position = Vector2(-1056, 30.999962)
 
 [node name="SafeArea3" parent="SafeAreas" unique_id=1707402177 instance=ExtResource("11_a3nlj")]
-position = Vector2(-115.49779, 4.9504914)
+position = Vector2(-544, -225.00005)
 
 [node name="SafeArea4" parent="SafeAreas" unique_id=1244036859 instance=ExtResource("11_a3nlj")]
-position = Vector2(-8.031678, 4.9504914)
+position = Vector2(-31.999939, 30.99996)
 
 [node name="LevelExits" type="Node2D" parent="." unique_id=555639378]
 
 [node name="LevelDoor" parent="LevelExits" unique_id=120435420 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(563, 56)
+position = Vector2(576, 32)
 enter_door = NodePath("../LevelDoor3")
-door_fade_duration = null
-player_spawn_offset = Vector2(0, 45)
+player_spawn_offset = Vector2(0, 64)
+no_sprite = false
 
 [node name="LevelDoor2" parent="LevelExits" unique_id=1431727498 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(1094, 329)
+position = Vector2(1120, 320)
+rotation = 1.5707964
 enter_door = NodePath("../LevelDoor4")
-door_fade_duration = null
-sprite_rotation_degrees = 90.0
-player_spawn_offset = Vector2(-45, 0)
+player_spawn_offset = Vector2(0, 64)
+no_sprite = false
 
 [node name="LevelDoor3" parent="LevelExits" unique_id=410338649 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(571, 606)
+position = Vector2(576, 608)
+rotation = -3.1415927
 enter_door = NodePath("../LevelDoor")
-door_fade_duration = null
-sprite_rotation_degrees = 180.0
-player_spawn_offset = Vector2(0, -45)
+player_spawn_offset = Vector2(0, 64)
+no_sprite = false
 
 [node name="LevelDoor4" parent="LevelExits" unique_id=144806269 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
-position = Vector2(52, 329)
+position = Vector2(32, 320)
+rotation = -1.5707964
 enter_door = NodePath("../LevelDoor2")
-door_fade_duration = null
-sprite_rotation_degrees = -90.0
-player_spawn_offset = Vector2(47.29, 0)
+player_spawn_offset = Vector2(0, 64)
+no_sprite = false
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("7_wkt00")]
