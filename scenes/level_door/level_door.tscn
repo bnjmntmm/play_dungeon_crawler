@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://c5u43pngl23g5" path="res://assets/sprites/world_sprites/Tuer_offen.png" id="4_door_open"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ttl3"]
-size = Vector2(80, 84)
+size = Vector2(64, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_DoorBlock"]
-size = Vector2(112, 99)
+size = Vector2(64, 64)
 
 [sub_resource type="GDScript" id="GDScript_qrrrs"]
 script/source = "@tool
@@ -26,9 +26,11 @@ func _process(delta: float) -> void:
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_4opm4")
+no_sprite = null
 
 [node name="DoorSprite" type="Sprite2D" parent="." unique_id=1948794752]
-scale = Vector2(0.3, 0.3)
+position = Vector2(0, 16)
+scale = Vector2(0.24354838, 0.24354838)
 texture = ExtResource("3_door_closed")
 
 [node name="OpenDoorSprite" type="Sprite2D" parent="DoorSprite" unique_id=122623187]
@@ -36,15 +38,14 @@ self_modulate = Color(1, 1, 1, 0)
 texture = ExtResource("4_door_open")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=843943335]
-position = Vector2(2, 4)
 shape = SubResource("RectangleShape2D_8ttl3")
 
 [node name="DoorwayBlocker" type="StaticBody2D" parent="." unique_id=189278453]
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DoorwayBlocker" unique_id=623984211]
-position = Vector2(2, -2.5)
 shape = SubResource("RectangleShape2D_DoorBlock")
+disabled = true
 
 [node name="ProgressRing" type="Node2D" parent="." unique_id=858242435]
 z_index = 10

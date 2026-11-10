@@ -12,20 +12,23 @@ const CLOSED_DOOR_TEXTURE: Texture2D = preload("res://assets/sprites/world_sprit
 @export var is_teleport_door: bool = false
 @export var teleport_destination: PackedScene
 @export_range(0.0, 2.0, 0.01) var door_fade_duration: float = 0.2
-@export var sprite_rotation_degrees: float = 0.0:
-	set(value):
-		sprite_rotation_degrees = value
-		$DoorSprite.rotation_degrees = sprite_rotation_degrees
-		$CollisionShape2D.rotation_degrees = sprite_rotation_degrees
-		$DoorwayBlocker.rotation_degrees = sprite_rotation_degrees
+#@export var sprite_rotation_degrees: float = 0.0:
+	#set(value):
+		#sprite_rotation_degrees = value
+		#$DoorSprite.rotation_degrees = sprite_rotation_degrees
+		#$CollisionShape2D.rotation_degrees = sprite_rotation_degrees
+		#$DoorwayBlocker.rotation_degrees = sprite_rotation_degrees
 
 @export_range(0.5, 10.0, 0.1) var skip_duration: float = 2.5
 @export var player_spawn_offset: Vector2
+@export var always_open: bool = true
+@export var no_sprite: bool = false
 
 @onready var door_sprite: Sprite2D = $DoorSprite
 @onready var open_door_sprite: Sprite2D = $DoorSprite/OpenDoorSprite
 @onready var doorway_blocker_shape: CollisionShape2D = $DoorwayBlocker/CollisionShape2D
 @onready var progress_ring: Node2D = $ProgressRing
+@onready var player_spawn_pos_visualizer: Marker2D = $PlayerSpawnPosVisualizer
 
 var _entry_player: PlayerCharacter
 var _skip_elapsed: float = 0.0
@@ -34,17 +37,23 @@ var _is_open: bool = false
 var _door_fade_tween: Tween
 
 func _ready() -> void:
-	_apply_sprite_rotation()
-	if is_teleport_door and not Engine.is_editor_hint():
+	#why dont we use just normal rotations?
+	#_apply_sprite_rotation()
+	if no_sprite and is_instance_valid(door_sprite):
+		door_sprite.visible = false
+	if always_open or (is_teleport_door and not Engine.is_editor_hint()):
 		set_door_open(true)
+		doorway_blocker_shape.disabled = true  # immediate, we're not in a physics callback
 
-func _apply_sprite_rotation() -> void:
-	if is_instance_valid(door_sprite):
-		door_sprite.rotation_degrees = sprite_rotation_degrees
-		$CollisionShape2D.rotation_degrees = sprite_rotation_degrees
-		$DoorwayBlocker.rotation_degrees = sprite_rotation_degrees
+#func _apply_sprite_rotation() -> void:
+	#if is_instance_valid(door_sprite):
+		#door_sprite.rotation_degrees = sprite_rotation_degrees
+		#$CollisionShape2D.rotation_degrees = sprite_rotation_degrees
+		#$DoorwayBlocker.rotation_degrees = sprite_rotation_degrees
 
 func set_door_open(is_open: bool) -> void:
+	if always_open or is_teleport_door:
+		is_open = true
 	if _is_open == is_open:
 		return
 	_is_open = is_open
