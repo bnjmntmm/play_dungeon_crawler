@@ -27,10 +27,15 @@ var _movement_lock: bool = false
 var _damage_cooldown_active: bool = false
 var safe_zone_count : int = 0
 
+## true as soon as the throw cooldown is over; a throw then happens
+## immediately once an enemy is in range
+var _can_throw: bool = true
+
 ## used for instantiating baguette
 var current_level_scene = null
 
 @onready var throw_area: Area2D = $ThrowArea
+@onready var throw_timer: Timer = $ThrowTimer
 
 func _enter_tree() -> void:
 	add_to_group("player")
@@ -46,8 +51,16 @@ func _ready() -> void:
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	if (use_slice_count_from_manager):
 		cake_slices = GameManager.player_final_cake_slices
+	
+	# The ThrowTimer is now only the cooldown between two throws.
+	# Its wait_time in the inspector is the cooldown.
+	throw_timer.one_shot = true
+	throw_timer.stop()
+	_can_throw = true
 
 func _physics_process(delta: float) -> void:
+	_try_throw()
+	
 	var direction := Input.get_vector("movement_left", "movement_right","movement_up","movement_down")
 	_update_joy_light(delta, direction)
 	if direction:
@@ -58,6 +71,18 @@ func _physics_process(delta: float) -> void:
 	if _movement_lock:
 		return
 	move_and_slide()
+
+## Throws right away if the cooldown is over and an enemy is in range.
+## If nobody is in range, the cooldown stays "ready" and we check again next frame.
+func _try_throw() -> void:
+	if not _can_throw:
+		return
+	nearest_animal = get_nearest_animal()
+	if nearest_animal == null:
+		return
+	throw_baguette()
+	_can_throw = false
+	throw_timer.start()
 
 func throw_baguette():
 	if nearest_animal:
@@ -103,8 +128,9 @@ func get_nearest_animal() -> AnimalScene:
 func _on_recheck_nearest_animal_timeout() -> void:
 	nearest_animal = get_nearest_animal()
 
+## The cooldown is over, the next throw happens as soon as an enemy is in range.
 func _on_throw_timer_timeout() -> void:
-	throw_baguette()
+	_can_throw = true
 
 func _position_player(new_pos: Vector2):
 	global_position = new_pos
@@ -141,6 +167,8 @@ func _get_direction_light_color(direction: Vector2) -> Color:
 	return horizontal.lerp(vertical, absf(direction.y) / total)
 
 func _vibrate_joy():
+	if _controller_ids.is_empty():
+		return
 	if not Input.has_joy_vibration(_controller_ids[0]):
 		return
 	if Input.is_joy_vibrating(_controller_ids[0]):

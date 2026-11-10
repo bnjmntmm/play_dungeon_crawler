@@ -2,13 +2,13 @@
 
 [ext_resource type="Texture2D" uid="uid://bkw5g76nvky8" path="res://icon.svg" id="1_8afob"]
 [ext_resource type="Script" uid="uid://i6t8jjxgsfpa" path="res://scenes/player/player.gd" id="1_dovo2"]
-[ext_resource type="PackedScene" path="res://scenes/ui/virtual_joystick.tscn" id="2_joystick"]
+[ext_resource type="PackedScene" uid="uid://c50qowea5417o" path="res://scenes/ui/virtual_joystick.tscn" id="2_joystick"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_8ttl3"]
 radius = 14.035668
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_48lqx"]
-radius = 135.0
+radius = 150.0
 
 [node name="Player" type="CharacterBody2D" unique_id=2108247644]
 collision_layer = 2
