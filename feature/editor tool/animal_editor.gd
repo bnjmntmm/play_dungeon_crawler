@@ -6,11 +6,17 @@ signal saved(code: String)
 
 @onready var save_button: Button = %SaveButton
 @onready var grid_con = %TextureGrid
-@onready var image_dir = "res://feature/editor tool/Cracks/"
+@onready var image_dir = "res://custom_data/"
 @export var grid_columns:int = 6
 @export var grid_item_size:Vector2i = Vector2i(0,150)
 @export var grid_item_margin:int = 5
 var buttonDictionary: Dictionary[Button, ImageTexture]
+var buttonPathDictionary: Dictionary[Button, String]
+var buttonFolderDictionary: Dictionary[Button, String]
+
+# currently selected image
+var selected_image_path:String = ""
+var selected_folder_name:String = ""
 
 @onready var health_text_edit: LineEdit = %Health_TextEdit
 @onready var damage_text_edit: LineEdit = %Damage_TextEdit
@@ -69,8 +75,10 @@ func use_kid(code: String) -> void:
 
 func _reset_form() -> void:
 	config_file = AnimalConfig.new()
+	selected_image_path = ""
+	selected_folder_name = ""
 	name_edit.text = ""
-	for text: LineEdit in [health_text_edit, damage_text_edit, speed_text_edit, attack_speed_text_edit, detection_range_text_edit]:
+	for text: LineEdit in [health_text_edit, speed_text_edit, attack_speed_text_edit, detection_range_text_edit]:
 		text.text = ""
 		text.set_modulate(Color(1,1,1))
 	_get_preview_sprite().texture = default_sprite
@@ -82,6 +90,8 @@ func _reset_form() -> void:
 
 func _load_into_form(animal: AnimalConfig) -> void:
 	config_file = animal
+	selected_image_path = ""
+	selected_folder_name = ""
 	name_edit.text = animal.display_name
 	var values: Dictionary[LineEdit, float] = {
 		health_text_edit: animal.health,
@@ -124,7 +134,7 @@ func _update_detection_ring() -> void:
 	detection_ring.width = 3.0 / zoom
 
 func _get_preview_sprite() -> Sprite2D:
-	return animal_scene.get_node("Sprite2D") as Sprite2D
+	return animal_scene.get_node("SpriteScaler/Sprite2D") as Sprite2D
 
 func _show_info(message: String, is_error: bool) -> void:
 	info_label.add_theme_color_override("font_color", Color(1, 0.35, 0.3) if is_error else Color(0.55, 1, 0.6))
@@ -133,58 +143,71 @@ func _show_info(message: String, is_error: bool) -> void:
 func clear_grid():
 	for child in grid_con.get_children():
 		child.queue_free()
-	
+	buttonDictionary.clear()
+	buttonPathDictionary.clear()
+	buttonFolderDictionary.clear()
+
+# scans res://custom_data/<folder_name>/animal/ for every folder_name
 func populate_texture_selection():
 	grid_con.columns = grid_columns
 	print("populating texture grid")
-	var dir = DirAccess.open(image_dir)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
+	var root_dir = DirAccess.open(image_dir)
+	if root_dir == null:
+		print("Textures Filepath ", image_dir, " could not be accessed")
+		return
+	
+	for folder_name in root_dir.get_directories():
+		var animal_dir_path:String = image_dir + folder_name + "/animal/"
+		if DirAccess.dir_exists_absolute(animal_dir_path) == false:
+			continue
+		add_images_from_directory(animal_dir_path, folder_name)
+
+func add_images_from_directory(dir_path:String, folder_name:String):
+	var dir = DirAccess.open(dir_path)
+	if dir == null:
+		print("Textures Filepath ", dir_path, " could not be accessed")
+		return
+	
+	for file_name in dir.get_files():
+		if file_name.ends_with(".png") == false:
+			continue
+		var full_path:String = dir_path + file_name
+		var img:Image = Image.load_from_file(full_path)
+		if img == null:
+			print("Could not load image: ", full_path)
+			continue
+		var tex:ImageTexture = ImageTexture.create_from_image(img)
 		
-		while file_name != "":
-			if dir.current_is_dir() == false:
-				# filter by file ending
-				var img:Image
-				var tex:ImageTexture
-				
-				if file_name.ends_with("png"):
-					#print("file: " + file_name)
-					img = Image.load_from_file(image_dir + file_name)
-					tex = ImageTexture.create_from_image(img)
-					
-					var margin_con = MarginContainer.new()
-					grid_con.add_child(margin_con)
-					margin_con.add_theme_constant_override("margin_top", grid_item_margin)
-					margin_con.add_theme_constant_override("margin_left", grid_item_margin)
-					margin_con.add_theme_constant_override("margin_bottom", grid_item_margin)
-					margin_con.add_theme_constant_override("margin_right", grid_item_margin)
-					margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-					margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
-					
-					var button = Button.new()
-					margin_con.add_child(button)
-					#print("tex: ", tex)
-					button.icon = tex
-					button.expand_icon = true
-					button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-					button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
-					button.custom_minimum_size = grid_item_size
-					
-					buttonDictionary.get_or_add(button)
-					buttonDictionary.set(button, tex)
-					
-					# on button press setze variable (verknüpfe das signal I guess)
-					button.pressed.connect(on_texture_button_clicked.bind(button))
-			file_name = dir.get_next()
-	else:
-		print("Textures Filepath ", image_dir , " could not be accessed")
+		var margin_con = MarginContainer.new()
+		grid_con.add_child(margin_con)
+		margin_con.add_theme_constant_override("margin_top", grid_item_margin)
+		margin_con.add_theme_constant_override("margin_left", grid_item_margin)
+		margin_con.add_theme_constant_override("margin_bottom", grid_item_margin)
+		margin_con.add_theme_constant_override("margin_right", grid_item_margin)
+		margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		var button = Button.new()
+		margin_con.add_child(button)
+		button.icon = tex
+		button.expand_icon = true
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+		button.custom_minimum_size = grid_item_size
+		button.tooltip_text = folder_name + "/" + file_name
+		
+		buttonDictionary[button] = tex
+		buttonPathDictionary[button] = full_path
+		buttonFolderDictionary[button] = folder_name
+		
+		button.pressed.connect(on_texture_button_clicked.bind(button))
 
 func on_texture_button_clicked(button:Button):
-	for child in animal_scene.get_children():
-		if child is Sprite2D:
-			child.texture = buttonDictionary.get(button)
+	animal_scene.sprite_2d.texture = buttonDictionary.get(button)
 	config_file.sprite = buttonDictionary.get(button)
+	selected_image_path = buttonPathDictionary.get(button, "")
+	selected_folder_name = buttonFolderDictionary.get(button, "")
+	config_file.source_png = selected_image_path
 
 func populate_sound_selection():
 	print("populating sound selection")
@@ -201,20 +224,18 @@ func populate_sound_selection():
 					var stream = AudioStreamWAV.load_from_file(sound_dir + file_name)
 					
 					var item_name:String = file_name.get_basename()
-					#print("adding file: ", file_name)
 					sound_option.add_item(item_name)
 					
-					soundDictionary.get_or_add(i)
-					soundDictionary.set(i, stream)
+					soundDictionary[i] = stream
 					i = i + 1
 			file_name = dir.get_next()
 	else:
 		print("Sound Filepath ", sound_dir , " could not be accessed")
 	sound_option.select(-1)
-	#print(soundDictionary)
 	
 #export the config
 func _on_save_button_pressed() -> void:
+	config_file.damage = 1
 	var problem: String = _find_save_problem()
 	if not problem.is_empty():
 		_show_info(problem, true)
@@ -222,18 +243,30 @@ func _on_save_button_pressed() -> void:
 	var code: String = LevelCode.clean(code_edit.text)
 	var path: String = KidFolders.get_animal_path(code)
 	config_file.display_name = name_edit.text.strip_edges()
+	#config_file.source_png = selected_image_path
 	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 	if ResourceSaver.save(config_file, path) != OK:
 		_show_info("Speichern hat nicht geklappt. Sag dem Dev-Team Bescheid.", true)
 		return
 	saved_path = path
+	
+	
+	# additionally save right next to the chosen png as animal_<folder_name>.tres
+	if selected_image_path != "" and selected_folder_name != "":
+		var png_side_path:String = selected_image_path.get_base_dir().path_join("animal_" + selected_folder_name + ".tres")
+		if png_side_path != path:
+			if ResourceSaver.save(config_file, png_side_path) != OK:
+				_show_info("Speichern neben dem Bild hat nicht geklappt: " + png_side_path, true)
+				return
+			print("also saved file to: ", png_side_path)
+	
 	if Engine.is_editor_hint():
 		EditorInterface.get_resource_filesystem().scan()
 	_show_info("Gespeichert! Jetzt kannst du dein Tier in den Raum setzen.", false)
 	saved.emit(code)
 
 func _find_save_problem() -> String:
-	for text: LineEdit in [health_text_edit, damage_text_edit, speed_text_edit, attack_speed_text_edit, detection_range_text_edit]:
+	for text: LineEdit in [health_text_edit, speed_text_edit, attack_speed_text_edit, detection_range_text_edit]:
 		if not text.text.is_valid_int() or int(text.text) <= 0:
 			return "Alle Werte brauchen eine Zahl größer als 0."
 	if config_file.sprite == null:
@@ -348,4 +381,3 @@ func _on_attack_timer_timeout() -> void:
 func _on_refresh_pressed() -> void:
 	clear_grid()
 	populate_texture_selection()
-	pass # Replace with function body.

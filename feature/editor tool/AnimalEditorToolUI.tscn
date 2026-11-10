@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b67wubyj4rlpj"]
 
-[ext_resource type="Script" path="res://feature/editor tool/animal_editor.gd" id="1_animal_editor"]
+[ext_resource type="Script" uid="uid://cr4trttxuxn6c" path="res://feature/editor tool/animal_editor.gd" id="1_animal_editor"]
 [ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="2_jd8r5"]
 [ext_resource type="StyleBox" uid="uid://bbx147h12vq6p" path="res://feature/editor tool/stylebox_editor_tool.tres" id="2_vf8p1"]
 [ext_resource type="Texture2D" uid="uid://cx313cyyhra11" path="res://feature/editor tool/Cracks/Cracks_01-512x512.png" id="3_mt0ab"]
@@ -15,13 +15,13 @@ grow_end = -10.0
 thickness = 2
 
 [node name="ToolUi" type="Control" unique_id=1558812303]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture_filter = 1
 script = ExtResource("1_animal_editor")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1948257166]
@@ -57,7 +57,7 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(549, 269)
+size = Vector2i(549, 263)
 render_target_update_mode = 4
 
 [node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
@@ -125,12 +125,14 @@ size_flags_vertical = 3
 text = "+"
 
 [node name="Damage Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=2033671799]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 text = "Damage"
 
 [node name="Damage Settings" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=1022441110]
+visible = false
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Damage Settings" unique_id=1054563018]
@@ -148,6 +150,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
+text = "1"
 placeholder_text = "1 - 10"
 alignment = 1
 
@@ -416,8 +419,8 @@ text = "Speichern"
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Detection Range Settings/HBoxContainer/DetectionRange_Down_Button" to="." method="_on_detection_range_down_button_pressed"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Detection Range Settings/HBoxContainer/DetectionRange_TextEdit" to="." method="_on_detection_range_text_edit_text_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Detection Range Settings/HBoxContainer/DetectionRange_Up_Button" to="." method="_on_detection_range_up_button_pressed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Animation OptionButton" to="." method="_on_animation_option_button_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings/SoundOption" to="." method="_on_sound_option_item_selected"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Animation OptionButton" to="." method="_on_animation_option_button_item_selected"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
