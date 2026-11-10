@@ -59,6 +59,7 @@ var moveAnimType: Enums.AnimalAnimationType = 0
 
 func _ready() -> void:
 	super._ready()
+	sprite_2d = $SpriteScaler/Sprite2D
 	player = get_tree().get_first_node_in_group("player") as PlayerCharacter
 	if player  == null and not GameManager.gallery_mode:
 		push_error("AnimalScene could not find a PlayerCharacter in the 'player' group")
@@ -79,7 +80,7 @@ func init_config() -> void:
 	damage = anim_config.damage
 	#Factor?
 	_attack_windup  = anim_config.attack_speed
-	movement_speed = anim_config.speed
+	movement_speed = anim_config.speed * 10
 	var detection_circle := detection_shape.shape as CircleShape2D
 	print(detection_circle.radius)
 	detection_circle.set_radius(anim_config.detection_range) 
@@ -166,7 +167,8 @@ func attack_player():
 		if sound:
 			audio_stream_player.stream = sound
 			audio_stream_player.play()
-		player.get_attacked(damage)
+		#player.get_attacked(damage)
+		player.get_attacked(1)
 	_on_player_attack_finished()
 
 func _on_player_attack_finished() -> void:
@@ -210,10 +212,13 @@ func fed():
 		collision_shape_2d.set_deferred("disabled", true)
 		_change_ai_state(AnimalAiState.inactive)
 		pacified.emit()
+		animation_player.play("RESET")
+		animation_player.advance(0)
+		animation_player.play("fed")
+		animation_player.queue("fed_idle")
 
 func is_pacified() -> bool:
 	return _pacified
-
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	if body != player:
@@ -229,7 +234,7 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 		_start_attack_windup()
 
 func set_passive_state(is_passive: bool)->void :
-	if (AnimalAiState.inactive):
+	if (AnimalAiState.inactive or _pacified):
 		return
 	passive_only = is_passive
 	_change_ai_state(AnimalAiState.passive) if is_passive else _change_ai_state(AnimalAiState.aggressive)
@@ -245,7 +250,6 @@ func _on_player_detection_area_body_exited(body: Node2D) -> void:
 		if current_ai_behaviour == AnimalAiState.aggressive:
 			# Continue to the last seen position, without tracking an unseen player.
 			set_movement_target(player.global_position)
-
 
 func _update_player_loss(delta: float) -> void:
 	if current_ai_behaviour != AnimalAiState.aggressive:
@@ -286,6 +290,9 @@ func setWalkAnimation(is_walking: bool) -> void:
 	if moveAnimType == 0:
 		return
 
+	if _pacified:
+		return
+	
 	var target := "idle"
 	if is_walking:
 		match moveAnimType:
