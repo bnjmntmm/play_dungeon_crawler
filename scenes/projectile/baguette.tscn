@@ -1,11 +1,14 @@
 [gd_scene format=3 uid="uid://d3c6bx7pcq5kw"]
 
 [ext_resource type="Script" uid="uid://ds4j7mvo4421b" path="res://scenes/projectile/baguette.gd" id="1_tqekf"]
-[ext_resource type="Texture2D" uid="uid://cqpw8auq34nvo" path="res://assets/sprites/Dungeon Gathering Free Version/Structure.png" id="2_k72so"]
+[ext_resource type="Texture2D" uid="uid://cfeh2of0e2tev" path="res://assets/sprites/world_sprites/Essen_01.png" id="2_k72so"]
+[ext_resource type="Texture2D" uid="uid://blvqsg2vgplhb" path="res://assets/sprites/world_sprites/Essen_02.png" id="3_yvp68"]
+[ext_resource type="Texture2D" uid="uid://cldf27aiu4s2b" path="res://assets/sprites/world_sprites/Essen_03.png" id="4_hqybu"]
+[ext_resource type="Texture2D" uid="uid://b7km7g4s1rw3x" path="res://assets/sprites/world_sprites/Essen_04.png" id="5_cec8a"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8ttl3"]
 radius = 3.0
-height = 14.0
+height = 11.5
 
 [node name="Baguette" type="Area2D" unique_id=1865676104]
 scale = Vector2(4, 4)
@@ -13,10 +16,33 @@ collision_layer = 16
 collision_mask = 5
 script = ExtResource("1_tqekf")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=228687742]
-position = Vector2(0, 0.5)
-scale = Vector2(0.375, 0.40625)
+[node name="Food1" type="Sprite2D" parent="." unique_id=228687742]
+visible = false
+position = Vector2(-0.15668629, -0.6566868)
+rotation = -0.7477154
+scale = Vector2(0.05, 0.05)
 texture = ExtResource("2_k72so")
+
+[node name="Food2" type="Sprite2D" parent="." unique_id=851417979]
+visible = false
+position = Vector2(-0.1566863, 0.09331322)
+rotation = -0.7477154
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("3_yvp68")
+
+[node name="Food3" type="Sprite2D" parent="." unique_id=80392124]
+visible = false
+position = Vector2(-0.1566863, 0.09331322)
+rotation = -0.7477154
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("4_hqybu")
+
+[node name="Food4" type="Sprite2D" parent="." unique_id=1356241324]
+visible = false
+position = Vector2(-0.1566863, 0.09331322)
+rotation = -0.7477154
+scale = Vector2(0.045, 0.045)
+texture = ExtResource("5_cec8a")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1402402321]
 shape = SubResource("CapsuleShape2D_8ttl3")
