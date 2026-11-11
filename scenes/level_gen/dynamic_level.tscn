@@ -25,6 +25,12 @@ size = Vector2(64, 224)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_a3nlj"]
 size = Vector2(64, 128)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arqpn"]
+size = Vector2(1152, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hgjwy"]
+size = Vector2(6, 640)
+
 [node name="DynamicLevel" type="Node2D" unique_id=1100624506]
 script = ExtResource("1_ebv8c")
 debug_level = ExtResource("2_a3nlj")
@@ -105,6 +111,31 @@ position = Vector2(532, -215)
 rotation = -1.5707964
 shape = SubResource("RectangleShape2D_a3nlj")
 
+[node name="ProjectileHitbox" type="StaticBody2D" parent="TileLayers/RoomCollisions" unique_id=1921324017]
+position = Vector2(44, 183)
+collision_layer = 32
+collision_mask = 22
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileLayers/RoomCollisions/ProjectileHitbox" unique_id=763474053]
+position = Vector2(532, -151)
+shape = SubResource("RectangleShape2D_arqpn")
+debug_color = Color(0.95816153, 2.8878452e-07, 0.58230346, 0.41960785)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/RoomCollisions/ProjectileHitbox" unique_id=42871178]
+position = Vector2(-12, 137)
+shape = SubResource("RectangleShape2D_hgjwy")
+debug_color = Color(0.95816153, 2.8878452e-07, 0.58230346, 0.41960785)
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="TileLayers/RoomCollisions/ProjectileHitbox" unique_id=44400078]
+position = Vector2(1076, 137)
+shape = SubResource("RectangleShape2D_hgjwy")
+debug_color = Color(0.95816153, 2.8878452e-07, 0.58230346, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="TileLayers/RoomCollisions/ProjectileHitbox" unique_id=1522731305]
+position = Vector2(532, 425)
+shape = SubResource("RectangleShape2D_arqpn")
+debug_color = Color(0.95816153, 2.8878452e-07, 0.58230346, 0.41960785)
+
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=1428946343 node_paths=PackedStringArray("floor_polygon")]
 script = ExtResource("10_navigation")
 floor_polygon = NodePath("../FloorArea")
@@ -134,27 +165,27 @@ position = Vector2(-31.999939, 30.99996)
 position = Vector2(576, 32)
 enter_door = NodePath("../LevelDoor3")
 player_spawn_offset = Vector2(0, 64)
-no_sprite = false
+always_open = false
 
 [node name="LevelDoor2" parent="LevelExits" unique_id=1431727498 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
 position = Vector2(1120, 320)
 rotation = 1.5707964
 enter_door = NodePath("../LevelDoor4")
 player_spawn_offset = Vector2(0, 64)
-no_sprite = false
+always_open = false
 
 [node name="LevelDoor3" parent="LevelExits" unique_id=410338649 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
 position = Vector2(576, 608)
 rotation = -3.1415927
 enter_door = NodePath("../LevelDoor")
 player_spawn_offset = Vector2(0, 64)
-no_sprite = false
+always_open = false
 
 [node name="LevelDoor4" parent="LevelExits" unique_id=144806269 node_paths=PackedStringArray("enter_door") instance=ExtResource("6_m30r8")]
 position = Vector2(32, 320)
 rotation = -1.5707964
 enter_door = NodePath("../LevelDoor2")
 player_spawn_offset = Vector2(0, 64)
-no_sprite = false
+always_open = false
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("7_wkt00")]

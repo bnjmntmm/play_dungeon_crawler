@@ -41,6 +41,7 @@ navigation_enabled = false
 
 [node name="Wall" type="StaticBody2D" parent="TileLayers" unique_id=397479653]
 position = Vector2(44, 183)
+collision_layer = 33
 collision_mask = 22
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=2041723795]
