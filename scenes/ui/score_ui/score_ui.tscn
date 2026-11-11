@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://c15ljp47t1g36"]
+
+[ext_resource type="Script" uid="uid://by1nwct2nppuf" path="res://scenes/ui/score_ui/score_ui.gd" id="1_qukyi"]
+
+[sub_resource type="Animation" id="Animation_qukyi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect/MarginContainer:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect/MarginContainer:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_gvfh5"]
+resource_name = "increased_score"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect/MarginContainer:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.049999997, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.15, 1.15), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect/MarginContainer:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.05235987755982989, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gg65l"]
+_data = {
+&"RESET": SubResource("Animation_qukyi"),
+&"increased_score": SubResource("Animation_gvfh5")
+}
+
+[node name="ScoreUi" type="Control" unique_id=798348638]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qukyi")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1841900793]
+layout_mode = 0
+offset_right = 133.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 0.5529412)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=481781098]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="ColorRect/MarginContainer" unique_id=1431347543]
+layout_mode = 2
+size_flags_vertical = 1
+text = "000000000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1097498921]
+libraries/ = SubResource("AnimationLibrary_gg65l")
