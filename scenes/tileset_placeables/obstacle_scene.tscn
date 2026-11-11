@@ -7,6 +7,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q034m"]
 size = Vector2(16, 16)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3gxm3"]
+size = Vector2(4, 4)
+
 [node name="ObstacleScene" type="Node2D" unique_id=879393062]
 script = ExtResource("1_aal6r")
 
@@ -21,3 +24,11 @@ sprite = NodePath(".")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1041089228]
 shape = SubResource("RectangleShape2D_q034m")
+
+[node name="ProjectileHitbox" type="StaticBody2D" parent="." unique_id=1788486697]
+collision_layer = 32
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ProjectileHitbox" unique_id=1682307353]
+shape = SubResource("RectangleShape2D_3gxm3")
+debug_color = Color(0.9627057, 0, 0.50582665, 0.41960785)
