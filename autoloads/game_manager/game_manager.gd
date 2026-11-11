@@ -8,6 +8,7 @@ signal loaded_new_room(room_name: String)
 signal room_cleared
 signal entered_end_room()
 signal player_died()
+signal player_score_changed()
 
 var nextEntryDoor : LevelDoor
 
@@ -43,6 +44,8 @@ const MAX_ROOMS_TO_GENERATE: int = 5
 const CUSTOM_DATA_PATH: String = "res://custom_data"
 const RESOURCE_EXTENSIONS: PackedStringArray = ["tres", "res"]
 const END_ROOM = preload("uid://brkub0ovdbfcx")
+
+var player_score: int = 0
  
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -116,6 +119,7 @@ func reset_run() -> void:
 	_room_ready_for_clear_check = false
 	unused_level_configs.append_array(all_level_configs)
 	current_room_index = 0
+	player_score = 0
 	GameManager.gallery_mode = false
 	#Stat Resets etc here
 
@@ -176,11 +180,12 @@ func handle_fade_callback(is_in: bool) -> void:
 	else:
 		pass
 
-func init_room_change() -> void:
+func init_room_change(no_progress: bool) -> void:
 	is_in_load = true
 	print ("load started")
 	if not gallery_mode:
-		current_room_index += 1
+		if not no_progress:
+			current_room_index += 1
 		if current_room_index >= MAX_ROOMS_TO_GENERATE:
 			entered_end_room.emit()
 			init_scene_change(END_ROOM)
@@ -199,6 +204,10 @@ func on_room_loaded() -> void:
 	_room_ready_for_clear_check = true
 	_check_room_clear()
 	player_reposition.emit(nextEntryDoor.player_spawn_pos_visualizer.global_position)
+	if gallery_mode:
+		on_player_repos()
+
+func on_player_repos()-> void:
 	loaded_new_room.emit(current_level_config.display_name)
 	start_fade.emit(false)
 	is_in_load = false
@@ -236,7 +245,7 @@ func gallery_switch(is_right: bool)-> void:
 	gallery_index += 1 if is_right else -1
 	gallery_index = posmod(gallery_index, all_level_configs.size())
 	is_in_load = true
-	init_room_change()
+	init_room_change(true)
 	pass
 	
 func gallery_search(new_index: int)-> void:
@@ -244,7 +253,8 @@ func gallery_search(new_index: int)-> void:
 		return
 	gallery_index = new_index
 	is_in_load = true
-	init_room_change()
+	init_room_change(true)
+	
 	pass
 
 func set_all_enemy_passive(passive: bool)->void :
@@ -268,3 +278,7 @@ func _check_room_clear() -> void:
 			return
 	room_is_cleared = true
 	room_cleared.emit()
+
+func add_player_score(pts: int)-> void:
+	player_score += pts
+	player_score_changed.emit()
