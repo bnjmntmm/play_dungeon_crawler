@@ -51,11 +51,18 @@ var _current_anim : String = ""
 
 ## From Config
 ## health / fed amount coming from the config
+var max_health: int = 1
 var health : int = 1
 var attack_speed : int = 1
 var damage : int = 1
 var sound : AudioStreamWAV
 var moveAnimType: Enums.AnimalAnimationType = 0
+
+var _in_load: bool = true
+
+const CHASE_DECAY_TIME := 1.0 
+var _player_in_detection_range : bool = false
+var _chase_decay_time: float = 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -69,6 +76,14 @@ func _ready() -> void:
 		config = GameManager.all_animal_configs.pick_random()
 		init_config()
 	GameManager.register_animal(self)
+	GameManager.change_level.connect(_enable_load.unbind(1))
+	GameManager.loaded_new_room.connect(_disable_load.unbind(1))
+	
+func _enable_load()-> void:
+	_in_load = true
+	
+func _disable_load()-> void:
+	_in_load = false
 
 func init_config() -> void:
 	super.init_config()
@@ -77,6 +92,7 @@ func init_config() -> void:
 		push_error("AnimalScene requires an AnimalConfig")
 		return
 	health = anim_config.health
+	max_health = anim_config.health
 	damage = anim_config.damage
 	#Factor?
 	_attack_windup  = anim_config.attack_speed
@@ -96,8 +112,11 @@ func _on_velocity_computed(safe_velocity: Vector2):
 	setWalkAnimation(character_body.velocity.length() > 0.1)
 
 func _physics_process(delta):
+	if _in_load:
+		return
 	if passive_only and current_ai_behaviour == AnimalAiState.aggressive:
 		_change_ai_state(AnimalAiState.passive)
+	_update_chase_decay(delta)
 	_update_player_loss(delta)
 	if _is_winding_up or _is_attacking:
 		_on_velocity_computed(Vector2.ZERO)
@@ -185,6 +204,8 @@ func _on_attack_windup_timer_timeout() -> void:
 		attack_player()
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
+	if _in_load:
+		return
 	if body == player:
 		_player_in_range = true
 		_start_attack_windup()
@@ -196,6 +217,8 @@ func _start_attack_windup() -> void:
 	attack_windup_timer.start(_attack_windup)
 
 func _on_attack_area_body_exited(body: Node2D) -> void:
+	if _in_load:
+		return
 	if body == player:
 		_player_in_range = false
 		attack_windup_timer.stop()
@@ -216,14 +239,19 @@ func fed():
 		animation_player.advance(0)
 		animation_player.play("fed")
 		animation_player.queue("fed_idle")
+		GameManager.add_player_score(100 * max_health)
 
 func is_pacified() -> bool:
 	return _pacified
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
+	if _in_load:
+		return
 	if body != player:
 		return
 	_player_detected = true
+	_player_in_detection_range = true
+	_chase_decay_time = 0.0
 	_lost_player_elapsed = 0.0
 	if passive_only or _pacified:
 		return
@@ -244,9 +272,13 @@ func set_passive_state(is_passive: bool)->void :
 	_on_velocity_computed(Vector2.ZERO)
 
 func _on_player_detection_area_body_exited(body: Node2D) -> void:
+	if _in_load:
+		return
 	if body == player:
-		_player_detected = false
+		#_player_detected = false
 		_lost_player_elapsed = 0.0
+		_player_in_detection_range = false
+		_chase_decay_time = 0.0
 		if current_ai_behaviour == AnimalAiState.aggressive:
 			# Continue to the last seen position, without tracking an unseen player.
 			set_movement_target(player.global_position)
@@ -313,3 +345,12 @@ func setWalkAnimation(is_walking: bool) -> void:
 	animation_player.play(target)
 	_current_anim = target
 		
+func _update_chase_decay(delta: float) -> void:
+	if not _player_detected or _player_in_detection_range:
+		return
+	_chase_decay_time += delta
+	if _chase_decay_time >= CHASE_DECAY_TIME:
+		_player_detected = false
+		_chase_decay_time = 0.0
+		if current_ai_behaviour == AnimalAiState.aggressive and is_instance_valid(player):
+			set_movement_target(player.global_position)
