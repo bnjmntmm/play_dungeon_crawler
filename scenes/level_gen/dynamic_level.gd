@@ -37,13 +37,13 @@ func _ready() -> void:
 		if debug_entry:
 			GameManager.nextEntryDoor = debug_entry
 	_update_door_visuals()
-	GameManager.init_room_change()
+	GameManager.init_room_change(false)
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") && debug_switch_level:
-		GameManager.init_room_change()
+		GameManager.init_room_change(false)
 	pass
 
 func change_level(level_data: PackedByteArray) -> void:
