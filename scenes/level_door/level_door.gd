@@ -21,7 +21,7 @@ const CLOSED_DOOR_TEXTURE: Texture2D = preload("res://assets/sprites/world_sprit
 
 @export_range(0.5, 10.0, 0.1) var skip_duration: float = 2.5
 @export var player_spawn_offset: Vector2
-@export var always_open: bool = true
+@export var always_open: bool = false
 @export var no_sprite: bool = false
 
 @onready var door_sprite: Sprite2D = $DoorSprite
@@ -41,10 +41,14 @@ func _ready() -> void:
 	#_apply_sprite_rotation()
 	if no_sprite and is_instance_valid(door_sprite):
 		door_sprite.visible = false
-	if always_open or (is_teleport_door and not Engine.is_editor_hint()):
-		set_door_open(true)
-		doorway_blocker_shape.disabled = true  # immediate, we're not in a physics callback
-
+	if Engine.is_editor_hint():
+		return
+	var start_open := always_open or is_teleport_door
+	_is_open = start_open
+	door_sprite.self_modulate.a = 0.0 if start_open else 1.0
+	open_door_sprite.self_modulate.a = 1.0 if start_open else 0.0
+	doorway_blocker_shape.disabled = start_open
+	
 #func _apply_sprite_rotation() -> void:
 	#if is_instance_valid(door_sprite):
 		#door_sprite.rotation_degrees = sprite_rotation_degrees
@@ -83,7 +87,7 @@ func _process(delta: float) -> void:
 		_skip_started = false
 		_entry_player.set_movement_lock(true)
 		GameManager.nextEntryDoor = enter_door
-		GameManager.init_room_change()
+		GameManager.init_room_change(false)
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is PlayerCharacter:
@@ -101,7 +105,7 @@ func _on_body_entered(body: Node2D) -> void:
 				GameManager.init_scene_change(teleport_destination)
 			else:
 				GameManager.nextEntryDoor = enter_door
-				GameManager.init_room_change()
+				GameManager.init_room_change(GameManager.nextEntryDoor == self)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body == _entry_player:
