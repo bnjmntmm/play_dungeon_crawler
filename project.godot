@@ -22,6 +22,7 @@ Enums="*uid://ded27x47u85m6"
 
 [display]
 
+window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [dotnet]
@@ -62,6 +63,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_3="animals"
 2d_physics/layer_4="leveldoor"
 2d_physics/layer_5="projectile"
+2d_physics/layer_6="obstacle"
 
 [rendering]
 
