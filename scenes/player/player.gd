@@ -30,6 +30,7 @@ var safe_zone_count : int = 0
 ## true as soon as the throw cooldown is over; a throw then happens
 ## immediately once an enemy is in range
 var _can_throw: bool = true
+var _in_load: bool = false
 
 ## used for instantiating baguette
 var current_level_scene = null
@@ -45,6 +46,8 @@ func _ready() -> void:
 	current_level_scene = get_tree().current_scene
 	GameManager.player_reposition.connect(player_room_reset)
 	GameManager.entered_end_room.connect(store_slices_to_manager)
+	GameManager.change_level.connect(_enable_load.unbind(1))
+	GameManager.loaded_new_room.connect(_disable_load.unbind(1))
 	_joy_light_color = joy_light_down
 	_direction_light_color = joy_light_down
 	_refresh_joy_lights()
@@ -57,6 +60,12 @@ func _ready() -> void:
 	throw_timer.one_shot = true
 	throw_timer.stop()
 	_can_throw = true
+
+func _enable_load()-> void:
+	_in_load = true
+	
+func _disable_load()-> void:
+	_in_load = false
 
 func _physics_process(delta: float) -> void:
 	_try_throw()
@@ -75,6 +84,8 @@ func _physics_process(delta: float) -> void:
 ## Throws right away if the cooldown is over and an enemy is in range.
 ## If nobody is in range, the cooldown stays "ready" and we check again next frame.
 func _try_throw() -> void:
+	if _in_load:
+		return
 	if not _can_throw:
 		return
 	nearest_animal = get_nearest_animal()
@@ -138,6 +149,7 @@ func _position_player(new_pos: Vector2):
 func player_room_reset(new_pos: Vector2):
 	_position_player(new_pos)
 	set_movement_lock(false)
+	GameManager.on_player_repos()
 	
 
 func set_movement_lock(is_locked: bool):
