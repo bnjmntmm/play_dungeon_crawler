@@ -25,7 +25,7 @@ var selected_folder_name:String = ""
 @onready var attack_speed_progress_bar: ProgressBar = %"Attack Speed ProgressBar"
 @onready var detection_range_text_edit: LineEdit = %DetectionRange_TextEdit
 
-@onready var sound_dir = "res://feature/editor tool/Sounds/"
+@onready var sound_dir = "res://assets/sounds/tiere/"
 @onready var sound_option: OptionButton = %SoundOption
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 var soundDictionary: Dictionary[int, AudioStream]
@@ -232,7 +232,8 @@ func populate_sound_selection():
 					var stream = AudioStreamWAV.load_from_file(sound_dir + file_name)
 					
 					var item_name:String = file_name.get_basename()
-					sound_option.add_item(item_name)
+					var cut_item_name:String = item_name.get_slice("-",1)
+					sound_option.add_item(cut_item_name)
 					
 					soundDictionary[i] = stream
 					i = i + 1
