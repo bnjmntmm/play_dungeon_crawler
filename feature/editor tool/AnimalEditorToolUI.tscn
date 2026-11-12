@@ -1,15 +1,17 @@
 [gd_scene format=3 uid="uid://b67wubyj4rlpj"]
 
 [ext_resource type="Script" uid="uid://cr4trttxuxn6c" path="res://feature/editor tool/animal_editor.gd" id="1_animal_editor"]
+[ext_resource type="Theme" uid="uid://l6wo5id8eao5" path="res://feature/editor tool/editor_tool_theme.tres" id="1_mt0ab"]
 [ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="2_jd8r5"]
-[ext_resource type="StyleBox" uid="uid://bbx147h12vq6p" path="res://feature/editor tool/stylebox_editor_tool.tres" id="2_vf8p1"]
-[ext_resource type="Texture2D" uid="uid://cx313cyyhra11" path="res://feature/editor tool/Cracks/Cracks_01-512x512.png" id="3_mt0ab"]
+[ext_resource type="Texture2D" uid="uid://bmn0xs3lo74md" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 1.png" id="4_jd8r5"]
+[ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="4_mt0ab"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_p04p2"]
 font_size = 28
+font_color = Color(0.3529412, 0.4862745, 0.44705883, 1)
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_vf8p1"]
-color = Color(1, 1, 1, 1)
+color = Color(0.9137255, 0.36862746, 0.24313726, 1)
 grow_begin = -10.0
 grow_end = -10.0
 thickness = 2
@@ -22,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_mt0ab")
 script = ExtResource("1_animal_editor")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1948257166]
@@ -31,10 +34,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=195820763]
 layout_mode = 2
@@ -46,7 +45,6 @@ size_flags_vertical = 3
 [node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1654267999]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = ExtResource("2_vf8p1")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2" unique_id=1859606228]
 layout_mode = 2
@@ -57,8 +55,14 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer" unique_id=801851304]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(549, 263)
+size = Vector2i(564, 273)
 render_target_update_mode = 4
+
+[node name="Hintergrund" type="Sprite2D" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=562510595]
+position = Vector2(278, 129)
+rotation = 1.5707964
+scale = Vector2(0.28626418, 0.31677026)
+texture = ExtResource("4_mt0ab")
 
 [node name="AnimalScene" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer2/SubViewportContainer/SubViewport" unique_id=775286256 instance=ExtResource("2_jd8r5")]
 unique_name_in_owner = true
@@ -75,7 +79,6 @@ autostart = true
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1797520521]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = ExtResource("2_vf8p1")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer" unique_id=2097317905]
 layout_mode = 2
@@ -94,7 +97,7 @@ columns = 2
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 6
-text = "Health bzw. Hunger"
+text = "Hunger"
 
 [node name="Health Settings" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=2141802192]
 layout_mode = 2
@@ -164,7 +167,7 @@ text = "+"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-text = "Speed"
+text = "Bewegungs Geschwindigkeit"
 
 [node name="BoxContainer4" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=1727291097]
 layout_mode = 2
@@ -197,7 +200,7 @@ text = "+"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-text = "Attack Speed"
+text = "Angriffs Geschwindigkeit"
 
 [node name="Attack Speed Settings" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=2109588221]
 layout_mode = 2
@@ -240,7 +243,7 @@ show_percentage = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
-text = "Detection Range"
+text = "Wahrnehmungs Reichweite"
 
 [node name="Detection Range Settings" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=1224855778]
 layout_mode = 2
@@ -293,7 +296,7 @@ popup/item_3/id = 3
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 6
-text = "Sound"
+text = "Geräusch"
 
 [node name="Sound Settings" type="BoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer" unique_id=1613996731]
 layout_mode = 2
@@ -305,24 +308,39 @@ size_flags_horizontal = 3
 
 [node name="Sound Preview Button" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings" unique_id=765996822]
 layout_mode = 2
-text = "Preview"
+text = "Vorschau"
 
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=521068402]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = ExtResource("2_vf8p1")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer" unique_id=1496741337]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=69238394]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1155268542]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=69238394]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 
-[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=630466370]
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer" unique_id=630466370]
 layout_mode = 2
 text = "Wähle ein Bild"
 label_settings = SubResource("LabelSettings_p04p2")
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer" unique_id=1466932101]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_right = 10
+
+[node name="Refresh" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer2" unique_id=181829075]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+tooltip_text = "Neue Bilder laden"
+text = "Bilder neu laden"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer" unique_id=1064551612]
 layout_mode = 2
@@ -352,52 +370,52 @@ theme_override_constants/margin_bottom = 10
 
 [node name="Button" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/ScrollContainer/TextureGrid/MarginContainer" unique_id=1902660199]
 layout_mode = 2
-icon = ExtResource("3_mt0ab")
+icon = ExtResource("4_jd8r5")
 icon_alignment = 1
 expand_icon = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1049529257]
+[node name="PanelContainer2" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=391451753]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/PanelContainer2" unique_id=1049529257]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="InfoLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1865273834]
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1406486931]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Name deines Tiers:"
+
+[node name="NameEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1406486932]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 56)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 22
+placeholder_text = "z. B. Flauschi"
+max_length = 24
+
+[node name="CodeEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1406486930]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+placeholder_text = "Code"
+
+[node name="InfoLabel" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1865273834]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 22
 autowrap_mode = 3
 
-[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486931]
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-text = "Name deines Tiers:"
-
-[node name="NameEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486932]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(240, 56)
-layout_mode = 2
-theme_override_font_sizes/font_size = 22
-placeholder_text = "z. B. Flauschi"
-max_length = 24
-
-[node name="CodeEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486930]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-size_flags_vertical = 4
-placeholder_text = "Code"
-
-[node name="Refresh" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=181829075]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 4
-tooltip_text = "Neue Bilder laden"
-text = "Bilder neu laden"
-
-[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1406486929]
+[node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer" unique_id=1406486929]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 64)
 layout_mode = 2
+size_flags_vertical = 4
 theme_override_font_sizes/font_size = 26
 text = "Speichern"
 
@@ -422,5 +440,5 @@ text = "Speichern"
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Animation OptionButton" to="." method="_on_animation_option_button_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings/SoundOption" to="." method="_on_sound_option_item_selected"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer2/PanelContainer/MarginContainer/GridContainer/Sound Settings/Sound Preview Button" to="." method="_on_sound_preview_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/MarginContainer2/Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer2/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]

@@ -30,6 +30,14 @@ var selected_folder_name:String = ""
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 var soundDictionary: Dictionary[int, AudioStream]
 
+@onready var animation_option_button: OptionButton = %"Animation OptionButton"
+var animationDictionary: Dictionary[int, String] = {
+	0 : "idle",
+	1 : "woble",
+	2 : "jump",
+	3 : "squish"
+}
+
 @onready var info_label: Label = %InfoLabel
 @onready var code_edit: LineEdit = %CodeEdit
 @onready var name_edit: LineEdit = %NameEdit
@@ -84,8 +92,8 @@ func _reset_form() -> void:
 	_get_preview_sprite().texture = default_sprite
 	_update_detection_ring()
 	sound_option.select(-1)
-	%"Animation OptionButton".select(0)
-	attack_timer.stop()
+	animation_option_button.select(0)
+	#attack_timer.stop()
 	_show_info("", false)
 
 func _load_into_form(animal: AnimalConfig) -> void:
@@ -109,7 +117,7 @@ func _load_into_form(animal: AnimalConfig) -> void:
 		if animal.sound and soundDictionary[index].data == animal.sound.data:
 			sound_option.select(index)
 			audio_stream_player.stream = soundDictionary[index]
-	%"Animation OptionButton".select(animal.animation)
+	animation_option_button.select(animal.animation)
 	_show_info("", false)
 
 ## Collision shapes are only drawn inside the Godot editor, so the range gets its own ring.
@@ -283,6 +291,12 @@ func _find_save_problem() -> String:
 
 func _on_animation_option_button_item_selected(index: int) -> void:
 	config_file.animation = index
+	if animal_scene.get_node_or_null("AnimationPlayer") != null:
+		var anim_player = animal_scene.get_node_or_null("AnimationPlayer") as AnimationPlayer
+		var animString:String
+		animString = animationDictionary[index]
+		anim_player.stop()
+		anim_player.play(animString)
 
 func _on_sound_option_item_selected(index: int) -> void:
 	audio_stream_player.stream = soundDictionary.get(index)
@@ -375,8 +389,9 @@ func _on_detection_range_down_button_pressed() -> void:
 	_update_detection_ring()
 
 func _on_attack_timer_timeout() -> void:
-	if sound_option.is_hovered() == false and sound_option.get_popup().visible == false:
-		audio_stream_player.play()
+	if self.visible == true:
+		if sound_option.is_hovered() == false and sound_option.get_popup().visible == false:
+			audio_stream_player.play()
 
 func _on_refresh_pressed() -> void:
 	clear_grid()

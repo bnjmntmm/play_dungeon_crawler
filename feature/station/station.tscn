@@ -1,71 +1,109 @@
 [gd_scene format=3 uid="uid://c6ivvtx1cfdr3"]
 
+[ext_resource type="Theme" uid="uid://l6wo5id8eao5" path="res://feature/editor tool/editor_tool_theme.tres" id="1_php68"]
 [ext_resource type="Script" uid="uid://dgyjxceb7frs" path="res://feature/station/station.gd" id="1_station"]
 [ext_resource type="PackedScene" uid="uid://b67wubyj4rlpj" path="res://feature/editor tool/AnimalEditorToolUI.tscn" id="2_animal"]
-[ext_resource type="PackedScene" path="res://feature/level_editor/level_editor.tscn" id="3_level"]
+[ext_resource type="PackedScene" uid="uid://brrq1gc1vyacg" path="res://feature/level_editor/level_editor.tscn" id="3_level"]
 
-[node name="Station" type="VBoxContainer" unique_id=1193819334]
+[node name="Station" type="Control" unique_id=1680545463]
 texture_filter = 1
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 0
+theme = ExtResource("1_php68")
 script = ExtResource("1_station")
 
-[node name="Header" type="MarginContainer" parent="." unique_id=380779854]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=982534736]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.13333334, 0.13333334, 0.13333334, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=363952618]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 1147.0
+offset_bottom = 643.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Tabs" type="VBoxContainer" parent="MarginContainer" unique_id=966313100]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="MarginContainer/Tabs" unique_id=380779854]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 12
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Header" unique_id=925822752]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/Tabs/Header" unique_id=925822752]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="KidLabel" type="Label" parent="Header/HBoxContainer" unique_id=792640789]
+[node name="KidLabel" type="Label" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=792640789]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Dein Tier:"
 
-[node name="KidOption" type="OptionButton" parent="Header/HBoxContainer" unique_id=206965699]
+[node name="KidOption" type="OptionButton" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=206965699]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 fit_to_longest_item = false
 
-[node name="CodeLabel" type="Label" parent="Header/HBoxContainer" unique_id=475567992]
+[node name="CodeLabel" type="Label" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=475567992]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 
-[node name="Spacer" type="Control" parent="Header/HBoxContainer" unique_id=1118677940]
+[node name="Spacer" type="Control" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=1118677940]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="NextButton" type="Button" parent="Header/HBoxContainer" unique_id=384360012]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 56)
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/Tabs" unique_id=448211988]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
 
-[node name="Tabs" type="TabContainer" parent="." unique_id=864743304]
+[node name="Tabs" type="TabContainer" parent="MarginContainer/Tabs" unique_id=864743304]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 22
 current_tab = 0
+tab_0/title = "    Tier     "
+tab_1/title = "   Raum   "
 
-[node name="Tier" parent="Tabs" unique_id=1866979684 instance=ExtResource("2_animal")]
+[node name="Tier" parent="MarginContainer/Tabs/Tabs" unique_id=1866979684 instance=ExtResource("2_animal")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
+metadata/_tab_name = "    Tier     "
 
-[node name="Raum" parent="Tabs" unique_id=693615443 instance=ExtResource("3_level")]
+[node name="Raum" parent="MarginContainer/Tabs/Tabs" unique_id=693615443 instance=ExtResource("3_level")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
+metadata/_tab_name = "   Raum   "
+
+[node name="NextButton" type="Button" parent="." unique_id=384360012]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 866.0
+offset_top = 9.0
+offset_right = 1136.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 22
