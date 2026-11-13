@@ -2,18 +2,472 @@
 
 [ext_resource type="TileSet" uid="uid://vdu1ji6k73dm" path="res://assets/resources/tile_sets/placeholder_tileset.tres" id="1_6tph8"]
 [ext_resource type="Script" uid="uid://cvl628i856ueo" path="res://scenes/end_room/end_room.gd" id="1_iyxm6"]
-[ext_resource type="PackedScene" uid="uid://dad5rvg2vb10d" path="res://scenes/player/player.tscn" id="3_wc4q1"]
 [ext_resource type="Texture2D" uid="uid://34qkqi65ha0q" path="res://assets/sprites/world_sprites/Tuer_zu.png" id="4_lkedx"]
 [ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="4_rdyi0"]
-[ext_resource type="PackedScene" uid="uid://db0lumpc20jpc" path="res://scenes/level_door/level_door.tscn" id="5_ae138"]
-[ext_resource type="PackedScene" uid="uid://o61iiilu83u4" path="res://scenes/start_room/start_room.tscn" id="6_v48nx"]
+[ext_resource type="Texture2D" uid="uid://v7ay8g2akty2" path="res://assets/sprites/world_sprites/omas_picknicktisch.png" id="7_1gq6w"]
+[ext_resource type="Script" uid="uid://i6t8jjxgsfpa" path="res://scenes/player/player.gd" id="7_lc7ni"]
+[ext_resource type="PackedScene" uid="uid://c50qowea5417o" path="res://scenes/ui/virtual_joystick.tscn" id="8_pkn68"]
+[ext_resource type="Texture2D" uid="uid://dbw1h3gx1h7bt" path="res://assets/sprites/animations/oma/oma_char_1.png" id="8_rwnha"]
+[ext_resource type="Texture2D" uid="uid://dtcvsoboqe6b3" path="res://assets/sprites/world_sprites/omas_picknicktisch_mitte.png" id="9_3d4vl"]
+[ext_resource type="PackedScene" uid="uid://bmtak5d58eiqv" path="res://scenes/util/final_cake.tscn" id="9_pkn68"]
+[ext_resource type="Texture2D" uid="uid://d4ek1mcec1syn" path="res://assets/sprites/player/player_char_idle.png" id="9_pqw6t"]
+[ext_resource type="Texture2D" uid="uid://bjpff56wd3l5r" path="res://assets/sprites/animations/oma/oma_char_2.png" id="9_rwnha"]
+[ext_resource type="Texture2D" uid="uid://m0qk3paasljx" path="res://assets/sprites/player/feet/player_char_foot_back_1.png" id="10_aiki7"]
+[ext_resource type="Texture2D" uid="uid://bc6w6itn6nelp" path="res://assets/sprites/player/feet/player_char_foot_front_1.png" id="11_4v83k"]
+[ext_resource type="Texture2D" uid="uid://4rwaccv62fs5" path="res://assets/sprites/player/feet/player_char_foot_front_2.png" id="12_8n1pj"]
+[ext_resource type="Texture2D" uid="uid://l0a5t6eqjylf" path="res://assets/sprites/player/feet/player_char_foot_back_2.png" id="13_mrh4e"]
+[ext_resource type="Texture2D" uid="uid://vtar3jptmcey" path="res://assets/sprites/player/cake/cake_3HP.png" id="14_q3pn4"]
+[ext_resource type="AudioStream" uid="uid://b07m26xulc6t3" path="res://assets/sounds/sfx/CakeReachedFanfare.wav" id="19_pqw6t"]
 [ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5gynk"]
 size = Vector2(1152, 64)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rwnha"]
+size = Vector2(200, 150)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3d4vl"]
 size = Vector2(64, 512)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p52qu"]
+size = Vector2(200, 20)
+
+[sub_resource type="Animation" id="Animation_3d4vl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("8_rwnha")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.22753902, 0.22753902)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:skew")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_u3pfu"]
+resource_name = "idle"
+length = 3.0000000000000004
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("8_rwnha"), ExtResource("9_rwnha"), ExtResource("8_rwnha"), ExtResource("9_rwnha"), ExtResource("8_rwnha")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.228, 0.25), Vector2(0.22753902, 0.22753902), Vector2(0.228, 0.25), Vector2(0.22753902, 0.22753902), Vector2(0.228, 0.25)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:skew")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.05235987755982989, 0.0, 0.05235987755982989, 0.0, -0.06981317007977318]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_34cxj"]
+_data = {
+&"RESET": SubResource("Animation_3d4vl"),
+&"idle": SubResource("Animation_u3pfu")
+}
+
+[sub_resource type="Animation" id="Animation_0owmy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerCharFootBack1:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_aiki7")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerCharFootFront1:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_4v83k")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.19140625, 0.19140625)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:skew")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -15.175)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Cake:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_qek5x"]
+resource_name = "foot_idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerCharFootBack1:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("10_aiki7")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerCharFootFront1:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("11_4v83k")]
+}
+
+[sub_resource type="Animation" id="Animation_5gtgg"]
+resource_name = "foot_walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerCharFootFront1:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("11_4v83k"), ExtResource("12_8n1pj"), ExtResource("11_4v83k"), ExtResource("12_8n1pj"), ExtResource("11_4v83k")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PlayerCharFootBack1:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.75, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("10_aiki7"), ExtResource("13_mrh4e"), ExtResource("10_aiki7"), ExtResource("13_mrh4e"), ExtResource("10_aiki7")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.191, 0.18), Vector2(0.191, 0.191), Vector2(0.191, 0.18), Vector2(0.191, 0.191), Vector2(0.191, 0.18), Vector2(0.191, 0.191), Vector2(0.191, 0.18), Vector2(0.191, 0.191), Vector2(0.191, 0.18)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:skew")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [-0.03490658503988659, 0.0, 0.03490658503988659, 0.0, -0.03490658503988659, 0.0, 0.03490658503988659, 0.0, -0.03490658503988659]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.275, -13.155), Vector2(0, -15.495), Vector2(-0.405, -13.155), Vector2(0, -15.495), Vector2(0.275, -13.155), Vector2(0, -15.495), Vector2(-0.405, -13.155), Vector2(0, -15.495), Vector2(0.275, -13.155)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Cake:offset")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -7.5), Vector2(0, 0), Vector2(0, -7.5), Vector2(0, 0), Vector2(0, -7.5), Vector2(0, 0), Vector2(0, -7.5), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h17s1"]
+_data = {
+&"RESET": SubResource("Animation_0owmy"),
+&"foot_idle": SubResource("Animation_qek5x"),
+&"foot_walk": SubResource("Animation_5gtgg")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8ttl3"]
+radius = 30.066593
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_48lqx"]
+radius = 150.0
+
+[sub_resource type="Animation" id="Animation_q4eo5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(576, 537)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player/Body/Cake:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player/Body/Cake:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player/Body/Cake:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_rwnha"]
+resource_name = "end_cutscene"
+length = 2.5000000000000004
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Player:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.5, 1, 1.4333333, 1.55, 1.9833333, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(573.275, 311), Vector2(573.275, 290), Vector2(573.275, 311), Vector2(573.275, 311), Vector2(573.275, 314.215), Vector2(548.435, 256.82), Vector2(542.66, 276.62), Vector2(542.66, 276.62)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Player:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.5, 1, 1.4333333, 1.55, 1.9833333, 2.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1.1), Vector2(1, 1), Vector2(1, 1), Vector2(1, 0.9), Vector2(1, 1.2), Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Player/Body/Cake:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.23333333, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(15, -300), Vector2(15, -220)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Player/Body/Cake:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1, 1), Vector2(1, 1), Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Player/Body/Cake:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("FinalCake:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/6/type = "audio"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("EndCutscene/AudioStreamPlayer")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("19_pqw6t")
+}],
+"times": PackedFloat32Array(0.5)
+}
+tracks/6/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3d4vl"]
+_data = {
+&"RESET": SubResource("Animation_q4eo5"),
+&"end_cutscene": SubResource("Animation_rwnha")
+}
 
 [node name="EndRoom" type="Node2D" unique_id=2119270197]
 script = ExtResource("1_iyxm6")
@@ -22,7 +476,6 @@ script = ExtResource("1_iyxm6")
 
 [node name="MainLevelLayer" type="Sprite2D" parent="TileLayers" unique_id=706239462]
 position = Vector2(576, 320)
-rotation = 1.5707964
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("bg_hintergrund")
 
@@ -30,12 +483,6 @@ texture = ExtResource("bg_hintergrund")
 visible = false
 scale = Vector2(4, 4)
 tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAFAAAAAAACAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAJAAAAAAACAAAAAAAKAAAAAAACAAAAAAALAAAAAAACAAAAAAAMAAAAAAACAAAAAAARAAAAAAADAAAAAAARAAkAAAADAAIAAAAQAAkAAAACAAIAAAAPAAkAAAACAAIAAAAOAAkAAAACAAIAAAANAAkAAAACAAIAAAAMAAkAAAACAAIAAAALAAkAAAACAAIAAAAKAAkAAAACAAIAAAAJAAkAAQAQAAUAAAAIAAkAAAACAAIAAAAHAAkAAAACAAIAAAAGAAkAAAACAAIAAAAFAAkAAAACAAIAAAAEAAkAAAACAAIAAAADAAkAAAACAAIAAAACAAkAAAACAAIAAAABAAkAAAACAAIAAAAAAAkAAAABAAIAAAAAAAgAAAABAAEAAAAAAAcAAAABAAEAAAAAAAYAAAABAAEAAAAAAAUAAAABAAEAAAAAAAMAAAABAAEAAAAAAAIAAAABAAEAAAAAAAEAAAABAAEAAAARAAEAAAADAAEAAAARAAIAAAADAAEAAAARAAMAAAADAAEAAAARAAQAAAADAAEAAAARAAUAAAADAAEAAAARAAYAAAADAAEAAAARAAcAAAADAAEAAAARAAgAAAADAAEAAAANAAAAAAACAAAAAAAOAAAAAAACAAAAAAAPAAAAAAACAAAAAAAQAAAAAAACAAAAAAAPAAUAAQABAAEAAAAPAAYAAQABAAEAAAAPAAcAAQABAAEAAAAOAAgAAQABAAEAAAAOAAcAAQABAAEAAAAOAAYAAQABAAEAAAAOAAUAAQABAAEAAAAOAAQAAQABAAEAAAAOAAMAAQABAAEAAAAPAAMAAQABAAEAAAAPAAQAAQABAAEAAAAPAAIAAQABAAEAAAAQAAIAAQABAAEAAAAQAAEAAQABAAEAAAAPAAEAAQABAAEAAAAOAAEAAQABAAEAAAANAAEAAQABAAEAAAAMAAEAAQABAAEAAAALAAEAAQABAAEAAAAKAAEAAQABAAEAAAAJAAEAAQABAAEAAAAIAAEAAQABAAEAAAAHAAEAAQABAAEAAAAGAAEAAQABAAEAAAAFAAEAAQABAAEAAAAEAAEAAQABAAEAAAADAAEAAQABAAEAAAACAAEAAQABAAEAAAABAAEAAQABAAEAAAABAAIAAQABAAEAAAABAAMAAQABAAEAAAABAAQAAQABAAEAAAABAAUAAQABAAEAAAABAAYAAQABAAEAAAAGAAMAAQABAAEAAAAGAAIAAQABAAEAAAAFAAIAAQABAAEAAAAEAAIAAQABAAEAAAADAAIAAQABAAEAAAACAAIAAQABAAEAAAACAAMAAQABAAEAAAACAAQAAQABAAEAAAACAAUAAQABAAEAAAACAAYAAQABAAEAAAACAAcAAQABAAEAAAABAAcAAQABAAEAAAABAAgAAQABAAEAAAACAAgAAQABAAEAAAADAAgAAQABAAEAAAADAAcAAQABAAEAAAADAAYAAQABAAEAAAADAAUAAQABAAEAAAADAAQAAQABAAEAAAADAAMAAQABAAEAAAAEAAMAAQABAAEAAAAEAAQAAQABAAEAAAAEAAUAAQABAAEAAAAEAAYAAQABAAEAAAAEAAcAAQABAAEAAAAEAAgAAQABAAEAAAAFAAgAAQABAAEAAAAFAAcAAQABAAEAAAAFAAYAAQABAAEAAAAFAAUAAQABAAEAAAAFAAQAAQABAAEAAAAFAAMAAQABAAEAAAAGAAQAAQABAAEAAAAGAAUAAQABAAEAAAAGAAYAAQABAAEAAAAGAAcAAQABAAEAAAAGAAgAAQABAAEAAAAHAAgAAQABAAEAAAAHAAcAAQABAAEAAAAHAAYAAQABAAEAAAAHAAUAAQABAAEAAAAHAAQAAQABAAEAAAAHAAMAAQABAAEAAAAHAAIAAQABAAEAAAAIAAIAAQABAAEAAAAIAAMAAQABAAEAAAAIAAQAAQABAAEAAAAIAAUAAQABAAEAAAAIAAYAAQABAAEAAAAIAAcAAQABAAEAAAAIAAgAAQABAAEAAAAJAAgAAQABAAEAAAAJAAcAAQABAAEAAAAJAAYAAQABAAEAAAAJAAUAAQABAAEAAAAJAAQAAQABAAEAAAAJAAMAAQABAAEAAAAJAAIAAQABAAEAAAAKAAIAAQABAAEAAAAKAAMAAQABAAEAAAAKAAQAAQABAAEAAAAKAAUAAQABAAEAAAAKAAYAAQABAAEAAAAKAAcAAQABAAEAAAAKAAgAAQABAAEAAAALAAgAAQABAAEAAAALAAcAAQABAAEAAAALAAYAAQABAAEAAAALAAUAAQABAAEAAAALAAQAAQABAAEAAAALAAMAAQABAAEAAAALAAIAAQABAAEAAAAMAAIAAQABAAEAAAAMAAMAAQABAAEAAAAMAAQAAQABAAEAAAAMAAUAAQABAAEAAAAMAAYAAQABAAEAAAAMAAcAAQABAAEAAAAMAAgAAQABAAEAAAANAAgAAQABAAEAAAANAAcAAQABAAEAAAANAAYAAQABAAEAAAANAAUAAQABAAEAAAANAAQAAQABAAEAAAANAAMAAQABAAEAAAANAAIAAQABAAEAAAAOAAIAAQABAAEAAAAQAAYAAQABAAEAAAAQAAUAAQABAAEAAAAQAAQAAQABAAEAAAAQAAMAAQABAAEAAAAQAAcAAQABAAEAAAAQAAgAAQABAAEAAAAPAAgAAQABAAEAAAAAAAQAAAABAAEAAAAJAAoAAAACAAIAAAA=")
-tile_set = ExtResource("1_6tph8")
-navigation_enabled = false
-
-[node name="ObjectLayer" type="TileMapLayer" parent="TileLayers" unique_id=1213103069]
-scale = Vector2(4, 4)
-tile_map_data = PackedByteArray("AAAFAAQABAAFAAEAAAAGAAQABAAGAAEAAAAHAAQABAAJAAEAAAAIAAQAAQABAAUAAAAKAAQABAAJAAEAAAALAAQABAAGAAEAAAAMAAQABAAFAAEAAAANAAQABAADAAEAAAAJAAMABAAAAAIAAAAJAAQAAQABAAUAAAAIAAMABAAAAAIAAAAEAAQABAAFAAEAAAA=")
 tile_set = ExtResource("1_6tph8")
 navigation_enabled = false
 
@@ -47,6 +494,10 @@ collision_mask = 22
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=2041723795]
 position = Vector2(532, -151)
 shape = SubResource("RectangleShape2D_5gynk")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=1333926685]
+position = Vector2(529, 60)
+shape = SubResource("RectangleShape2D_rwnha")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=609212114]
 position = Vector2(532, 425)
@@ -60,23 +511,113 @@ shape = SubResource("RectangleShape2D_3d4vl")
 position = Vector2(1076, 137)
 shape = SubResource("RectangleShape2D_3d4vl")
 
+[node name="CutsceneTrigger" type="Area2D" parent="." unique_id=817229833]
+position = Vector2(573, 368)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CutsceneTrigger" unique_id=1757669472]
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_p52qu")
+debug_color = Color(0.9837732, 0, 0.35426855, 0.41960785)
+
 [node name="TuerZu" type="Sprite2D" parent="." unique_id=406155931]
 position = Vector2(576, 602)
 rotation = -3.1415925
 scale = Vector2(0.244, 0.244)
 texture = ExtResource("4_lkedx")
 
-[node name="Player" parent="." unique_id=2108247644 instance=ExtResource("3_wc4q1")]
+[node name="OmasPicknicktisch" type="Sprite2D" parent="." unique_id=2015541714]
+position = Vector2(574, 235)
+scale = Vector2(0.291, 0.291)
+texture = ExtResource("7_1gq6w")
+
+[node name="OmaChar1" type="Sprite2D" parent="." unique_id=1153074784]
+position = Vector2(612.00006, 171)
+scale = Vector2(0.22753902, 0.22753902)
+texture = ExtResource("8_rwnha")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="OmaChar1" unique_id=1646282607]
+libraries/ = SubResource("AnimationLibrary_34cxj")
+
+[node name="OmasPicknicktischMitte" type="Sprite2D" parent="." unique_id=1246973400]
+position = Vector2(589.00006, 232)
+scale = Vector2(0.291, 0.291)
+texture = ExtResource("9_3d4vl")
+
+[node name="FinalCake" parent="." unique_id=1644168730 instance=ExtResource("9_pkn68")]
+visible = false
+position = Vector2(576.035, 252.455)
+scale = Vector2(0.19, 0.19)
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=2108247644]
 position = Vector2(576, 537)
+collision_layer = 2
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("7_lc7ni")
 use_slice_count_from_manager = true
+debug_joy_light = true
+
+[node name="VirtualJoystickLayer" parent="Player" unique_id=2141596835 instance=ExtResource("8_pkn68")]
+
+[node name="AttackDamageHealth" type="Node" parent="Player" unique_id=1712468708]
+
+[node name="Body" type="Sprite2D" parent="Player" unique_id=1414600469]
+position = Vector2(0, -15.175)
+scale = Vector2(0.19140625, 0.19140625)
+texture = ExtResource("9_pqw6t")
+
+[node name="FootAnims" type="AnimationPlayer" parent="Player/Body" unique_id=706775210]
+libraries/ = SubResource("AnimationLibrary_h17s1")
+
+[node name="PlayerCharFootBack1" type="Sprite2D" parent="Player/Body" unique_id=25177054]
+texture = ExtResource("10_aiki7")
+
+[node name="PlayerCharFootFront1" type="Sprite2D" parent="Player/Body" unique_id=895086019]
+texture = ExtResource("11_4v83k")
+
+[node name="Cake" type="Sprite2D" parent="Player/Body" unique_id=1820366401]
+texture = ExtResource("14_q3pn4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1549203928]
+shape = SubResource("CircleShape2D_8ttl3")
+
+[node name="ThrowArea" type="Area2D" parent="Player" unique_id=710564937]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/ThrowArea" unique_id=694434095]
+shape = SubResource("CircleShape2D_48lqx")
+
+[node name="RecheckNearestAnimal" type="Timer" parent="Player" unique_id=814111372]
+wait_time = 1.2
+autostart = true
+
+[node name="ThrowTimer" type="Timer" parent="Player" unique_id=1456668592]
+autostart = true
+
+[node name="StepSound" type="AudioStreamPlayer" parent="Player" unique_id=1757117977]
+volume_db = -18.0
+
+[node name="ThrowSound" type="AudioStreamPlayer" parent="Player" unique_id=1344360757]
+volume_db = -12.0
 
 [node name="EndRoomUI" type="CanvasLayer" parent="." unique_id=1488534486]
+visible = false
 
 [node name="SceneFader" parent="EndRoomUI" unique_id=382022906 instance=ExtResource("4_rdyi0")]
 
-[node name="LevelDoor" parent="." unique_id=120435420 instance=ExtResource("5_ae138")]
-position = Vector2(576, 287)
-scale = Vector2(1.96, 1)
-is_teleport_door = true
-teleport_destination = ExtResource("6_v48nx")
-no_sprite = true
+[node name="EndCutscene" type="AnimationPlayer" parent="." unique_id=54225170]
+libraries/ = SubResource("AnimationLibrary_3d4vl")
+playback_default_blend_time = 1.0
+
+[node name="PlayerStartPos" type="Marker2D" parent="EndCutscene" unique_id=87284875]
+position = Vector2(573.275, 311)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="EndCutscene" unique_id=785866867]
+
+[connection signal="body_entered" from="CutsceneTrigger" to="." method="_on_cutscene_trigger_body_entered"]
+[connection signal="timeout" from="Player/RecheckNearestAnimal" to="Player" method="_on_recheck_nearest_animal_timeout"]
+[connection signal="timeout" from="Player/ThrowTimer" to="Player" method="_on_throw_timer_timeout"]
+[connection signal="animation_finished" from="EndCutscene" to="." method="_on_end_cutscene_animation_finished"]
