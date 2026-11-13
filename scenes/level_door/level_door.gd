@@ -30,6 +30,8 @@ const CLOSED_DOOR_TEXTURE: Texture2D = preload("res://assets/sprites/world_sprit
 @onready var progress_ring: Node2D = $ProgressRing
 @onready var player_spawn_pos_visualizer: Marker2D = $PlayerSpawnPosVisualizer
 
+@onready var player_leave_sfx: AudioStreamPlayer = $Player_LeaveSFX
+
 var _entry_player: PlayerCharacter
 var _skip_elapsed: float = 0.0
 var _skip_started: bool = false
@@ -100,6 +102,7 @@ func _on_body_entered(body: Node2D) -> void:
 			_skip_started = true
 			progress_ring.set_progress(0.0)
 		else:
+			player_leave_sfx.play()
 			player.set_movement_lock(true)
 			if is_teleport_door:
 				GameManager.init_scene_change(teleport_destination)
