@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://3dqtf02foq2i"]
 
 [ext_resource type="Script" uid="uid://8q8uypfooxgk" path="res://scenes/ui/level_name_display/level_name_display.gd" id="1_wr6pi"]
+[ext_resource type="FontFile" uid="uid://fjmg85ykmg4r" path="res://assets/fonts/Chalkboard-Regular-German.ttf" id="2_u15wr"]
 
 [sub_resource type="Animation" id="Animation_wr6pi"]
 length = 0.001
@@ -60,7 +61,7 @@ offset_top = -57.0
 offset_right = -0.00024414063
 grow_horizontal = 0
 grow_vertical = 0
-color = Color(0, 0, 0, 0.56078434)
+color = Color(0, 0, 0, 0)
 
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=2104735895]
 layout_mode = 1
@@ -77,6 +78,8 @@ theme_override_constants/margin_bottom = 10
 
 [node name="Label" type="Label" parent="ColorRect/MarginContainer" unique_id=477767074]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_u15wr")
+theme_override_font_sizes/font_size = 30
 text = "Das Beste Level Eva"
 horizontal_alignment = 2
 text_overrun_behavior = 5

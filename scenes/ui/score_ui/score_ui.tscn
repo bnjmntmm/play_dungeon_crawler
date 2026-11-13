@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c15ljp47t1g36"]
 
 [ext_resource type="Script" uid="uid://by1nwct2nppuf" path="res://scenes/ui/score_ui/score_ui.gd" id="1_qukyi"]
+[ext_resource type="FontFile" uid="uid://fjmg85ykmg4r" path="res://assets/fonts/Chalkboard-Regular-German.ttf" id="2_gvfh5"]
 
 [sub_resource type="Animation" id="Animation_qukyi"]
 length = 0.001
@@ -73,10 +74,13 @@ grow_vertical = 2
 script = ExtResource("1_qukyi")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1841900793]
+custom_minimum_size = Vector2(200, 40)
 layout_mode = 0
-offset_right = 133.0
-offset_bottom = 40.0
-color = Color(0, 0, 0, 0.5529412)
+offset_left = -7.0
+offset_top = 9.0
+offset_right = 193.0
+offset_bottom = 49.0
+color = Color(0, 0, 0, 0)
 
 [node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=481781098]
 layout_mode = 1
@@ -94,9 +98,11 @@ theme_override_constants/margin_bottom = 10
 [node name="Label" type="Label" parent="ColorRect/MarginContainer" unique_id=1431347543]
 layout_mode = 2
 size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("2_gvfh5")
+theme_override_font_sizes/font_size = 30
 text = "000000000000"
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1097498921]
 libraries/ = SubResource("AnimationLibrary_gg65l")
