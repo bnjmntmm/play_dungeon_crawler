@@ -115,7 +115,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-columns = 2
+columns = 4
 
 [node name="ObstacleLabel" type="Label" parent="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn" unique_id=476417852]
 layout_mode = 2
@@ -132,7 +132,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-columns = 2
+columns = 4
 
 [node name="RoomView" type="PanelContainer" parent="MarginContainer/VBoxContainer/Workspace" unique_id=730973157]
 unique_name_in_owner = true
