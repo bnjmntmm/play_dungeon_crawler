@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cwsa6npfl25dv" path="res://scenes/level_gen/dynamic_level_complete.tscn" id="5_6jrso"]
 [ext_resource type="PackedScene" uid="uid://cusdp1hq5coda" path="res://scenes/gallery/gallery.tscn" id="6_k1xoi"]
 [ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="7_6jrso"]
+[ext_resource type="Texture2D" uid="uid://dbw4rrh6uhu1k" path="res://assets/sprites/world_sprites/Spawn_Animal.png" id="7_e2b43"]
 [ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="8_k1xoi"]
 [ext_resource type="Texture2D" uid="uid://d3vb8dxr8xf0m" path="res://assets/sprites/world_sprites/Schild_Galerie.png" id="11_nldu3"]
 [ext_resource type="Texture2D" uid="uid://bt4jvdwky4qie" path="res://assets/sprites/world_sprites/Schild_Start.png" id="12_e2b43"]
@@ -14,6 +15,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nldu3"]
 size = Vector2(544, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p52qu"]
+size = Vector2(46, 186)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e2b43"]
 size = Vector2(544, 64)
@@ -45,7 +49,6 @@ script = ExtResource("1_5nnua")
 
 [node name="MainLevelLayer" type="Sprite2D" parent="TileLayers" unique_id=985842180]
 position = Vector2(576, 323.99997)
-rotation = 1.5707964
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("bg_hintergrund")
 
@@ -62,6 +65,22 @@ collision_mask = 22
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=1503244565]
 position = Vector2(228, 425)
 shape = SubResource("RectangleShape2D_nldu3")
+
+[node name="CollisionShape2D9" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=1116852282]
+position = Vector2(339, 300)
+shape = SubResource("RectangleShape2D_p52qu")
+
+[node name="CollisionShape2D10" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=346377245]
+position = Vector2(727, 300)
+shape = SubResource("RectangleShape2D_p52qu")
+
+[node name="CollisionShape2D13" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=1642585450]
+position = Vector2(339, -26)
+shape = SubResource("RectangleShape2D_p52qu")
+
+[node name="CollisionShape2D14" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=263890501]
+position = Vector2(727, -26)
+shape = SubResource("RectangleShape2D_p52qu")
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="TileLayers/Wall" unique_id=1485151550]
 position = Vector2(836, 425)
@@ -103,6 +122,80 @@ position = Vector2(576, 608)
 rotation = 3.1415927
 is_teleport_door = true
 teleport_destination = ExtResource("6_k1xoi")
+
+[node name="Fences" type="Node2D" parent="." unique_id=362173895]
+
+[node name="SpawnAnimal" type="Sprite2D" parent="Fences" unique_id=2146334981]
+position = Vector2(382.99997, 544)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal2" type="Sprite2D" parent="Fences" unique_id=1085478920]
+position = Vector2(382.99997, 483)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal3" type="Sprite2D" parent="Fences" unique_id=1472794898]
+position = Vector2(382.99997, 421.99997)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal5" type="Sprite2D" parent="Fences" unique_id=1984539004]
+position = Vector2(382.99997, 96.99994)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal6" type="Sprite2D" parent="Fences" unique_id=2132492448]
+position = Vector2(382.99997, 156)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal7" type="Sprite2D" parent="Fences" unique_id=1719387589]
+position = Vector2(382.99997, 219.99998)
+rotation = -1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal4" type="Sprite2D" parent="Fences" unique_id=1534851757]
+position = Vector2(770.9825, 544)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal8" type="Sprite2D" parent="Fences" unique_id=1871556089]
+position = Vector2(770.9825, 483)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal9" type="Sprite2D" parent="Fences" unique_id=277291483]
+position = Vector2(770.9825, 421.99997)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal10" type="Sprite2D" parent="Fences" unique_id=1921650576]
+position = Vector2(770.9825, 96.99994)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal11" type="Sprite2D" parent="Fences" unique_id=1254796861]
+position = Vector2(770.9825, 156)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
+
+[node name="SpawnAnimal12" type="Sprite2D" parent="Fences" unique_id=413678414]
+position = Vector2(770.9825, 219.99998)
+rotation = 1.5707964
+scale = Vector2(0.145, 0.145)
+texture = ExtResource("7_e2b43")
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("1_7m6vu")]
 position = Vector2(576, 327)
