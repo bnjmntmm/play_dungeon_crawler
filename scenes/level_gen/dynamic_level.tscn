@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://d1axup47vsymc" path="res://custom_data/test_kind2/obstacle/obstacle_test_kind2.tres" id="9_arqpn"]
 [ext_resource type="Script" uid="uid://bmwpujhyef6jc" path="res://scenes/level_gen/runtime_navigation.gd" id="10_navigation"]
 [ext_resource type="PackedScene" uid="uid://c88w75pb5xu4h" path="res://scenes/util/safe_area.tscn" id="11_a3nlj"]
+[ext_resource type="AudioStream" uid="uid://blg0wagd5p8d3" path="res://assets/sounds/sfx/DoorsOpen.wav" id="13_arqpn"]
 [ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p52qu"]
@@ -39,7 +40,6 @@ debug_level = ExtResource("2_a3nlj")
 
 [node name="MainLevelLayer" type="Sprite2D" parent="TileLayers" unique_id=279505042]
 position = Vector2(576, 320)
-rotation = 1.5707964
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("bg_hintergrund")
 
@@ -189,3 +189,6 @@ player_spawn_offset = Vector2(0, 64)
 always_open = false
 
 [node name="Player" parent="." unique_id=2108247644 instance=ExtResource("7_wkt00")]
+
+[node name="DoorsSFX" type="AudioStreamPlayer" parent="." unique_id=1644488415]
+stream = ExtResource("13_arqpn")

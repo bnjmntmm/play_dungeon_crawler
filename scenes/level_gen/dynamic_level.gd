@@ -19,6 +19,9 @@ signal on_change_level_complete
 	$LevelExits/LevelDoor3,
 	$LevelExits/LevelDoor4,
 ]
+@onready var doors_sfx: AudioStreamPlayer = $DoorsSFX
+
+
 #@onready var canvas_layer: CanvasLayer = $CanvasLayer
 
 
@@ -59,6 +62,8 @@ func change_level(level_data: PackedByteArray) -> void:
 	pass
 
 func _on_room_cleared() -> void:
+	MusicManager.play_ambience()
+	doors_sfx.play()
 	_update_door_visuals()
 	await rebuild_navigation()
 
