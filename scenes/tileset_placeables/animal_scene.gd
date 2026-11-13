@@ -32,6 +32,8 @@ const BITE_SCENE = preload("uid://c85rnmtq75r6q")
 @onready var detection_shape: CollisionShape2D = $PlayerDetectionArea/DetectionShape
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var sleep_sprite: AnimatedSprite2D = $SleepSprite
+@onready var heart_hit_particles: CPUParticles2D = $HeartHitParticles
 
 @onready var damage_sfx: AudioStreamPlayer = $DamageSFX
 @onready var defeated_sfx: AudioStreamPlayer = $DefeatedSFX
@@ -243,6 +245,7 @@ func fed():
 	print("current health: ", health)
 	if health > 0 and !passive_only:
 		health -= 1
+		heart_hit_particles.emitting = true
 	if health == 0 and not _pacified:
 		_pacified = true
 		collision_shape_2d.set_deferred("disabled", true)
@@ -254,6 +257,9 @@ func fed():
 		animation_player.queue("fed_idle")
 		GameManager.add_player_score(100 * max_health)
 		defeated_sfx.play()
+		var tween := create_tween()
+		sleep_sprite.play("default")
+		tween.tween_property(sleep_sprite,"modulate:a", 1.0,0.5)
 
 func is_pacified() -> bool:
 	return _pacified
