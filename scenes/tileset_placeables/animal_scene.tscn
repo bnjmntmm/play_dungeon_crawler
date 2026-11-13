@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://dw0aycqe0hkeq" path="res://scenes/tileset_placeables/animal_scene.gd" id="1_3k0lt"]
 [ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
 [ext_resource type="Script" uid="uid://dpiw2yp0cunfg" path="res://scenes/util/sprite_cap_size.gd" id="3_n5yd6"]
+[ext_resource type="AudioStream" uid="uid://cw3miklwesnl7" path="res://assets/sounds/sfx/Enemy-defeated.wav" id="4_o7d5c"]
+[ext_resource type="AudioStream" uid="uid://bjuw3ta224t7e" path="res://assets/sounds/sfx/PlayerTakesDamage-CakeGetsEaten.wav" id="4_yvrkb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p52qu"]
 radius = 7.071068
@@ -359,6 +361,12 @@ shape = SubResource("CircleShape2D_n5yd6")
 debug_color = Color(0.500858, 0.58136106, 1.92523e-07, 0.41960785)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=322952373]
+
+[node name="DamageSFX" type="AudioStreamPlayer" parent="." unique_id=1032747981]
+stream = ExtResource("4_yvrkb")
+
+[node name="DefeatedSFX" type="AudioStreamPlayer" parent="." unique_id=907004647]
+stream = ExtResource("4_o7d5c")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=677015676]
 libraries/ = SubResource("AnimationLibrary_o7d5c")

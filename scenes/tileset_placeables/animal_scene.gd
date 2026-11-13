@@ -5,6 +5,8 @@ signal pacified
 
 enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 
+const BITE_SCENE = preload("uid://c85rnmtq75r6q")
+
 @export var movement_speed: float = 4.0
 @export var repath_interval: float = 0.25
 @export var repath_min_distance: float = 8.0
@@ -30,6 +32,9 @@ enum AnimalAiState {inactive = 0, passive = 1, aggressive = 2}
 @onready var detection_shape: CollisionShape2D = $PlayerDetectionArea/DetectionShape
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+@onready var damage_sfx: AudioStreamPlayer = $DamageSFX
+@onready var defeated_sfx: AudioStreamPlayer = $DefeatedSFX
 
 var current_ai_behaviour: AnimalAiState = AnimalAiState.inactive
 var _pending_ai_state : AnimalAiState
@@ -75,6 +80,7 @@ func _ready() -> void:
 	if is_random:
 		config = GameManager.all_animal_configs.pick_random()
 		init_config()
+		_in_load = false
 	GameManager.register_animal(self)
 	GameManager.change_level.connect(_enable_load.unbind(1))
 	GameManager.loaded_new_room.connect(_disable_load.unbind(1))
@@ -178,17 +184,24 @@ func _get_config_source() -> Dictionary:
 
 #region Everything Attack
 func attack_player():
+	BITE_SCENE.instantiate()
 	if _is_attacking or passive_only or current_ai_behaviour != AnimalAiState.aggressive:
 		return
-	
 	_is_attacking = true
 	if _player_in_range and is_instance_valid(player):
-		if sound:
-			audio_stream_player.stream = sound
-			audio_stream_player.play()
-		#player.get_attacked(damage)
-		player.get_attacked(1)
+		#if player.get_attacked(damage)
+		if player.get_attacked(1):
+			_spawn_bite_effect()
+			if sound:
+				audio_stream_player.stream = sound
+				audio_stream_player.play()
+			damage_sfx.play()
 	_on_player_attack_finished()
+
+func _spawn_bite_effect() -> void:
+	var bite := BITE_SCENE.instantiate()
+	get_tree().current_scene.add_child(bite)  # add first, then set global_position
+	bite.global_position = global_position.lerp(player.global_position, 0.5)
 
 func _on_player_attack_finished() -> void:
 	_is_attacking = false
@@ -228,7 +241,7 @@ func _on_attack_area_body_exited(body: Node2D) -> void:
 ## this function is called when we hit a animal with a baguette
 func fed():
 	print("current health: ", health)
-	if health > 0 and current_ai_behaviour == AnimalAiState.aggressive:
+	if health > 0 and !passive_only:
 		health -= 1
 	if health == 0 and not _pacified:
 		_pacified = true
@@ -240,6 +253,7 @@ func fed():
 		animation_player.play("fed")
 		animation_player.queue("fed_idle")
 		GameManager.add_player_score(100 * max_health)
+		defeated_sfx.play()
 
 func is_pacified() -> bool:
 	return _pacified
@@ -354,3 +368,4 @@ func _update_chase_decay(delta: float) -> void:
 		_chase_decay_time = 0.0
 		if current_ai_behaviour == AnimalAiState.aggressive and is_instance_valid(player):
 			set_movement_target(player.global_position)
+		
