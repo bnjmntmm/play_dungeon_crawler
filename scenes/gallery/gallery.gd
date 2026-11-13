@@ -1,6 +1,10 @@
 extends Node2D
 
 @onready var scene_fader: SceneFader = $CanvasLayer/SceneFader
+@onready var gallery_sfx: AudioStreamPlayer = $GallerySFX
+
+const SWIPE_LEFT = preload("uid://berg3w4jyfyrm")
+const SWIPE_RIGHT = preload("uid://ckw7ebb5xkyhv")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -18,9 +22,13 @@ func _process(_delta: float) -> void:
 
 func on_left_pressed() -> void:
 	GameManager.gallery_switch(false)
-
+	gallery_sfx.stream = SWIPE_LEFT
+	gallery_sfx.play()
+	
 func on_right_pressed() -> void:
 	GameManager.gallery_switch(true)
+	gallery_sfx.stream = SWIPE_RIGHT
+	gallery_sfx.play()
 	
 func on_up_pressed() -> void:
 	scene_fader.start_fade(true)
