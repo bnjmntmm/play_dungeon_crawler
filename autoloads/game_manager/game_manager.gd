@@ -46,6 +46,9 @@ const RESOURCE_EXTENSIONS: PackedStringArray = ["tres", "res"]
 const END_ROOM = preload("uid://brkub0ovdbfcx")
 
 var player_score: int = 0
+
+var _cached_fade: Dictionary = {} # {"is_in": bool, "force": bool}
+var _next_is_force: bool = false
  
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -157,7 +160,7 @@ func _room_fade_event(is_in: bool) -> void:
 func _choose_next_level() -> LevelConfig:
 	if debug_mode_enabled && debug_level:
 		return debug_level
-	if scripted_level_config:
+	if scripted_level_config && not gallery_mode:
 		return scripted_level_config
 	if gallery_mode:
 			return all_level_configs[gallery_index]
@@ -169,16 +172,14 @@ func _choose_next_level() -> LevelConfig:
 	return chosen_level_config
 
 func handle_fade_callback(is_in: bool) -> void:
-	if is_force_fade:
-		is_force_fade = false
-		return
-	if is_in:
+	var was_force: bool = is_force_fade
+	is_force_fade = false
+	if is_in and not was_force:
 		if changing_scenes:
 			_load_next_scene()
 		else:
 			_load_new_room()
-	else:
-		pass
+	_flush_cached_fade.call_deferred(is_in and not was_force)
 
 func init_room_change(no_progress: bool) -> void:
 	is_in_load = true
@@ -214,8 +215,10 @@ func on_player_repos()-> void:
 	if not gallery_mode && scripted_level_config:
 		scripted_level_config = null
 	print ("loaded")
+	MusicManager.play_action()
 	
 func on_player_died() -> void:
+	get_tree().create_timer(1).timeout
 	init_start_room_return()
 	player_died.emit()
 
@@ -235,8 +238,11 @@ func _load_next_scene() -> void:
 	changing_scenes = false
 	
 func force_fade(is_in: bool) -> void:
-	is_force_fade = true
-	start_fade.emit(is_in)
+	_next_is_force = true
+	start_fade.emit(is_in) 
+	if _next_is_force:      
+		_next_is_force = false
+		is_force_fade = true
 		
 
 func gallery_switch(is_right: bool)-> void:
@@ -282,3 +288,19 @@ func _check_room_clear() -> void:
 func add_player_score(pts: int)-> void:
 	player_score += pts
 	player_score_changed.emit()
+
+func cache_fade(is_in: bool) -> void:
+	_cached_fade = {"is_in": is_in, "force": _next_is_force}
+	_next_is_force = false
+
+func _flush_cached_fade(handled_fade_in: bool) -> void:
+	if _cached_fade.is_empty():
+		return
+	var cached: Dictionary = _cached_fade
+	_cached_fade = {}
+	# A plain fade-in on top of a finished fade-in is redundant: the callback
+	# above already did whatever was pending (load room or change scene).
+	if handled_fade_in and cached["is_in"] and not cached["force"]:
+		return
+	is_force_fade = cached["force"]
+	start_fade.emit(cached["is_in"])
