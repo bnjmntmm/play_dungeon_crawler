@@ -16,6 +16,13 @@ position = Vector2(576, 323.99997)
 scale = Vector2(0.6, 0.6)
 texture = ExtResource("bg_hintergrund")
 
+[node name="DynamicLevel" parent="." unique_id=1100624506 instance=ExtResource("2_6ursi")]
+no_player = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="DynamicLevel" unique_id=225786391]
+
+[node name="SceneFader" parent="DynamicLevel/CanvasLayer" unique_id=382022906 instance=ExtResource("3_5jo7c")]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1727913442]
 layer = 2
 
@@ -23,10 +30,3 @@ layer = 2
 
 [node name="SceneFader" parent="CanvasLayer" unique_id=511355906 instance=ExtResource("3_5jo7c")]
 use_game_manager_callbacks = false
-
-[node name="DynamicLevel" parent="." unique_id=1100624506 instance=ExtResource("2_6ursi")]
-no_player = true
-
-[node name="CanvasLayer" type="CanvasLayer" parent="DynamicLevel" unique_id=225786391]
-
-[node name="SceneFader" parent="DynamicLevel/CanvasLayer" unique_id=382022906 instance=ExtResource("3_5jo7c")]

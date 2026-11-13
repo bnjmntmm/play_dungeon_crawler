@@ -1,6 +1,11 @@
 extends Control
+class_name GallerySearcher
+
+signal xpressed
 
 @export var partial_match: bool = true
+## Tick this to test the tap-to-select mode on a PC.
+@export var force_mobile_mode: bool = false
 
 const COLOR_ERROR := Color(1.0, 0.4, 0.4)
 const SHAKE_STEP := 0.04   # seconds per shake movement
@@ -11,13 +16,11 @@ const ERROR_FADE := 0.6    # seconds for the rise + fade out
 @onready var text_edit: TextEdit = $TextEdit
 @onready var error_type: Label = $ErrorType
 @onready var selected_level_indicator: TextureRect = $SelectedLevelIndicator
-@onready var gallery_sfx: AudioStreamPlayer = $"../../GallerySFX"
-
-const SWIPE_LEFT = preload("uid://berg3w4jyfyrm")
-const SWIPE_RIGHT = preload("uid://ckw7ebb5xkyhv")
 
 var _rest_position: Vector2
 var _error_tween: Tween
+var _mobile: bool = false
+var _last_tap_msec: int = 0
 
 
 func _ready() -> void:
@@ -27,6 +30,10 @@ func _ready() -> void:
 	# With FOCUS_ALL, pressing an arrow key (UI navigation) would focus it by accident,
 	# and Space would then be typed instead of selecting the level.
 	text_edit.focus_mode = Control.FOCUS_CLICK
+
+	_mobile = _is_mobile()
+	if _mobile:
+		_setup_mobile_mode()
 
 	# Buttons must not take focus, otherwise Space / A / Cross would "press" them
 	# instead of selecting the level. Mouse clicks still work.
@@ -75,12 +82,18 @@ func _update_indicator() -> void:
 #                            the gamepad button selects)
 
 func _input(event: InputEvent) -> void:
+	# Safety net: the first real touch switches to mobile mode, even if the platform
+	# check missed it (e.g. a phone browser asking for the desktop site).
+	if not _mobile and event is InputEventScreenTouch:
+		_mobile = true
+		_setup_mobile_mode()
+
 	if not event.is_pressed() or event.is_echo():
 		return
 
 	var typing := text_edit.has_focus()
 
-	if event is InputEventKey and (event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER):
+	if not _mobile and event is InputEventKey and (event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER):
 		get_viewport().set_input_as_handled()
 		if typing:
 			_submit(text_edit.text.strip_edges())
@@ -111,6 +124,53 @@ func _is_select_event(event: InputEvent) -> bool:
 		return event.button_index == JOY_BUTTON_A
 	# Space (and anything else mapped to ui_accept).
 	return event.is_action_pressed("ui_accept")
+
+
+# --- Mobile: no typing or search, tap the field to select the level -----------------
+
+func _is_mobile() -> bool:
+	return (
+		force_mobile_mode
+		or OS.has_feature("mobile")
+		or OS.has_feature("web_android")
+		or OS.has_feature("web_ios")
+	)
+
+
+func _setup_mobile_mode() -> void:
+	# The field becomes a read-only display; no focus, no keyboard, no selection UI.
+	text_edit.release_focus()
+
+	# A read-only TextEdit uses its own "read_only" style and a dimmed font color.
+	# Copy the normal look over so the field looks the same as before.
+	text_edit.add_theme_stylebox_override("read_only", text_edit.get_theme_stylebox("normal"))
+	text_edit.add_theme_color_override("font_readonly_color", text_edit.get_theme_color("font_color"))
+
+	text_edit.editable = false
+	text_edit.focus_mode = Control.FOCUS_NONE
+	text_edit.selecting_enabled = false
+	text_edit.context_menu_enabled = false
+	text_edit.virtual_keyboard_enabled = false
+	text_edit.mouse_filter = Control.MOUSE_FILTER_STOP
+	text_edit.gui_input.connect(_on_text_edit_tapped)
+
+
+func _on_text_edit_tapped(event: InputEvent) -> void:
+	var tapped: bool = (
+		(event is InputEventScreenTouch and event.pressed)
+		or (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT)
+	)
+	if not tapped:
+		return
+	text_edit.accept_event()
+
+	# A touch can arrive as both a touch and an emulated mouse event; count it once.
+	var now := Time.get_ticks_msec()
+	if now - _last_tap_msec < 200:
+		return
+	_last_tap_msec = now
+
+	_select_current_level()
 
 
 func _submit(query: String) -> void:
@@ -211,11 +271,11 @@ func _search(query: String) -> Array[int]:
 
 func _on_button_pressed() -> void:
 	GameManager.gallery_switch(false)
-	gallery_sfx.stream = SWIPE_LEFT
-	gallery_sfx.play()
 
 
 func _on_button_2_pressed() -> void:
 	GameManager.gallery_switch(true)
-	gallery_sfx.stream = SWIPE_RIGHT
-	gallery_sfx.play()
+
+
+func _on_x_button_pressed() -> void:
+	xpressed.emit()

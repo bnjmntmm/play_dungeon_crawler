@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://l0a5t6eqjylf" path="res://assets/sprites/player/feet/player_char_foot_back_2.png" id="13_mrh4e"]
 [ext_resource type="Texture2D" uid="uid://vtar3jptmcey" path="res://assets/sprites/player/cake/cake_3HP.png" id="14_q3pn4"]
 [ext_resource type="PackedScene" uid="uid://dvognwvdk7uxe" path="res://scenes/ui/end_room_notice.tscn" id="18_aiki7"]
-[ext_resource type="AudioStream" uid="uid://b07m26xulc6t3" path="res://assets/sounds/sfx/CakeReachedFanfare.wav" id="19_pqw6t"]
+[ext_resource type="AudioStream" uid="uid://bm3n8nqr0sra3" path="res://assets/sounds/sfx/CakeReachedFanfare.wav" id="19_pqw6t"]
 [ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5gynk"]

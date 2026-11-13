@@ -8,13 +8,14 @@
 [ext_resource type="FontFile" uid="uid://c5f4pvgvwacs5" path="res://assets/fonts/Chalkboard-Regular-German-Extended.ttf" id="6_a07yg"]
 [ext_resource type="FontFile" uid="uid://fjmg85ykmg4r" path="res://assets/fonts/Chalkboard-Regular-German.ttf" id="6_u6fh1"]
 [ext_resource type="Texture2D" uid="uid://casdnh7sanc6p" path="res://assets/sprites/world_sprites/Spawn_Player.png" id="7_us0uv"]
+[ext_resource type="Texture2D" uid="uid://daqnhcc3ndr48" path="res://assets/sprites/ui/x.png" id="9_c1xj6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us0uv"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0)
 draw_center = false
 border_width_bottom = 2
 border_color = Color(0.8, 0.8, 0.8, 0)
@@ -144,5 +145,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
+[node name="XButton" type="Button" parent="." unique_id=894754026]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -126.0
+offset_top = 35.000004
+offset_right = 6.0
+offset_bottom = 167.0
+grow_horizontal = 0
+scale = Vector2(0.475, 0.475)
+icon = ExtResource("9_c1xj6")
+flat = true
+
 [connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="XButton" to="." method="_on_x_button_pressed"]

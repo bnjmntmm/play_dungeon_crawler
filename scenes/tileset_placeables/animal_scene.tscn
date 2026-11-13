@@ -353,7 +353,7 @@ particles_anim_loop = false
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
-collision_layer = 4
+collision_layer = 20
 collision_mask = 19
 motion_mode = 1
 script = ExtResource("1_3k0lt")

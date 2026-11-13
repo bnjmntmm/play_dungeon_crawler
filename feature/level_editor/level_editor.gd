@@ -49,6 +49,7 @@ var loaded_name_key: String = ""
 var preview_pid: int = -1
 var last_message: String = ""
 var last_message_time: int = 0
+var notify_layer: Control
 var _name_cleaner: RegEx
 var _reported_invalid: Dictionary[String, bool] = {}
 
@@ -593,6 +594,17 @@ func _find_room_problem() -> String:
 func _set_status(message: String) -> void:
 	status_label.text = message
 
+## Floating messages live on their own clipped layer, so they never affect the layout.
+func _get_notify_layer() -> Control:
+	if notify_layer == null or not is_instance_valid(notify_layer):
+		notify_layer = Control.new()
+		notify_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		notify_layer.clip_contents = true
+		notify_layer.custom_minimum_size = Vector2.ZERO
+		notify_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		room_view.add_child(notify_layer)
+	return notify_layer
+
 ## The status line alone went unnoticed, so problems also float up from the mouse for a moment.
 func _notify(message: String) -> void:
 	_set_status(message)
@@ -602,6 +614,7 @@ func _notify(message: String) -> void:
 	last_message = message
 	last_message_time = now
 
+	var layer: Control = _get_notify_layer()
 	var label: Label = Label.new()
 	label.text = message
 	label.add_theme_font_size_override("font_size", 30)
@@ -609,13 +622,18 @@ func _notify(message: String) -> void:
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 10)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	room_view.add_child(label)
-	var mouse_position: Vector2 = room_view.get_local_mouse_position()
-	if not Rect2(Vector2.ZERO, room_view.size).has_point(mouse_position):
-		mouse_position = room_view.size / 2.0
+	# Wrap at a fixed width, so a long message gets taller instead of wider.
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.custom_minimum_size.x = minf(layer.size.x * 0.8, 700.0)
+	layer.add_child(label)
 	label.reset_size()
+
+	var mouse_position: Vector2 = room_view.get_local_mouse_position()
+	if not Rect2(Vector2.ZERO, layer.size).has_point(mouse_position):
+		mouse_position = layer.size / 2.0
 	label.position = (mouse_position - Vector2(label.size.x / 2.0, label.size.y + 16)).clamp(
-		Vector2.ZERO, room_view.size - label.size)
+		Vector2.ZERO, (layer.size - label.size).max(Vector2.ZERO))
 
 	var tween: Tween = label.create_tween().set_parallel()
 	tween.tween_property(label, "position:y", label.position.y - 60.0, MESSAGE_SECONDS)

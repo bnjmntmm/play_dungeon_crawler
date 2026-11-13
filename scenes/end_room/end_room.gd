@@ -27,7 +27,6 @@ func _on_cutscene_trigger_body_entered(body: Node2D) -> void:
 		end_cutscene.play("end_cutscene")
 	pass # Replace with function body.
 
-
 func _on_end_cutscene_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "end_cutscene":
 		is_waiting_for_end = true
@@ -35,10 +34,22 @@ func _on_end_cutscene_animation_finished(anim_name: StringName) -> void:
 		msg._show_end_msg()
 		
 func _input(event: InputEvent) -> void:
-	if in_transition:
+	if not is_waiting_for_end:
 		return
-	if event.is_action_pressed("ui_accept"):
+	if in_transition or not event.is_pressed() or event.is_echo():
+		return
+	if _is_accept_event(event):
 		in_transition = true
 		get_viewport().set_input_as_handled()
 		GameManager.init_start_room_return()
+
+func _is_accept_event(event: InputEvent) -> bool:
+	# A on Xbox, Cross on PlayStation. Checked directly, so it works without a joypad entry on ui_accept.
+	if event is InputEventJoypadButton:
+		return event.button_index == JOY_BUTTON_A
+	# A tap anywhere on a touch screen.
+	if event is InputEventScreenTouch:
+		return true  # is_pressed() was already checked in _input, so this is the finger going down
+	# Space / Enter (and anything else mapped to ui_accept).
+	return event.is_action_pressed("ui_accept")
 		

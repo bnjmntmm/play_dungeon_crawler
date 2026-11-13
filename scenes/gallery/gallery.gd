@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var scene_fader: SceneFader = $CanvasLayer/SceneFader
 @onready var gallery_sfx: AudioStreamPlayer = $GallerySFX
+@onready var gallery_searcher: GallerySearcher = $CanvasLayer/GallerySearcher
 
 const SWIPE_LEFT = preload("uid://berg3w4jyfyrm")
 const SWIPE_RIGHT = preload("uid://ckw7ebb5xkyhv")
@@ -9,6 +10,7 @@ const SWIPE_RIGHT = preload("uid://ckw7ebb5xkyhv")
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GameManager.gallery_mode = true
+	gallery_searcher.xpressed.connect(on_up_pressed)
 	scene_fader.start_fade(false)
 	pass # Replace with function body.
 
