@@ -21,6 +21,9 @@ func change_fade_color(new_color: Color) -> void:
 	pass
 
 func start_fade(is_in_new: bool) -> void:
+	if use_game_manager_callbacks and tween and tween.is_running():
+		GameManager.cache_fade(is_in_new) # busy: let the GameManager hold it
+		return
 	is_in = is_in_new
 	_fade_to(1.0 if is_in else 0.0)
 
@@ -28,8 +31,10 @@ func _fade_to(target_alpha: float) -> void:
 	if tween and tween.is_valid():
 		tween.kill()
 	tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_property(color_rect, "color:a", target_alpha, fade_duration)
-	tween.finished.connect(_on_fade_finished)
-	
-func _on_fade_finished() -> void:
-	on_fade_completed.emit(is_in)
+	# bind the direction at start so it can't change under the callback
+	tween.finished.connect(_on_fade_finished.bind(is_in), CONNECT_ONE_SHOT)
+
+func _on_fade_finished(finished_is_in: bool) -> void:
+	on_fade_completed.emit(finished_is_in)
