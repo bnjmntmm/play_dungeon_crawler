@@ -1,6 +1,22 @@
 [gd_scene format=3 uid="uid://cjirrmnant0ty"]
 
 [ext_resource type="Script" uid="uid://6uuy2koro742" path="res://scenes/ui/gallery_searcher/gallery_searcher.gd" id="1_dpma0"]
+[ext_resource type="Texture2D" uid="uid://drmohcorisad3" path="res://assets/sprites/ui/Rahmen.PNG" id="2_0b4w4"]
+[ext_resource type="Texture2D" uid="uid://clqvawe16r28c" path="res://assets/sprites/ui/pfeil_links.png" id="3_1sets"]
+[ext_resource type="Texture2D" uid="uid://bnj4w338pd6bk" path="res://assets/sprites/ui/searchbar.png" id="4_u6fh1"]
+[ext_resource type="Texture2D" uid="uid://cubawwqea3tsc" path="res://assets/sprites/ui/pfeil_rechts.png" id="5_us0uv"]
+[ext_resource type="FontFile" uid="uid://fjmg85ykmg4r" path="res://assets/fonts/Chalkboard-Regular-German.ttf" id="6_u6fh1"]
+[ext_resource type="Texture2D" uid="uid://casdnh7sanc6p" path="res://assets/sprites/world_sprites/Spawn_Player.png" id="7_us0uv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us0uv"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+draw_center = false
+border_width_bottom = 2
+border_color = Color(0.8, 0.8, 0.8, 0)
 
 [node name="GallerySearcher" type="Control" unique_id=2104103872]
 layout_mode = 3
@@ -11,42 +27,121 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_dpma0")
 
-[node name="TextEdit" type="TextEdit" parent="." unique_id=1186151798]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=454000449]
 layout_mode = 0
-offset_left = 376.5
-offset_top = 526.0
-offset_right = 775.5
-offset_bottom = 565.0
-text = "LevelSSLSLSLSLSLSLSLSLS"
+offset_left = -234.0
+offset_top = -121.0
+offset_right = 918.0
+offset_bottom = 527.0
+scale = Vector2(1.365, 1.365)
+texture = ExtResource("2_0b4w4")
+expand_mode = 2
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1164073911]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1122851122]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -78.40503
-offset_right = 300.0
-offset_bottom = -43.745056
+offset_left = -319.19
+offset_top = -128.37
+offset_right = 2760.81
+offset_bottom = 383.63074
 grow_horizontal = 2
 grow_vertical = 0
-color = Color(0, 0, 0, 0.7411765)
+scale = Vector2(0.215, 0.215)
+alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="ColorRect" unique_id=335811537]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ErrorType" type="Label" parent="ColorRect/MarginContainer" unique_id=1279539694]
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=905959538]
 layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(-500, 0)
+offset_transform_visual_only = false
+focus_mode = 0
+icon = ExtResource("3_1sets")
+flat = true
+
+[node name="TextureRect3" type="TextureRect" parent="HBoxContainer" unique_id=977047403]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -250)
+offset_transform_scale = Vector2(2.005, 2.005)
+texture = ExtResource("4_u6fh1")
+
+[node name="Button2" type="Button" parent="HBoxContainer" unique_id=493083684]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(530, 0)
+offset_transform_visual_only = false
+focus_mode = 0
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 1)
+theme_override_colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_colors/icon_normal_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+icon = ExtResource("5_us0uv")
+flat = true
+
+[node name="TextEdit" type="TextEdit" parent="." unique_id=1186151798]
+layout_mode = 0
+offset_left = 403.0
+offset_top = 558.0
+offset_right = 778.0
+offset_bottom = 597.0
+focus_mode = 0
+theme_override_colors/search_result_color = Color(0.3, 0.3, 0.3, 0)
+theme_override_colors/search_result_border_color = Color(0.3, 0.3, 0.3, 0)
+theme_override_colors/caret_color = Color(0.88, 0.88, 0.88, 0)
+theme_override_colors/caret_background_color = Color(0, 0, 0, 0)
+theme_override_colors/selection_color = Color(0.5, 0.5, 0.5, 0)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/current_line_color = Color(1, 1, 1, 0)
+theme_override_fonts/font = ExtResource("6_u6fh1")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_us0uv")
+text = "LevelSSLSLSLSLSLSLSLSLS"
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+middle_mouse_paste_enabled = false
+empty_selection_clipboard_enabled = false
+tab_input_mode = false
+virtual_keyboard_enabled = false
+
+[node name="SelectedLevelIndicator" type="TextureRect" parent="." unique_id=1946069383]
+layout_mode = 0
+offset_left = 743.0
+offset_top = 534.0
+offset_right = 1247.0
+offset_bottom = 784.0
+scale = Vector2(0.12501548, 0.12501548)
+texture = ExtResource("7_us0uv")
+
+[node name="ErrorType" type="Label" parent="." unique_id=1279539694]
+layout_mode = 0
+offset_left = 276.0
+offset_top = 503.0
+offset_right = 876.0
+offset_bottom = 523.0
 theme_override_colors/font_color = Color(0.99999994, 0.22220251, 0.23155007, 1)
+theme_override_fonts/font = ExtResource("6_u6fh1")
 theme_override_font_sizes/font_size = 14
 text = "Mehrere Level mit diesem Suchbegriff gefunden! Bitte den Begriff anpassen."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Button2" to="." method="_on_button_2_pressed"]
