@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://dh8falkf74mr"
 Enums="*uid://ded27x47u85m6"
+MusicManager="*uid://b5q7qse2bnnfg"
 
 [display]
 
