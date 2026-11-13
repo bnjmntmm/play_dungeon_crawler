@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bmtak5d58eiqv"]
+
+[ext_resource type="Texture2D" uid="uid://vtar3jptmcey" path="res://assets/sprites/player/cake/cake_3HP.png" id="1_ioexo"]
+
+[sub_resource type="GDScript" id="GDScript_t384r"]
+script/source = "extends Sprite2D
+
+@onready var cake: Sprite2D = $\".\"
+var cake_slices: int = 3
+
+const CAKE_1HP = preload(\"uid://qfwu162w12je\")
+const CAKE_2HP = preload(\"uid://c13qeobdx6dg1\")
+const CAKE_3HP = preload(\"uid://vtar3jptmcey\")
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	cake_slices = GameManager.player_final_cake_slices
+	_update_cake_slices()
+
+func _update_cake_slices() -> void:
+	match cake_slices:
+		3:
+			cake.texture = CAKE_3HP
+		2:
+			cake.texture = CAKE_2HP
+		1:
+			cake.texture = CAKE_1HP
+"
+
+[node name="FinalCake" type="Sprite2D" unique_id=1644168730]
+texture = ExtResource("1_ioexo")
+script = SubResource("GDScript_t384r")
