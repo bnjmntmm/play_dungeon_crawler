@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://4rwaccv62fs5" path="res://assets/sprites/player/feet/player_char_foot_front_2.png" id="12_8n1pj"]
 [ext_resource type="Texture2D" uid="uid://l0a5t6eqjylf" path="res://assets/sprites/player/feet/player_char_foot_back_2.png" id="13_mrh4e"]
 [ext_resource type="Texture2D" uid="uid://vtar3jptmcey" path="res://assets/sprites/player/cake/cake_3HP.png" id="14_q3pn4"]
+[ext_resource type="PackedScene" uid="uid://dvognwvdk7uxe" path="res://scenes/ui/end_room_notice.tscn" id="18_aiki7"]
 [ext_resource type="AudioStream" uid="uid://b07m26xulc6t3" path="res://assets/sounds/sfx/CakeReachedFanfare.wav" id="19_pqw6t"]
 [ext_resource type="Texture2D" uid="uid://c8cxiiuetkp75" path="res://assets/sprites/world_sprites/Hintergrund.PNG" id="bg_hintergrund"]
 
@@ -604,7 +605,10 @@ volume_db = -18.0
 volume_db = -12.0
 
 [node name="EndRoomUI" type="CanvasLayer" parent="." unique_id=1488534486]
-visible = false
+
+[node name="EndRoomNotice" parent="EndRoomUI" unique_id=694988190 instance=ExtResource("18_aiki7")]
+offset_top = 39.075
+offset_bottom = 39.075012
 
 [node name="SceneFader" parent="EndRoomUI" unique_id=382022906 instance=ExtResource("4_rdyi0")]
 

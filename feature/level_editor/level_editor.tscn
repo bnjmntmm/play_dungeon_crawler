@@ -76,6 +76,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 toggle_mode = true
 text = "Radierer"
 icon = ExtResource("2_eraser")
@@ -85,8 +86,18 @@ custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Alles löschen"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Alles"
 icon = ExtResource("3_trash")
+
+[node name="EraserButton2" type="Button" parent="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn" unique_id=1682113990]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+toggle_mode = true
+text = "Aktualisieren"
 
 [node name="AnimalLabel" type="Label" parent="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn" unique_id=483773695]
 layout_mode = 2
@@ -158,7 +169,7 @@ size_flags_vertical = 4
 
 [node name="KidIdLabel" type="Label" parent="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox" unique_id=1064501541]
 layout_mode = 2
-text = "Code deines Levels: "
+text = "Name deines Levels: "
 
 [node name="KidIdEdit" type="LineEdit" parent="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox" unique_id=1161124193]
 unique_name_in_owner = true
@@ -169,10 +180,12 @@ placeholder_text = "z. B. roter_fuchs_7"
 
 [node name="NewCodeButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox" unique_id=1962954376]
 layout_mode = 2
-text = "Zufälliger Code"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Zufälliger Name"
 
 [node name="LoadButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox" unique_id=1338962184]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Laden"
 
 [node name="SaveButton" type="Button" parent="MarginContainer/VBoxContainer/PanelContainer/Footer" unique_id=1403685084]
@@ -180,6 +193,7 @@ custom_minimum_size = Vector2(200, 64)
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Speichern"
 
@@ -187,6 +201,7 @@ text = "Speichern"
 custom_minimum_size = Vector2(280, 80)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_try_normal")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_try_pressed")
@@ -195,6 +210,7 @@ text = "Ausprobieren"
 icon = ExtResource("4_play")
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn/ToolRow/ClearButton" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn/EraserButton2" to="." method="_on_eraser_button_2_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox/NewCodeButton" to="." method="_on_new_code_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/Footer/SaveButton" to="." method="_on_save_button_pressed"]

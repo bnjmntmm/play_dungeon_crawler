@@ -1,3 +1,4 @@
+@tool
 extends Control
 ## Game Design station: kids build an animal first, then place it in their room.
 ## The header picks the kid folder once, so both tabs always save into the same one.
@@ -21,6 +22,7 @@ func _ready() -> void:
 	animal_editor.code_edit.hide()
 	level_editor.set_identity_visible(true)
 	animal_editor.saved.connect(_on_animal_saved)
+	animal_editor.animal_picked.connect(_on_animal_picked)
 	level_editor.saved.connect(_fill_kid_option)
 	kid_option.item_selected.connect(_on_kid_selected)
 	tabs.tab_changed.connect(_on_tab_changed)
@@ -28,9 +30,6 @@ func _ready() -> void:
 	_fill_kid_option("")
 	_on_kid_selected(0)
 	_on_tab_changed(tabs.current_tab)
-	
-	for i in tabs.get_tab_count():
-		$MarginContainer/Tabs/TabBar
 
 ## Refills the dropdown without reloading the editors, so unsaved work stays.
 func _fill_kid_option(selected_code: String) -> void:
@@ -47,6 +46,14 @@ func _on_kid_selected(index: int) -> void:
 	var code: String = codes[index - 1] if index > 0 else LevelCode.create_unused(KidFolders.CUSTOM_DATA_PATH)
 	code_label.text = "Ordner: %s" % code
 	animal_editor.use_kid(code)
+	level_editor.use_kid(code)
+	level_editor.build_palette()
+
+## An image was picked in the grid: keep header and room tab on the same kid folder.
+## Deliberately does not call animal_editor.use_kid(), that would reset the form.
+func _on_animal_picked(code: String) -> void:
+	kid_option.select(codes.find(code) + 1)  # not found -> index 0 = "+ Neues Tier"
+	code_label.text = "Ordner: %s" % code
 	level_editor.use_kid(code)
 	level_editor.build_palette()
 

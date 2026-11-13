@@ -63,12 +63,45 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 56)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
+selected = 0
 fit_to_longest_item = false
+item_count = 15
+popup/item_0/text = "+ Neues Tier"
+popup/item_0/id = 0
+popup/item_1/text = "animal_test"
+popup/item_1/id = 1
+popup/item_2/text = "Flasche  (brave_acorn_20)"
+popup/item_2/id = 2
+popup/item_3/text = "Flasche  (mutiger_dachs_72)"
+popup/item_3/id = 3
+popup/item_4/text = "grosser_fuchs_45"
+popup/item_4/id = 4
+popup/item_5/text = "grosser_hirsch_6"
+popup/item_5/id = 5
+popup/item_6/text = "gruener_hirsch_2"
+popup/item_6/id = 6
+popup/item_7/text = "Hey_ein_Neues_Level"
+popup/item_7/id = 7
+popup/item_8/text = "noble_tulip_27"
+popup/item_8/id = 8
+popup/item_9/text = "roter_frosch_6"
+popup/item_9/id = 9
+popup/item_10/text = "roter_wolf_64"
+popup/item_10/id = 10
+popup/item_11/text = "test_kind"
+popup/item_11/id = 11
+popup/item_12/text = "test_kind2"
+popup/item_12/id = 12
+popup/item_13/text = "test_kind3"
+popup/item_13/id = 13
+popup/item_14/text = "tiny_thistle_54"
+popup/item_14/id = 14
 
 [node name="CodeLabel" type="Label" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=475567992]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+text = "Ordner: gruener_hirsch_28"
 
 [node name="Spacer" type="Control" parent="MarginContainer/Tabs/Header/HBoxContainer" unique_id=1118677940]
 layout_mode = 2
@@ -83,27 +116,29 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 22
 current_tab = 0
-tab_0/title = "    Tier     "
-tab_1/title = "   Raum   "
+tab_0/title = "1. Tier bauen"
+tab_1/title = "2. Raum bauen"
 
 [node name="Tier" parent="MarginContainer/Tabs/Tabs" unique_id=1866979684 instance=ExtResource("2_animal")]
 unique_name_in_owner = true
 layout_mode = 2
 metadata/_tab_index = 0
-metadata/_tab_name = "    Tier     "
+metadata/_tab_name = "1. Tier bauen"
 
 [node name="Raum" parent="MarginContainer/Tabs/Tabs" unique_id=693615443 instance=ExtResource("3_level")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1
-metadata/_tab_name = "   Raum   "
+metadata/_tab_name = "2. Raum bauen"
 
 [node name="NextButton" type="Button" parent="." unique_id=384360012]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 866.0
 offset_top = 9.0
 offset_right = 1136.0
 offset_bottom = 51.0
 theme_override_font_sizes/font_size = 22
+text = "Raum bauen"

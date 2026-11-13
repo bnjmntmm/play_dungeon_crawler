@@ -10,6 +10,9 @@ signal saved(code: String)
 
 const CONFIG_EXTENSIONS: PackedStringArray = ["tres", "res"]
 
+## Folder name that holds obstacle PNGs, e.g. custom_data/<name>/obstacle/rock.png
+const OBSTACLE_FOLDER: String = "obstacle"
+
 ## Red, because the bright green zones looked like the place to put things.
 const SAFE_COLOR: Color = Color(0.95, 0.2, 0.15, 0.35)
 const HOVER_COLOR: Color = Color(1, 1, 1, 0.35)
@@ -17,6 +20,7 @@ const HOVER_BLOCKED_COLOR: Color = Color(1, 0.2, 0.15, 0.6)
 const ANIMAL_COLOR: Color = Color(0.55, 0.32, 0.12)
 const OBSTACLE_COLOR: Color = Color(0.16, 0.3, 0.5)
 const MESSAGE_SECONDS: float = 1.6
+const MAX_LISTED_MATCHES: int = 4
 
 @onready var animal_grid: GridContainer = %AnimalGrid
 @onready var obstacle_grid: GridContainer = %ObstacleGrid
@@ -38,11 +42,15 @@ var tile_size: Vector2 = Vector2.ZERO
 var previews: Dictionary[Vector2i, Sprite2D] = {}
 var hover_rect: ColorRect
 var palette_group: ButtonGroup = ButtonGroup.new()
+## The level that was loaded (or saved) in this session. Only this one may be overwritten.
 var loaded_path: String = ""
 var loaded_uuid: String = ""
+var loaded_name_key: String = ""
 var preview_pid: int = -1
 var last_message: String = ""
 var last_message_time: int = 0
+var _name_cleaner: RegEx
+var _reported_invalid: Dictionary[String, bool] = {}
 
 ## Inside the Godot editor LevelEditorTool calls initialize(), so opening this scene stays harmless.
 func _ready() -> void:
@@ -149,7 +157,12 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return rect
 
+# ---------------------------------------------------------------------------
+# Palette and obstacle scanning
+# ---------------------------------------------------------------------------
+
 func build_palette() -> void:
+	scan_new_obstacles()
 	for grid: GridContainer in [animal_grid, obstacle_grid]:
 		for button: Node in grid.get_children():
 			button.free()
@@ -204,6 +217,57 @@ func select_config_path(path: String) -> void:
 				button.button_pressed = true
 				button.pressed.emit()
 
+## Creates a BaseConfig for every valid PNG in an obstacle folder that has none yet.
+## Returns how many were created, so a refresh button can report it later.
+func scan_new_obstacles() -> int:
+	var created: int = _scan_dir_for_obstacles(CUSTOM_DATA_PATH)
+	if created > 0 and Engine.is_editor_hint():
+		EditorInterface.get_resource_filesystem().scan()
+	return created
+
+func _scan_dir_for_obstacles(dir_path: String) -> int:
+	var created: int = 0
+	if dir_path.get_file() == OBSTACLE_FOLDER:
+		created += _create_missing_obstacles(dir_path)
+	for sub_dir: String in DirAccess.get_directories_at(dir_path):
+		if sub_dir != "level" and sub_dir != "animal":
+			created += _scan_dir_for_obstacles(dir_path.path_join(sub_dir))
+	return created
+
+func _create_missing_obstacles(dir_path: String) -> int:
+	# What already has a config here: by source_png, or by a .tres with the same file name as the PNG.
+	var known_pngs: Dictionary[String, bool] = {}
+	var known_names: Dictionary[String, bool] = {}
+	for file: String in DirAccess.get_files_at(dir_path):
+		if file.get_extension() not in CONFIG_EXTENSIONS:
+			continue
+		known_names[file.get_basename()] = true
+		var config: BaseConfig = ResourceLoader.load(dir_path.path_join(file), "", ResourceLoader.CACHE_MODE_IGNORE) as BaseConfig
+		if config and not config.source_png.is_empty():
+			known_pngs[config.source_png] = true
+
+	var created: int = 0
+	for file: String in DirAccess.get_files_at(dir_path):
+		if file.get_extension().to_lower() != "png":
+			continue
+		var png_path: String = dir_path.path_join(file)
+		if known_pngs.has(png_path) or known_names.has(file.get_basename()):
+			continue
+		var config: BaseConfig = BaseConfig.new()
+		config.uuid = str(ResourceUID.create_id())  # unused, just needs a value
+		config.source_png = png_path
+		if not config.refresh_sprite():
+			if not _reported_invalid.has(png_path):
+				_reported_invalid[png_path] = true
+				push_warning("Obstacle image could not be loaded: %s" % png_path)
+			continue
+		var config_path: String = dir_path.path_join(file.get_basename() + ".tres")
+		if ResourceSaver.save(config, config_path) != OK:
+			push_warning("Could not save obstacle config: %s" % config_path)
+			continue
+		created += 1
+	return created
+
 func _collect_configs(dir_path: String) -> Array[BaseConfig]:
 	var configs: Array[BaseConfig] = []
 	for sub_dir: String in DirAccess.get_directories_at(dir_path):
@@ -219,6 +283,10 @@ func _collect_configs(dir_path: String) -> Array[BaseConfig]:
 
 func _select_config(config: BaseConfig) -> void:
 	selected_config = config
+
+# ---------------------------------------------------------------------------
+# Room view and editing
+# ---------------------------------------------------------------------------
 
 func _fit_room() -> void:
 	if room_rect.size == Vector2.ZERO:
@@ -285,50 +353,159 @@ func _clear_room() -> void:
 
 func _on_clear_button_pressed() -> void:
 	_clear_room()
-	_set_status("Der Raum ist wieder leer.")
+	_forget_loaded_level()
+	kid_id_edit.text = ""
+	_set_status("Der Raum ist wieder leer. Gib deinem neuen Level einen Namen.")
 
-## The station picks the kid folder in its header, so the code row here is only for the standalone tool.
+## After this, no level counts as loaded, so saving under an existing name is blocked again.
+func _forget_loaded_level() -> void:
+	loaded_path = ""
+	loaded_uuid = ""
+	loaded_name_key = ""
+
+## The station picks the kid folder in its header, so the name row here is only for the standalone tool.
 func set_identity_visible(is_visible: bool) -> void:
 	identity_box.visible = is_visible
 
+# ---------------------------------------------------------------------------
+# Level names: lookup, search and uniqueness
+# ---------------------------------------------------------------------------
+
+## Lowercase and only letters/digits, so "My_Cool Level!" and "mycoollevel" count as the same name.
+func _normalize(text: String) -> String:
+	if _name_cleaner == null:
+		_name_cleaner = RegEx.create_from_string("[^\\p{L}\\p{N}]")
+	return _name_cleaner.sub(text.to_lower(), "", true)
+
+func _read_level_name() -> String:
+	return kid_id_edit.text.strip_edges()
+
+## Shown name: underscores become spaces, repeated spaces collapse.
+func _get_display_name() -> String:
+	var display_name: String = _read_level_name().replace("_", " ")
+	while display_name.contains("  "):
+		display_name = display_name.replace("  ", " ")
+	return display_name.strip_edges()
+
+## Folder name for a new level: the typed name, safe for the file system, spaces as underscores.
+func _to_folder_name(text: String) -> String:
+	var folder: String = text.strip_edges().validate_filename().replace(" ", "_")
+	while folder.contains("__"):
+		folder = folder.replace("__", "_")
+	return folder
+
+## One dictionary per saved level: {folder, path, config, level_name}.
+func _make_level_entry(folder: String) -> Dictionary:
+	var path: String = KidFolders.get_level_path(folder)
+	if not ResourceLoader.exists(path):
+		return {}
+	var config: LevelConfig = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as LevelConfig
+	if config == null:
+		return {}
+	var level_name: String = config.display_name if not config.display_name.is_empty() else folder
+	return {"folder": folder, "path": path, "config": config, "level_name": level_name}
+
+## GameManager is an autoload and not available inside the Godot editor, so levels are read from disk.
+func _collect_levels() -> Array[Dictionary]:
+	var levels: Array[Dictionary] = []
+	for folder: String in DirAccess.get_directories_at(CUSTOM_DATA_PATH):
+		var entry: Dictionary = _make_level_entry(folder)
+		if not entry.is_empty():
+			levels.append(entry)
+	return levels
+
+## Both the shown name and the folder name count, so old levels are found and protected too.
+func _get_name_keys(level: Dictionary) -> Array[String]:
+	return [_normalize(level.level_name), _normalize(level.folder)]
+
+## Exact (normalized) matches win over partial ones.
+func _search(query: String) -> Array[Dictionary]:
+	var exact: Array[Dictionary] = []
+	var partial: Array[Dictionary] = []
+	var query_key: String = _normalize(query)
+	if query_key.is_empty():
+		return exact
+	for level: Dictionary in _collect_levels():
+		var keys: Array[String] = _get_name_keys(level)
+		if query_key in keys:
+			exact.append(level)
+			continue
+		for key: String in keys:
+			if key.contains(query_key):
+				partial.append(level)
+				break
+	return exact if not exact.is_empty() else partial
+
+func _find_level_by_name(level_name: String) -> Dictionary:
+	var key: String = _normalize(level_name)
+	for level: Dictionary in _collect_levels():
+		if key in _get_name_keys(level):
+			return level
+	return {}
+
+## A level may only be overwritten when it was loaded (or created) here and the name still is the same.
+func _is_overwriting_loaded() -> bool:
+	return not loaded_path.is_empty() and _normalize(_read_level_name()) == loaded_name_key
+
+func _get_save_path() -> String:
+	if _is_overwriting_loaded():
+		return loaded_path
+	return KidFolders.get_level_path(_to_folder_name(_read_level_name()))
+
+# ---------------------------------------------------------------------------
+# Loading
+# ---------------------------------------------------------------------------
+
 ## Opens the room saved in this kid folder, or an empty room for a new kid.
 func use_kid(code: String) -> void:
-	kid_id_edit.text = code
 	_clear_room()
-	loaded_path = ""
-	loaded_uuid = ""
-	if ResourceLoader.exists(KidFolders.get_level_path(code)):
-		_on_load_button_pressed()
-	else:
+	_forget_loaded_level()
+	var entry: Dictionary = _make_level_entry(code)
+	if entry.is_empty():
+		kid_id_edit.text = code
 		_set_status("Wähle links etwas aus und klicke es in den Raum.")
+	else:
+		_load_level(entry)
+
+func _load_level(level: Dictionary) -> void:
+	_clear_room()
+	draft.load_from(level.config)
+	for cell: Vector2i in draft.get_placed_cells():
+		_update_preview(cell)
+	loaded_path = level.path
+	loaded_uuid = (level.config as LevelConfig).uuid
+	loaded_name_key = _normalize(level.level_name)
+	kid_id_edit.text = level.level_name
+	_set_status("Dein Level \"%s\" ist geladen." % level.level_name)
 
 func _suggest_code() -> void:
 	kid_id_edit.text = LevelCode.create_unused(CUSTOM_DATA_PATH)
 
 func _on_new_code_button_pressed() -> void:
 	_suggest_code()
-	_set_status("Dein neuer Code ist: %s" % kid_id_edit.text)
+	_set_status("Dein neuer Name ist: %s" % kid_id_edit.text)
 
 func _on_load_button_pressed() -> void:
-	var kid_id: String = _read_kid_id()
-	if kid_id.is_empty():
-		_set_status("Gib zuerst deinen Code ein.")
+	var query: String = _read_level_name()
+	if _normalize(query).is_empty():
+		_set_status("Gib zuerst den Namen deines Levels ein.")
 		return
-	var path: String = KidFolders.get_level_path(kid_id)
-	if not ResourceLoader.exists(path):
-		_set_status("Zu diesem Code gibt es noch kein Level.")
+	var matches: Array[Dictionary] = _search(query)
+	if matches.is_empty():
+		_set_status("Kein Level mit dem Namen \"%s\" gefunden. Prüfe die Schreibweise, oder speichere es als neues Level." % query)
 		return
-	var level: LevelConfig = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as LevelConfig
-	if level == null:
-		_set_status("Dieses Level konnte nicht geladen werden.")
+	if matches.size() > 1:
+		var names: PackedStringArray = []
+		for level: Dictionary in matches.slice(0, MAX_LISTED_MATCHES):
+			names.append(level.level_name)
+		var more: String = ", ..." if matches.size() > MAX_LISTED_MATCHES else ""
+		_set_status("Mehrere Levels passen: %s%s. Schreib den Namen genauer." % [", ".join(names), more])
 		return
-	_clear_room()
-	draft.load_from(level)
-	for cell: Vector2i in draft.get_placed_cells():
-		_update_preview(cell)
-	loaded_path = path
-	loaded_uuid = level.uuid
-	_set_status("Dein Level ist geladen.")
+	_load_level(matches[0])
+
+# ---------------------------------------------------------------------------
+# Trying and saving
+# ---------------------------------------------------------------------------
 
 func _on_try_button_pressed() -> void:
 	var problem: String = _find_room_problem()
@@ -343,7 +520,7 @@ func _on_try_button_pressed() -> void:
 func _write_preview_level() -> bool:
 	var level: LevelConfig = LevelConfig.new()
 	level.uuid = "level_editor_preview"
-	level.display_name = _read_kid_id()
+	level.display_name = _get_display_name()
 	draft.apply_to(level, scene_tile_set)
 	return ResourceSaver.save(level, LevelPreview.LEVEL_PATH) == OK
 
@@ -368,39 +545,40 @@ func _on_save_button_pressed() -> void:
 func _save_level() -> bool:
 	var problem: String = _find_save_problem()
 	if not problem.is_empty():
-		_notify(problem)
+		_set_status(problem)
 		return false
 
-	var kid_id: String = _read_kid_id()
-	var path: String = KidFolders.get_level_path(kid_id)
+	var path: String = _get_save_path()
 	var level: LevelConfig = LevelConfig.new()
 	level.uuid = loaded_uuid if path == loaded_path else str(ResourceUID.create_id())
-	level.display_name = KidFolders.get_display_name(kid_id) if KidFolders.load_animal(kid_id) else kid_id
+	level.display_name = _get_display_name()
 	draft.apply_to(level, scene_tile_set)
 
 	DirAccess.make_dir_recursive_absolute(path.get_base_dir())
 	if ResourceSaver.save(level, path) != OK:
 		_set_status("Speichern hat nicht geklappt. Sag dem Dev-Team Bescheid.")
 		return false
+	# From now on this level counts as loaded, so the same kid can keep saving it.
 	loaded_path = path
 	loaded_uuid = level.uuid
+	loaded_name_key = _normalize(level.display_name)
 	if Engine.is_editor_hint():
 		EditorInterface.get_resource_filesystem().scan()
-	_set_status("Gespeichert! Dein Code ist: %s" % kid_id)
-	saved.emit(kid_id)
+	_set_status("Gespeichert! Dein Level heißt: %s" % level.display_name)
+	saved.emit(path.get_base_dir().get_base_dir().get_file())
 	return true
 
 func _find_save_problem() -> String:
-	var kid_id: String = _read_kid_id()
-	if kid_id.is_empty():
-		return "Gib zuerst deinen Code ein."
-	var problem: String = _find_room_problem()
-	if not problem.is_empty():
-		return problem
-	var path: String = KidFolders.get_level_path(kid_id)
-	if path != loaded_path and FileAccess.file_exists(path):
-		return "Diesen Code gibt es schon. Lade dein Level oder nimm einen anderen."
-	return ""
+	var level_name: String = _read_level_name()
+	if _normalize(level_name).is_empty():
+		return "Gib deinem Level zuerst einen Namen."
+	if not _is_overwriting_loaded():
+		var existing: Dictionary = _find_level_by_name(level_name)
+		if not existing.is_empty():
+			return "Ein Level mit dem Namen \"%s\" gibt es schon. Lade es zuerst, wenn du es ändern willst, oder nimm einen anderen Namen." % existing.level_name
+		if FileAccess.file_exists(_get_save_path()):
+			return "Dieser Name ist schon vergeben. Nimm einen anderen."
+	return _find_room_problem()
 
 func _find_room_problem() -> String:
 	if draft.is_empty():
@@ -411,9 +589,6 @@ func _find_room_problem() -> String:
 	if not LevelRules.get_unreachable_doors(floor_cells, door_cells, draft.get_obstacle_cells()).is_empty():
 		return "Eine Tür ist zugebaut. Der Spieler muss zu allen Türen kommen."
 	return ""
-
-func _read_kid_id() -> String:
-	return LevelCode.clean(kid_id_edit.text)
 
 func _set_status(message: String) -> void:
 	status_label.text = message
@@ -446,3 +621,9 @@ func _notify(message: String) -> void:
 	tween.tween_property(label, "position:y", label.position.y - 60.0, MESSAGE_SECONDS)
 	tween.tween_property(label, "modulate:a", 0.0, MESSAGE_SECONDS).set_delay(MESSAGE_SECONDS / 2.0)
 	tween.chain().tween_callback(label.queue_free)
+
+
+func _on_eraser_button_2_pressed() -> void:
+	var created: int = scan_new_obstacles()
+	build_palette()
+	_set_status("%d neue Hindernisse gefunden." % created)

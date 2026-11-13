@@ -37,6 +37,7 @@ const BITE_SCENE = preload("uid://c85rnmtq75r6q")
 
 @onready var damage_sfx: AudioStreamPlayer = $DamageSFX
 @onready var defeated_sfx: AudioStreamPlayer = $DefeatedSFX
+@onready var got_hit_sfx: AudioStreamPlayer = $GotHitSFX
 
 var current_ai_behaviour: AnimalAiState = AnimalAiState.inactive
 var _pending_ai_state : AnimalAiState
@@ -243,9 +244,10 @@ func _on_attack_area_body_exited(body: Node2D) -> void:
 ## this function is called when we hit a animal with a baguette
 func fed():
 	print("current health: ", health)
-	if health > 0 and !passive_only:
+	if health > 0:
 		health -= 1
 		heart_hit_particles.emitting = true
+		got_hit_sfx.play()
 	if health == 0 and not _pacified:
 		_pacified = true
 		collision_shape_2d.set_deferred("disabled", true)

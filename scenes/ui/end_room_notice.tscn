@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://dvognwvdk7uxe"]
+
+[ext_resource type="Script" uid="uid://clvd4nnkrp44o" path="res://scenes/ui/end_room_notice.gd" id="1_e0crx"]
+[ext_resource type="FontFile" uid="uid://fjmg85ykmg4r" path="res://assets/fonts/Chalkboard-Regular-German.ttf" id="1_sykxy"]
+
+[sub_resource type="Animation" id="Animation_sykxy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(322, 620)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e0crx"]
+resource_name = "reveal"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 0.041234694),
+"update": 0,
+"values": [Vector2(322, 680), Vector2(322, 460)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wu7n8"]
+_data = {
+&"RESET": SubResource("Animation_sykxy"),
+&"reveal": SubResource("Animation_e0crx")
+}
+
+[node name="EndRoomNotice" type="Control" unique_id=694988190]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e0crx")
+
+[node name="Label" type="Label" parent="." unique_id=1674264974]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -254.0
+offset_top = -28.0
+offset_right = 254.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_sykxy")
+theme_override_font_sizes/font_size = 30
+text = "You did it! Press X to return to the start!"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=591080929]
+libraries/ = SubResource("AnimationLibrary_wu7n8")

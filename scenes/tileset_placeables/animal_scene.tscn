@@ -3,8 +3,9 @@
 [ext_resource type="Script" uid="uid://dw0aycqe0hkeq" path="res://scenes/tileset_placeables/animal_scene.gd" id="1_3k0lt"]
 [ext_resource type="Texture2D" uid="uid://prflrd5lx0ae" path="res://assets/sprites/Dungeon Gathering Free Version/Potion 3.png" id="1_dn6mg"]
 [ext_resource type="Script" uid="uid://dpiw2yp0cunfg" path="res://scenes/util/sprite_cap_size.gd" id="3_n5yd6"]
-[ext_resource type="AudioStream" uid="uid://cw3miklwesnl7" path="res://assets/sounds/sfx/Enemy-defeated.wav" id="4_o7d5c"]
-[ext_resource type="AudioStream" uid="uid://bjuw3ta224t7e" path="res://assets/sounds/sfx/PlayerTakesDamage-CakeGetsEaten.wav" id="4_yvrkb"]
+[ext_resource type="AudioStream" uid="uid://dpubyxs8w2qlq" path="res://assets/sounds/sfx/Enemy-defeated.wav" id="4_o7d5c"]
+[ext_resource type="AudioStream" uid="uid://c41vwr2algqqh" path="res://assets/sounds/sfx/PlayerTakesDamage-CakeGetsEaten.wav" id="4_yvrkb"]
+[ext_resource type="AudioStream" uid="uid://day11x56d0h7v" path="res://assets/sounds/sfx/EnemyHit.wav" id="5_i107u"]
 [ext_resource type="Texture2D" uid="uid://dl4qolg7sgcfr" path="res://assets/sprites/enemies/sleep/z1.png" id="6_ei8qe"]
 [ext_resource type="Texture2D" uid="uid://bkjpv3hcdy5x5" path="res://assets/sprites/enemies/sleep/z2.png" id="7_6svch"]
 [ext_resource type="Texture2D" uid="uid://bxeym46103l3r" path="res://assets/sprites/enemies/sleep/z3.png" id="8_i107u"]
@@ -353,13 +354,12 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="AnimalScene" type="CharacterBody2D" unique_id=775286256]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 19
 motion_mode = 1
 script = ExtResource("1_3k0lt")
 movement_speed = 100.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=56172178]
-debug_enabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=466218718]
 shape = SubResource("CircleShape2D_p52qu")
@@ -394,6 +394,9 @@ one_shot = true
 
 [node name="DamageSFX" type="AudioStreamPlayer" parent="." unique_id=1032747981]
 stream = ExtResource("4_yvrkb")
+
+[node name="GotHitSFX" type="AudioStreamPlayer" parent="." unique_id=1164484967]
+stream = ExtResource("5_i107u")
 
 [node name="DefeatedSFX" type="AudioStreamPlayer" parent="." unique_id=907004647]
 stream = ExtResource("4_o7d5c")
