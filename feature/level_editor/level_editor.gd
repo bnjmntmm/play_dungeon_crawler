@@ -52,6 +52,8 @@ var last_message_time: int = 0
 var notify_layer: Control
 var _name_cleaner: RegEx
 var _reported_invalid: Dictionary[String, bool] = {}
+var _palette_library = preload("res://autoloads/game_manager/content_library.gd").new()
+var _pending_palette_selection: String = ""
 
 ## Inside the Godot editor LevelEditorTool calls initialize(), so opening this scene stays harmless.
 func _ready() -> void:
@@ -163,6 +165,9 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 # ---------------------------------------------------------------------------
 
 func build_palette() -> void:
+	# The station starts on the animal tab. Do not scan/load the hidden room palette.
+	if not is_visible_in_tree():
+		return
 	scan_new_obstacles()
 	for grid: GridContainer in [animal_grid, obstacle_grid]:
 		for button: Node in grid.get_children():
@@ -187,6 +192,9 @@ func build_palette() -> void:
 		if selected_config and selected_config.resource_path == config.resource_path:
 			button.button_pressed = true
 			selected_config = config
+	if not _pending_palette_selection.is_empty():
+		select_config_path(_pending_palette_selection)
+		_pending_palette_selection = ""
 
 func _get_config_name(config: BaseConfig) -> String:
 	if config is AnimalConfig and not (config as AnimalConfig).display_name.is_empty():
@@ -212,6 +220,9 @@ func _style_palette_button(button: Button, color: Color) -> void:
 
 ## Selects a palette entry by file, e.g. the animal a kid just saved in the other tab.
 func select_config_path(path: String) -> void:
+	if not is_visible_in_tree():
+		_pending_palette_selection = path
+		return
 	for grid: GridContainer in [animal_grid, obstacle_grid]:
 		for button: Button in grid.get_children():
 			if button.get_meta("config_path") == path:
@@ -270,16 +281,12 @@ func _create_missing_obstacles(dir_path: String) -> int:
 	return created
 
 func _collect_configs(dir_path: String) -> Array[BaseConfig]:
+	# Keep parsed configs and decoded drawings across tab switches. Levels are not
+	# palette entries and can pull in every placed animal through dependencies.
+	_palette_library.refresh(dir_path, false, ["level"])
 	var configs: Array[BaseConfig] = []
-	for sub_dir: String in DirAccess.get_directories_at(dir_path):
-		if sub_dir != "level":
-			configs.append_array(_collect_configs(dir_path.path_join(sub_dir)))
-	for file: String in DirAccess.get_files_at(dir_path):
-		if file.get_extension() in CONFIG_EXTENSIONS:
-			## REPLACE keeps placed configs valid while picking up changes from the animal tab.
-			var config: BaseConfig = ResourceLoader.load(dir_path.path_join(file), "", ResourceLoader.CACHE_MODE_REPLACE) as BaseConfig
-			if config:
-				configs.append(config)
+	configs.append_array(_palette_library.animals)
+	configs.append_array(_palette_library.obstacles)
 	return configs
 
 func _select_config(config: BaseConfig) -> void:
@@ -528,7 +535,10 @@ func _write_preview_level() -> bool:
 ## The game runs as its own process, so the draft stays open here while a kid plays.
 func _start_preview() -> void:
 	_stop_preview()
-	var arguments: PackedStringArray = ["--path", ProjectSettings.globalize_path("res://"), PREVIEW_SCENE_PATH]
+	var arguments: PackedStringArray = [
+		"--path", ProjectSettings.globalize_path("res://"), PREVIEW_SCENE_PATH,
+		"--", "--level-editor-preview",
+	]
 	preview_pid = OS.create_process(OS.get_executable_path(), arguments)
 	if preview_pid == -1:
 		_set_status("Ausprobieren hat nicht geklappt. Sag dem Dev-Team Bescheid.")

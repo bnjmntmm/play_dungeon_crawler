@@ -11,6 +11,8 @@ const CLOSED_DOOR_TEXTURE: Texture2D = preload("res://assets/sprites/world_sprit
 
 @export var is_teleport_door: bool = false
 @export var teleport_destination: PackedScene
+## File paths avoid loading the whole destination dependency tree with this door.
+@export_file("*.tscn") var teleport_scene_path: String = ""
 @export_range(0.0, 2.0, 0.01) var door_fade_duration: float = 0.2
 #@export var sprite_rotation_degrees: float = 0.0:
 	#set(value):
@@ -105,7 +107,10 @@ func _on_body_entered(body: Node2D) -> void:
 			player_leave_sfx.play()
 			player.set_movement_lock(true)
 			if is_teleport_door:
-				GameManager.init_scene_change(teleport_destination)
+				if not teleport_scene_path.is_empty():
+					GameManager.init_scene_change_path(teleport_scene_path)
+				else:
+					GameManager.init_scene_change(teleport_destination)
 			else:
 				GameManager.nextEntryDoor = enter_door
 				GameManager.init_room_change(GameManager.nextEntryDoor == self)

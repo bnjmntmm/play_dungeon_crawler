@@ -15,6 +15,12 @@ var buttonDictionary: Dictionary[Button, ImageTexture]
 var buttonPathDictionary: Dictionary[Button, String]
 var buttonFolderDictionary: Dictionary[Button, String]
 
+const ImageGridJob = preload("res://feature/editor tool/image_grid_job.gd")
+var _image_job: RefCounted
+var _retired_image_jobs: Array[RefCounted] = []
+var _image_cache: Dictionary[String, Dictionary] = {}
+var _visible_image_paths: Dictionary[String, bool] = {}
+
 # currently selected image
 var selected_image_path:String = ""
 var selected_folder_name:String = ""
@@ -59,8 +65,12 @@ const RING_COLOR: Color = Color(1, 0.85, 0.2, 0.9)
 
 ## Health is capped at 10 (and must be above 0).
 const HEALTH_MAX: int = 10
+## Movement speed is capped at: 10
+const MAX_MOVEMENT_SPEED : int = 10
 ## Attack speed is entered as 1-10, where 10 is the fastest.
 const ATTACK_SPEED_MAX: int = 10
+## Max Wahrnehmungsreichweite
+const MAX_REACH_DISTANCE : int = 100
 ## The stored cooldown in seconds: entering 1 gives SLOWEST, entering 10 gives FASTEST.
 const COOLDOWN_SLOWEST: float = 1.0
 const COOLDOWN_FASTEST: float = 0.1
@@ -69,6 +79,7 @@ func _ready() -> void:
 	attack_speed_progress_bar.step = 0.01
 
 func _process(delta: float) -> void:
+	_process_image_jobs()
 	# The bar fills up until the next attack.
 	attack_speed_progress_bar.max_value = attack_timer.wait_time
 	attack_speed_progress_bar.value = attack_timer.wait_time - attack_timer.time_left
@@ -199,67 +210,89 @@ func clear_grid():
 	buttonPathDictionary.clear()
 	buttonFolderDictionary.clear()
 
-# scans res://custom_data/<folder_name>/animal/ for every folder_name
+# Scan and decode in a worker; add a few thumbnails per frame to keep input responsive.
 func populate_texture_selection():
+	if _image_job:
+		_image_job.cancel()
+		_retired_image_jobs.append(_image_job)
 	grid_con.columns = grid_columns
-	print("populating texture grid")
-	var root_dir = DirAccess.open(image_dir)
-	if root_dir == null:
-		print("Textures Filepath ", image_dir, " could not be accessed")
-		return
-	
-	for folder_name in root_dir.get_directories():
-		var animal_dir_path:String = image_dir + folder_name + "/animal/"
-		if DirAccess.dir_exists_absolute(animal_dir_path) == false:
-			continue
-		add_images_from_directory(animal_dir_path, folder_name)
+	_visible_image_paths.clear()
+	var stamps: Dictionary = {}
+	for path: String in _image_cache:
+		stamps[path] = _image_cache[path].stamp
+	_image_job = ImageGridJob.new()
+	_image_job.start(image_dir, stamps)
 
-func add_images_from_directory(dir_path:String, folder_name:String):
-	var dir = DirAccess.open(dir_path)
-	if dir == null:
-		print("Textures Filepath ", dir_path, " could not be accessed")
+func _process_image_jobs() -> void:
+	for index: int in range(_retired_image_jobs.size() - 1, -1, -1):
+		if _retired_image_jobs[index].is_finished():
+			_retired_image_jobs[index].wait()
+			_retired_image_jobs.remove_at(index)
+	if _image_job == null:
 		return
-	
-	for file_name in dir.get_files():
-		if file_name.ends_with(".png") == false:
-			continue
-		var full_path:String = dir_path + file_name
-		var img:Image = Image.load_from_file(full_path)
-		if img == null:
-			print("Could not load image: ", full_path)
-			continue
-		var tex:ImageTexture = ImageTexture.create_from_image(img)
-		
-		var margin_con = MarginContainer.new()
-		grid_con.add_child(margin_con)
-		margin_con.add_theme_constant_override("margin_top", grid_item_margin)
-		margin_con.add_theme_constant_override("margin_left", grid_item_margin)
-		margin_con.add_theme_constant_override("margin_bottom", grid_item_margin)
-		margin_con.add_theme_constant_override("margin_right", grid_item_margin)
-		margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		
-		var button = Button.new()
-		margin_con.add_child(button)
-		button.icon = tex
-		button.expand_icon = true
-		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
-		button.custom_minimum_size = grid_item_size
-		button.tooltip_text = folder_name + "/" + file_name
-		
-		buttonDictionary[button] = tex
-		buttonPathDictionary[button] = full_path
-		buttonFolderDictionary[button] = folder_name
-		
-		button.pressed.connect(on_texture_button_clicked.bind(button))
+	var finished: bool = _image_job.is_finished()
+	var entries: Array[Dictionary] = _image_job.take_pending()
+	for entry: Dictionary in entries:
+		var path: String = entry.path
+		if entry.has("image"):
+			_image_cache[path] = {"stamp": entry.stamp, "texture": ImageTexture.create_from_image(entry.image)}
+		if _image_cache.has(path):
+			_visible_image_paths[path] = true
+			_add_image_button(path, entry.folder, _image_cache[path].texture)
+	# An empty batch after worker completion means the queue has been drained.
+	if entries.is_empty() and finished:
+		_image_job.wait()
+		_image_job = null
+		for path: String in _image_cache.keys():
+			if not _visible_image_paths.has(path):
+				_image_cache.erase(path)
+
+func _exit_tree() -> void:
+	if _image_job:
+		_image_job.cancel()
+		_retired_image_jobs.append(_image_job)
+		_image_job = null
+	for job: RefCounted in _retired_image_jobs:
+		job.cancel()
+	for job: RefCounted in _retired_image_jobs:
+		job.wait()
+	_retired_image_jobs.clear()
+
+func _add_image_button(full_path: String, folder_name: String, tex: ImageTexture) -> void:
+	var margin_con = MarginContainer.new()
+	grid_con.add_child(margin_con)
+	margin_con.add_theme_constant_override("margin_top", grid_item_margin)
+	margin_con.add_theme_constant_override("margin_left", grid_item_margin)
+	margin_con.add_theme_constant_override("margin_bottom", grid_item_margin)
+	margin_con.add_theme_constant_override("margin_right", grid_item_margin)
+	margin_con.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin_con.size_flags_vertical = Control.SIZE_EXPAND_FILL
+
+	var button = Button.new()
+	margin_con.add_child(button)
+	button.icon = tex
+	button.expand_icon = true
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	button.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	button.custom_minimum_size = grid_item_size
+	button.tooltip_text = folder_name + "/" + full_path.get_file()
+
+	buttonDictionary[button] = tex
+	buttonPathDictionary[button] = full_path
+	buttonFolderDictionary[button] = folder_name
+
+	button.pressed.connect(on_texture_button_clicked.bind(button))
 
 ## Picking an image loads the AnimalConfig that uses it, or starts a fresh one.
 func on_texture_button_clicked(button: Button) -> void:
-	var texture: ImageTexture = buttonDictionary.get(button)
 	var png_path: String = buttonPathDictionary.get(button, "")
 	var folder: String = buttonFolderDictionary.get(button, "")
 
+	var image := Image.new()
+	if image.load_png_from_buffer(FileAccess.get_file_as_bytes(png_path)) != OK or image.is_empty():
+		_show_info("Das Bild konnte nicht geladen werden. Bitte aktualisieren.", true)
+		return
+	var texture := ImageTexture.create_from_image(image)
 	var code: String = _find_code_for_image(png_path, texture)
 	if code.is_empty():
 		# New sprite: start from scratch.
@@ -274,8 +307,7 @@ func on_texture_button_clicked(button: Button) -> void:
 	selected_image_path = png_path
 	selected_folder_name = folder
 	config_file.source_png = png_path
-	if config_file.sprite == null:
-		config_file.sprite = texture
+	config_file.sprite = texture
 	_get_preview_sprite().texture = config_file.sprite
 	code_edit.text = code
 	_set_form_unlocked(true)
@@ -370,9 +402,9 @@ func _find_save_problem() -> String:
 	# Max value per field, -1 means no upper limit.
 	var limits: Dictionary[LineEdit, int] = {
 		health_text_edit: HEALTH_MAX,
-		speed_text_edit: -1,
+		speed_text_edit: MAX_MOVEMENT_SPEED,
 		attack_speed_text_edit: ATTACK_SPEED_MAX,
-		detection_range_text_edit: -1,
+		detection_range_text_edit: MAX_REACH_DISTANCE,
 	}
 	for text: LineEdit in limits:
 		var max_value: int = limits[text]
@@ -414,12 +446,16 @@ func _on_sound_option_item_selected(index: int) -> void:
 func _on_sound_preview_button_pressed() -> void:
 	audio_stream_player.play()
 
-## Valid means a whole number above 0, and not above max_value (if one is given).
+## Accepts whole numbers above 0 and clamps them to max_value (if one is given).
 ## While the form is locked nothing is accepted.
 func change_value(text: LineEdit, new_text: String, max_value: int = -1) -> bool:
 	if not form_unlocked:
 		return false
-	if new_text.is_valid_int() and int(new_text) > 0 and (max_value <= 0 or int(new_text) <= max_value):
+	if new_text.is_valid_int() and int(new_text) > 0:
+		if max_value > 0 and int(new_text) > max_value:
+			var caret: int = text.caret_column
+			text.text = str(max_value)
+			text.caret_column = mini(caret, text.text.length())
 		text.set_modulate(Color(1,1,1))
 		return true
 	else:
@@ -428,23 +464,23 @@ func change_value(text: LineEdit, new_text: String, max_value: int = -1) -> bool
 		
 func _on_health_text_edit_text_changed(new_text: String) -> void:
 	if change_value(health_text_edit, new_text, HEALTH_MAX):
-		config_file.health = int(new_text)
+		config_file.health = int(health_text_edit.text)
 		print("new health value: ", config_file.health)
 
 func _on_damage_text_edit_text_changed(new_text: String) -> void:
 	if change_value(damage_text_edit, new_text):
-		config_file.damage = int(new_text)
+		config_file.damage = int(damage_text_edit.text)
 		print("new damage value: ", config_file.damage)
 
 func _on_speed_text_edit_text_changed(new_text: String) -> void:
-	if change_value(speed_text_edit, new_text):
-		config_file.speed = int(new_text)
+	if change_value(speed_text_edit, new_text, MAX_MOVEMENT_SPEED):
+		config_file.speed = int(speed_text_edit.text)
 		print("new speed value: ", config_file.speed)
 
 ## The field takes 1-10 (10 = fastest). The config stores the cooldown in seconds (1.0 down to 0.1).
 func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
 	if change_value(attack_speed_text_edit, new_text, ATTACK_SPEED_MAX):
-		config_file.attack_speed = _ui_to_cooldown(int(new_text))
+		config_file.attack_speed = _ui_to_cooldown(int(attack_speed_text_edit.text))
 		print("new attack cooldown: ", config_file.attack_speed)
 		attack_timer.wait_time = config_file.attack_speed
 		attack_timer.start()
@@ -452,8 +488,8 @@ func _on_attack_speed_text_edit_text_changed(new_text: String) -> void:
 		attack_timer.stop()
 
 func _on_detection_range_text_edit_text_changed(new_text: String) -> void:
-	if change_value(detection_range_text_edit, new_text):
-		config_file.detection_range = int(new_text)
+	if change_value(detection_range_text_edit, new_text, MAX_REACH_DISTANCE):
+		config_file.detection_range = int(detection_range_text_edit.text)
 		print("new detection rate value: ", config_file.detection_range)
 	_update_detection_ring()
 
@@ -478,16 +514,16 @@ func _on_health_down_button_pressed() -> void:
 	text_increment(health_text_edit, -1, HEALTH_MAX)
 
 func _on_damage_up_button_pressed() -> void:
-	text_increment(damage_text_edit, 1)
+	text_increment(damage_text_edit, 1, )
 
 func _on_damage_down_button_pressed() -> void:
 	text_increment(damage_text_edit, -1)
 
 func _on_speed_up_button_pressed() -> void:
-	text_increment(speed_text_edit, 1)
+	text_increment(speed_text_edit, 1, MAX_MOVEMENT_SPEED)
 
 func _on_speed_down_button_pressed() -> void:
-	text_increment(speed_text_edit, -1)
+	text_increment(speed_text_edit, -1, MAX_MOVEMENT_SPEED)
 
 func _on_attack_speed_up_button_pressed() -> void:
 	text_increment(attack_speed_text_edit, 1, ATTACK_SPEED_MAX)
@@ -497,10 +533,10 @@ func _on_attack_speed_down_button_pressed() -> void:
 
 ## The text_changed handler sets the range and redraws the ring, so these only step the value.
 func _on_detection_range_up_button_pressed() -> void:
-	text_increment(detection_range_text_edit, 10)
+	text_increment(detection_range_text_edit, 10, MAX_REACH_DISTANCE)
 
 func _on_detection_range_down_button_pressed() -> void:
-	text_increment(detection_range_text_edit, -10)
+	text_increment(detection_range_text_edit, -10, MAX_REACH_DISTANCE)
 
 ## The timer now only drives the progress bar. Sound is played by the preview button only.
 func _on_attack_timer_timeout() -> void:

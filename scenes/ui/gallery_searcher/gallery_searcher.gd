@@ -40,6 +40,9 @@ func _ready() -> void:
 	for button: BaseButton in find_children("*", "BaseButton", true, false):
 		button.focus_mode = Control.FOCUS_NONE
 
+	# Start a fresh search on focus, whether entered by mouse or keyboard.
+	text_edit.focus_entered.connect(text_edit.clear)
+
 	# Whenever the field loses focus (Esc, finished search, mouse click elsewhere),
 	# show the current level's title again.
 	text_edit.focus_exited.connect(_sync_to_current_level)
@@ -84,7 +87,13 @@ func _update_indicator() -> void:
 func _input(event: InputEvent) -> void:
 	# Safety net: the first real touch switches to mobile mode, even if the platform
 	# check missed it (e.g. a phone browser asking for the desktop site).
-	if not _mobile and event is InputEventScreenTouch:
+	# Mouse-to-touch emulation is enabled in the project. Those events must not
+	# disable desktop typing when the user clicks the search field.
+	if (
+		not _mobile
+		and event is InputEventScreenTouch
+		and event.device != InputEvent.DEVICE_ID_EMULATION
+	):
 		_mobile = true
 		_setup_mobile_mode()
 
@@ -98,8 +107,6 @@ func _input(event: InputEvent) -> void:
 		if typing:
 			_submit(text_edit.text.strip_edges())
 		else:
-			# Start a new search: clear the old text so no arrow-key editing is needed.
-			text_edit.text = ""
 			text_edit.grab_focus()
 		return
 

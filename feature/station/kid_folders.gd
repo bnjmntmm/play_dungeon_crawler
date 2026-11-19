@@ -7,6 +7,9 @@ const CUSTOM_DATA_PATH: String = "res://custom_data"
 const ANIMAL_PATH_TEMPLATE: String = "res://custom_data/%s/animal/animal_%s.tres"
 const LEVEL_PATH_TEMPLATE: String = "res://custom_data/%s/level/level_%s.tres"
 
+static var _animals: Dictionary[String, Resource] = {}
+static var _stamps: Dictionary[String, Vector2i] = {}
+
 static func get_animal_path(code: String) -> String:
 	return ANIMAL_PATH_TEMPLATE % [code, code]
 
@@ -32,9 +35,22 @@ static func get_display_name(code: String) -> String:
 	return ""
 
 static func load_animal(code: String) -> AnimalConfig:
-	return _load(get_animal_path(code)) as AnimalConfig
+	var animal := _load(get_animal_path(code)) as AnimalConfig
+	# Form edits stay private until saved; textures/audio can remain shared.
+	return animal.duplicate() as AnimalConfig if animal else null
 
 static func _load(path: String) -> Resource:
 	if not ResourceLoader.exists(path):
+		_animals.erase(path)
+		_stamps.erase(path)
 		return null
-	return ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE)
+	var disk_path: String = path if FileAccess.file_exists(path) else path + ".remap"
+	var file := FileAccess.open(disk_path, FileAccess.READ)
+	var stamp := Vector2i(FileAccess.get_modified_time(disk_path), file.get_length()) if file else Vector2i(-1, -1)
+	if _animals.has(path) and _stamps.get(path) == stamp:
+		return _animals[path]
+	var animal := ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if animal:
+		_animals[path] = animal
+		_stamps[path] = stamp
+	return animal
