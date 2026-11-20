@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_lu2rv"]
+[ext_resource type="Resource" path="res://custom_data/tiny_rocket_91/animal/animal_tiny_rocket_91.tres" id="2_5iby2"]
+[ext_resource type="Resource" path="res://custom_data/speedy_harbor_96/animal/animal_speedy_harbor_96.tres" id="3_mmxss"]
+[ext_resource type="Resource" path="res://custom_data/witty_daisy_84/animal/animal_witty_daisy_84.tres" id="4_6pxej"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_s68eq"]
+[ext_resource type="Resource" path="res://custom_data/cozy_quill_37/obstacle/obstacle_cozy_quill_37.tres" id="6_q6bgc"]
+[ext_resource type="Resource" path="res://custom_data/proud_jungle_54/obstacle/obstacle_proud_jungle_54.tres" id="7_58e3w"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="8_hure4"]
+
+[resource]
+script = ExtResource("8_hure4")
+uuid = "4874254342072156669"
+display_name = "Wizbiz"
+tile_map_data = PackedByteArray("AAAGAAMAAAAAAAAAAQAMAAUAAAAAAAAAAQALAAQAAAAAAAAAAQAFAAUAAAAAAAAAAQAFAAYAAQAAAAAAAQAGAAUAAQAAAAAAAQAKAAMAAQAAAAAAAQAGAAYAAQAAAAAAAQAMAAMAAQAAAAAAAQAMAAcAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_lu2rv")]({
+Vector2i(5, 5): ExtResource("4_6pxej"),
+Vector2i(6, 3): ExtResource("2_5iby2"),
+Vector2i(11, 4): ExtResource("3_mmxss"),
+Vector2i(12, 5): ExtResource("2_5iby2")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_s68eq")]({
+Vector2i(5, 6): ExtResource("6_q6bgc"),
+Vector2i(6, 5): ExtResource("6_q6bgc"),
+Vector2i(6, 6): ExtResource("7_58e3w"),
+Vector2i(10, 3): ExtResource("6_q6bgc"),
+Vector2i(12, 3): ExtResource("7_58e3w"),
+Vector2i(12, 7): ExtResource("7_58e3w")
+})

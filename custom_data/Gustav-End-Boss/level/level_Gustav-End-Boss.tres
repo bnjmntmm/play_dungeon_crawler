@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_2luvm"]
+[ext_resource type="Resource" path="res://custom_data/speedy_harbor_96/animal/animal_speedy_harbor_96.tres" id="2_qbs8s"]
+[ext_resource type="Resource" path="res://custom_data/shiny_puddle_53/animal/animal_shiny_puddle_53.tres" id="3_asfp8"]
+[ext_resource type="Resource" path="res://custom_data/smooth_nugget_41/animal/animal_smooth_nugget_41.tres" id="4_lre3r"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_3hptm"]
+[ext_resource type="Resource" path="res://custom_data/snowy_anchor_60/obstacle/obstacle_snowy_anchor_60.tres" id="6_h3x0g"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="7_t7ylk"]
+
+[resource]
+script = ExtResource("7_t7ylk")
+uuid = "487962100252853373"
+display_name = "Gustav End Boss"
+tile_map_data = PackedByteArray("AAAEAAMAAAAAAAAAAQAOAAIAAAAAAAAAAQAOAAMAAAAAAAAAAQALAAcAAAAAAAAAAQAGAAcAAAAAAAAAAQADAAYAAAAAAAAAAQANAAYAAAAAAAAAAQAGAAQAAAAAAAAAAQAGAAMAAAAAAAAAAQAHAAIAAAAAAAAAAQAIAAIAAAAAAAAAAQAIAAMAAAAAAAAAAQAHAAQAAAAAAAAAAQAIAAQAAAAAAAAAAQAJAAQAAQAAAAAAAQAJAAMAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_2luvm")]({
+Vector2i(3, 6): ExtResource("3_asfp8"),
+Vector2i(4, 3): ExtResource("2_qbs8s"),
+Vector2i(6, 3): ExtResource("4_lre3r"),
+Vector2i(6, 4): ExtResource("4_lre3r"),
+Vector2i(6, 7): ExtResource("2_qbs8s"),
+Vector2i(7, 2): ExtResource("4_lre3r"),
+Vector2i(7, 4): ExtResource("4_lre3r"),
+Vector2i(8, 2): ExtResource("4_lre3r"),
+Vector2i(8, 3): ExtResource("4_lre3r"),
+Vector2i(8, 4): ExtResource("4_lre3r"),
+Vector2i(11, 7): ExtResource("2_qbs8s"),
+Vector2i(13, 6): ExtResource("3_asfp8"),
+Vector2i(14, 2): ExtResource("2_qbs8s"),
+Vector2i(14, 3): ExtResource("2_qbs8s")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_3hptm")]({
+Vector2i(9, 3): ExtResource("6_h3x0g"),
+Vector2i(9, 4): ExtResource("6_h3x0g")
+})

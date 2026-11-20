@@ -1,0 +1,79 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_2000n"]
+[ext_resource type="Resource" path="res://custom_data/proud_river_87/animal/animal_proud_river_87.tres" id="2_6nf5h"]
+[ext_resource type="Resource" path="res://custom_data/quiet_fjord_32/animal/animal_quiet_fjord_32.tres" id="3_qj651"]
+[ext_resource type="Resource" path="res://custom_data/sunny_mitten_70/animal/animal_sunny_mitten_70.tres" id="4_si8aq"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_i4v0p"]
+[ext_resource type="Resource" path="res://custom_data/cozy_quill_37/obstacle/obstacle_cozy_quill_37.tres" id="6_r1o3a"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_96/obstacle/obstacle_giant_anchor_96.tres" id="7_tasr8"]
+[ext_resource type="Resource" path="res://custom_data/tiny_puddle_25/obstacle/obstacle_tiny_puddle_25.tres" id="8_0jr13"]
+[ext_resource type="Resource" path="res://custom_data/rapid_acorn_66/obstacle/obstacle_rapid_acorn_66.tres" id="9_ks4su"]
+[ext_resource type="Resource" path="res://custom_data/quick_sparrow_63/obstacle/obstacle_quick_sparrow_63.tres" id="10_70ymy"]
+[ext_resource type="Resource" path="res://custom_data/quiet_ember_12/obstacle/obstacle_quiet_ember_12.tres" id="11_q1htr"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="12_jilae"]
+
+[resource]
+script = ExtResource("12_jilae")
+uuid = "6521106182685701860"
+display_name = "PAY THE MOGGER GOGOGOGOGOGOGOGOGOGOGOGOGOGOGOGOGOG"
+tile_map_data = PackedByteArray("AAACAAgAAAAAAAAAAQANAAEAAAAAAAAAAQANAAIAAAAAAAAAAQAMAAIAAAAAAAAAAQAMAAEAAAAAAAAAAQAIAAQAAAAAAAAAAQAIAAMAAAAAAAAAAQAHAAMAAAAAAAAAAQADAAQAAAAAAAAAAQAHAAgAAQAAAAAAAQAHAAcAAQAAAAAAAQAFAAcAAQAAAAAAAQAJAAcAAQAAAAAAAQAJAAYAAQAAAAAAAQAJAAUAAQAAAAAAAQAIAAUAAQAAAAAAAQAHAAUAAQAAAAAAAQADAAcAAQAAAAAAAQACAAUAAQAAAAAAAQACAAQAAQAAAAAAAQACAAMAAQAAAAAAAQABAAMAAQAAAAAAAQAEAAIAAQAAAAAAAQAJAAIAAQAAAAAAAQAJAAMAAQAAAAAAAQAIAAIAAQAAAAAAAQALAAMAAQAAAAAAAQALAAQAAQAAAAAAAQANAAcAAQAAAAAAAQAOAAcAAQAAAAAAAQAOAAUAAQAAAAAAAQANAAUAAQAAAAAAAQAPAAUAAQAAAAAAAQAQAAYAAQAAAAAAAQAPAAQAAQAAAAAAAQAPAAMAAQAAAAAAAQAGAAUAAQAAAAAAAQAEAAcAAQAAAAAAAQAEAAMAAQAAAAAAAQAMAAMAAQAAAAAAAQAFAAYAAQAAAAAAAQAFAAUAAQAAAAAAAQAEAAUAAQAAAAAAAQAEAAQAAQAAAAAAAQALAAUAAQAAAAAAAQALAAYAAQAAAAAAAQALAAcAAQAAAAAAAQAMAAcAAQAAAAAAAQALAAIAAQAAAAAAAQALAAEAAQAAAAAAAQAGAAEAAQAAAAAAAQAGAAIAAQAAAAAAAQAGAAMAAQAAAAAAAQAPAAIAAQAAAAAAAQANAAMAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_2000n")]({
+Vector2i(2, 8): ExtResource("2_6nf5h"),
+Vector2i(3, 4): ExtResource("4_si8aq"),
+Vector2i(7, 3): ExtResource("4_si8aq"),
+Vector2i(8, 3): ExtResource("4_si8aq"),
+Vector2i(8, 4): ExtResource("4_si8aq"),
+Vector2i(12, 1): ExtResource("3_qj651"),
+Vector2i(12, 2): ExtResource("3_qj651"),
+Vector2i(13, 1): ExtResource("3_qj651"),
+Vector2i(13, 2): ExtResource("3_qj651")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_i4v0p")]({
+Vector2i(1, 3): ExtResource("6_r1o3a"),
+Vector2i(2, 3): ExtResource("6_r1o3a"),
+Vector2i(2, 4): ExtResource("6_r1o3a"),
+Vector2i(2, 5): ExtResource("6_r1o3a"),
+Vector2i(3, 7): ExtResource("6_r1o3a"),
+Vector2i(4, 2): ExtResource("6_r1o3a"),
+Vector2i(4, 3): ExtResource("8_0jr13"),
+Vector2i(4, 4): ExtResource("10_70ymy"),
+Vector2i(4, 5): ExtResource("9_ks4su"),
+Vector2i(4, 7): ExtResource("8_0jr13"),
+Vector2i(5, 5): ExtResource("9_ks4su"),
+Vector2i(5, 6): ExtResource("9_ks4su"),
+Vector2i(5, 7): ExtResource("6_r1o3a"),
+Vector2i(6, 1): ExtResource("11_q1htr"),
+Vector2i(6, 2): ExtResource("11_q1htr"),
+Vector2i(6, 3): ExtResource("11_q1htr"),
+Vector2i(6, 5): ExtResource("7_tasr8"),
+Vector2i(7, 5): ExtResource("6_r1o3a"),
+Vector2i(7, 7): ExtResource("6_r1o3a"),
+Vector2i(7, 8): ExtResource("6_r1o3a"),
+Vector2i(8, 2): ExtResource("6_r1o3a"),
+Vector2i(8, 5): ExtResource("6_r1o3a"),
+Vector2i(9, 2): ExtResource("6_r1o3a"),
+Vector2i(9, 3): ExtResource("6_r1o3a"),
+Vector2i(9, 5): ExtResource("6_r1o3a"),
+Vector2i(9, 6): ExtResource("6_r1o3a"),
+Vector2i(9, 7): ExtResource("6_r1o3a"),
+Vector2i(11, 1): ExtResource("9_ks4su"),
+Vector2i(11, 2): ExtResource("9_ks4su"),
+Vector2i(11, 3): ExtResource("6_r1o3a"),
+Vector2i(11, 4): ExtResource("6_r1o3a"),
+Vector2i(11, 5): ExtResource("10_70ymy"),
+Vector2i(11, 6): ExtResource("10_70ymy"),
+Vector2i(11, 7): ExtResource("10_70ymy"),
+Vector2i(12, 3): ExtResource("8_0jr13"),
+Vector2i(12, 7): ExtResource("9_ks4su"),
+Vector2i(13, 3): ExtResource("9_ks4su"),
+Vector2i(13, 5): ExtResource("6_r1o3a"),
+Vector2i(13, 7): ExtResource("6_r1o3a"),
+Vector2i(14, 5): ExtResource("6_r1o3a"),
+Vector2i(14, 7): ExtResource("6_r1o3a"),
+Vector2i(15, 2): ExtResource("11_q1htr"),
+Vector2i(15, 3): ExtResource("6_r1o3a"),
+Vector2i(15, 4): ExtResource("6_r1o3a"),
+Vector2i(15, 5): ExtResource("6_r1o3a"),
+Vector2i(16, 6): ExtResource("6_r1o3a")
+})

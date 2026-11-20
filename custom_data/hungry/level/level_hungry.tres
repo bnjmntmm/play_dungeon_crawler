@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_kso3b"]
+[ext_resource type="Resource" path="res://custom_data/giant_maple_25/animal/animal_giant_maple_25.tres" id="2_3fj3a"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="3_67bif"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_32/obstacle/obstacle_giant_anchor_32.tres" id="4_3vpep"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="5_4ic4i"]
+
+[resource]
+script = ExtResource("5_4ic4i")
+uuid = "4744462838131676372"
+display_name = "hungry"
+tile_map_data = PackedByteArray("AAAEAAIAAAAAAAAAAQAJAAIAAAAAAAAAAQAHAAMAAAAAAAAAAQAGAAMAAAAAAAAAAQAFAAYAAAAAAAAAAQADAAQAAAAAAAAAAQAGAAQAAAAAAAAAAQAKAAUAAAAAAAAAAQALAAUAAAAAAAAAAQANAAMAAAAAAAAAAQAOAAYAAAAAAAAAAQALAAcAAAAAAAAAAQACAAYAAAAAAAAAAQAEAAUAAAAAAAAAAQADAAcAAAAAAAAAAQACAAMAAAAAAAAAAQAEAAQAAAAAAAAAAQAGAAUAAAAAAAAAAQAFAAcAAAAAAAAAAQAFAAQAAAAAAAAAAQAKAAcAAAAAAAAAAQAMAAUAAAAAAAAAAQAOAAQAAAAAAAAAAQAOAAIAAAAAAAAAAQAMAAIAAAAAAAAAAQAJAAQAAAAAAAAAAQAIAAUAAAAAAAAAAQAHAAQAAAAAAAAAAQAGAAcAAAAAAAAAAQAIAAYAAAAAAAAAAQALAAYAAAAAAAAAAQANAAcAAAAAAAAAAQAPAAcAAAAAAAAAAQAPAAUAAAAAAAAAAQANAAQAAAAAAAAAAQALAAMAAAAAAAAAAQALAAEAAAAAAAAAAQALAAIAAAAAAAAAAQAJAAMAAAAAAAAAAQAHAAIAAAAAAAAAAQAGAAIAAAAAAAAAAQAFAAMAAAAAAAAAAQADAAIAAAAAAAAAAQAEAAcAAAAAAAAAAQAFAAgAAAAAAAAAAQAMAAgAAAAAAAAAAQAPAAEAAAAAAAAAAQAPAAMAAAAAAAAAAQAHAAYAAAAAAAAAAQAIAAQAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_kso3b")]({
+Vector2i(2, 3): ExtResource("2_3fj3a"),
+Vector2i(2, 6): ExtResource("2_3fj3a"),
+Vector2i(3, 2): ExtResource("2_3fj3a"),
+Vector2i(3, 4): ExtResource("2_3fj3a"),
+Vector2i(3, 7): ExtResource("2_3fj3a"),
+Vector2i(4, 2): ExtResource("2_3fj3a"),
+Vector2i(4, 4): ExtResource("2_3fj3a"),
+Vector2i(4, 5): ExtResource("2_3fj3a"),
+Vector2i(4, 7): ExtResource("2_3fj3a"),
+Vector2i(5, 3): ExtResource("2_3fj3a"),
+Vector2i(5, 4): ExtResource("2_3fj3a"),
+Vector2i(5, 6): ExtResource("2_3fj3a"),
+Vector2i(5, 7): ExtResource("2_3fj3a"),
+Vector2i(5, 8): ExtResource("2_3fj3a"),
+Vector2i(6, 2): ExtResource("2_3fj3a"),
+Vector2i(6, 3): ExtResource("2_3fj3a"),
+Vector2i(6, 4): ExtResource("2_3fj3a"),
+Vector2i(6, 5): ExtResource("2_3fj3a"),
+Vector2i(6, 7): ExtResource("2_3fj3a"),
+Vector2i(7, 2): ExtResource("2_3fj3a"),
+Vector2i(7, 3): ExtResource("2_3fj3a"),
+Vector2i(7, 4): ExtResource("2_3fj3a"),
+Vector2i(7, 6): ExtResource("2_3fj3a"),
+Vector2i(8, 5): ExtResource("2_3fj3a"),
+Vector2i(8, 6): ExtResource("2_3fj3a"),
+Vector2i(9, 2): ExtResource("2_3fj3a"),
+Vector2i(9, 3): ExtResource("2_3fj3a"),
+Vector2i(9, 4): ExtResource("2_3fj3a"),
+Vector2i(10, 5): ExtResource("2_3fj3a"),
+Vector2i(10, 7): ExtResource("2_3fj3a"),
+Vector2i(11, 1): ExtResource("2_3fj3a"),
+Vector2i(11, 2): ExtResource("2_3fj3a"),
+Vector2i(11, 3): ExtResource("2_3fj3a"),
+Vector2i(11, 5): ExtResource("2_3fj3a"),
+Vector2i(11, 6): ExtResource("2_3fj3a"),
+Vector2i(11, 7): ExtResource("2_3fj3a"),
+Vector2i(12, 2): ExtResource("2_3fj3a"),
+Vector2i(12, 5): ExtResource("2_3fj3a"),
+Vector2i(12, 8): ExtResource("2_3fj3a"),
+Vector2i(13, 3): ExtResource("2_3fj3a"),
+Vector2i(13, 4): ExtResource("2_3fj3a"),
+Vector2i(13, 7): ExtResource("2_3fj3a"),
+Vector2i(14, 2): ExtResource("2_3fj3a"),
+Vector2i(14, 4): ExtResource("2_3fj3a"),
+Vector2i(14, 6): ExtResource("2_3fj3a"),
+Vector2i(15, 1): ExtResource("2_3fj3a"),
+Vector2i(15, 3): ExtResource("2_3fj3a"),
+Vector2i(15, 5): ExtResource("2_3fj3a"),
+Vector2i(15, 7): ExtResource("2_3fj3a")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("3_67bif")]({
+Vector2i(8, 4): ExtResource("4_3vpep")
+})

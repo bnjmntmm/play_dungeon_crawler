@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_juuhi"]
+[ext_resource type="Resource" path="res://custom_data/calm_biscuit_60/animal/animal_calm_biscuit_60.tres" id="2_dgtu5"]
+[ext_resource type="Resource" path="res://custom_data/quiet_puddle_96/animal/animal_quiet_puddle_96.tres" id="3_miwi0"]
+[ext_resource type="Resource" path="res://custom_data/smooth_nugget_41/animal/animal_smooth_nugget_41.tres" id="4_2qq8c"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_fhnmb"]
+[ext_resource type="Resource" path="res://custom_data/noble_button_45/obstacle/obstacle_noble_button_45.tres" id="6_xhj32"]
+[ext_resource type="Resource" path="res://custom_data/witty_pebble_51/obstacle/obstacle_witty_pebble_51.tres" id="7_avby5"]
+[ext_resource type="Resource" path="res://custom_data/rapid_pickle_99/obstacle/obstacle_rapid_pickle_99.tres" id="8_0qimi"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="9_tfupv"]
+
+[resource]
+script = ExtResource("9_tfupv")
+uuid = "341379214819823187"
+display_name = "Timmdorf"
+tile_map_data = PackedByteArray("AAAEAAMAAAAAAAAAAQAMAAMAAAAAAAAAAQADAAcAAAAAAAAAAQAOAAcAAAAAAAAAAQAIAAUAAQAAAAAAAQADAAUAAQAAAAAAAQAEAAUAAQAAAAAAAQAFAAUAAQAAAAAAAQAMAAUAAQAAAAAAAQANAAUAAQAAAAAAAQAOAAUAAQAAAAAAAQAEAAQAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_juuhi")]({
+Vector2i(3, 7): ExtResource("3_miwi0"),
+Vector2i(4, 3): ExtResource("2_dgtu5"),
+Vector2i(12, 3): ExtResource("2_dgtu5"),
+Vector2i(14, 7): ExtResource("4_2qq8c")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_fhnmb")]({
+Vector2i(3, 5): ExtResource("7_avby5"),
+Vector2i(4, 4): ExtResource("8_0qimi"),
+Vector2i(4, 5): ExtResource("7_avby5"),
+Vector2i(5, 5): ExtResource("7_avby5"),
+Vector2i(8, 5): ExtResource("6_xhj32"),
+Vector2i(12, 5): ExtResource("7_avby5"),
+Vector2i(13, 5): ExtResource("7_avby5"),
+Vector2i(14, 5): ExtResource("7_avby5")
+})

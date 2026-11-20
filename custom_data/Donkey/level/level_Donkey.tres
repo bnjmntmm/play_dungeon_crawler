@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_vgalp"]
+[ext_resource type="Resource" path="res://custom_data/sleepy_rocket_12/animal/animal_sleepy_rocket_12.tres" id="2_xls3n"]
+[ext_resource type="Resource" path="res://custom_data/happy_tulip_60/animal/animal_happy_tulip_60.tres" id="3_0hk1a"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="4_6xg7r"]
+[ext_resource type="Resource" path="res://custom_data/tiny_puddle_25/obstacle/obstacle_tiny_puddle_25.tres" id="5_k3h18"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_32/obstacle/obstacle_giant_anchor_32.tres" id="6_8vb42"]
+[ext_resource type="Resource" path="res://custom_data/rapid_acorn_66/obstacle/obstacle_rapid_acorn_66.tres" id="7_vtsmq"]
+[ext_resource type="Resource" path="res://custom_data/noble_button_45/obstacle/obstacle_noble_button_45.tres" id="8_nf0u7"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_96/obstacle/obstacle_giant_anchor_96.tres" id="9_cv1qq"]
+[ext_resource type="Resource" path="res://custom_data/cozy_quill_37/obstacle/obstacle_cozy_quill_37.tres" id="10_xglcn"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="11_5oonf"]
+
+[resource]
+script = ExtResource("11_5oonf")
+uuid = "982447030114462525"
+display_name = "Donkey"
+tile_map_data = PackedByteArray("AAAIAAQAAAAAAAAAAQAJAAUAAAAAAAAAAQALAAQAAAAAAAAAAQAGAAUAAAAAAAAAAQABAAgAAAAAAAAAAQACAAgAAAAAAAAAAQADAAgAAAAAAAAAAQAPAAEAAAAAAAAAAQAOAAEAAAAAAAAAAQANAAEAAAAAAAAAAQAFAAEAAAAAAAAAAQALAAgAAAAAAAAAAQADAAYAAQAAAAAAAQAEAAYAAQAAAAAAAQANAAMAAQAAAAAAAQAOAAMAAQAAAAAAAQADAAIAAQAAAAAAAQAEAAIAAQAAAAAAAQAKAAQAAQAAAAAAAQAKAAUAAQAAAAAAAQAMAAcAAQAAAAAAAQANAAcAAQAAAAAAAQADAAEAAQAAAAAAAQAEAAEAAQAAAAAAAQAMAAgAAQAAAAAAAQANAAgAAQAAAAAAAQAHAAQAAQAAAAAAAQAHAAUAAQAAAAAAAQACAAEAAQAAAAAAAQAOAAgAAQAAAAAAAQAGAAgAAQAAAAAAAQAHAAcAAQAAAAAAAQAKAAEAAQAAAAAAAQAJAAIAAQAAAAAAAQADAAQAAQAAAAAAAQADAAUAAQAAAAAAAQAOAAUAAQAAAAAAAQAKAAgAAQAAAAAAAQAHAAEAAQAAAAAAAQABAAMAAQAAAAAAAQAQAAMAAQAAAAAAAQAQAAYAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_vgalp")]({
+Vector2i(1, 8): ExtResource("3_0hk1a"),
+Vector2i(2, 8): ExtResource("3_0hk1a"),
+Vector2i(3, 8): ExtResource("3_0hk1a"),
+Vector2i(5, 1): ExtResource("3_0hk1a"),
+Vector2i(6, 5): ExtResource("2_xls3n"),
+Vector2i(8, 4): ExtResource("2_xls3n"),
+Vector2i(9, 5): ExtResource("2_xls3n"),
+Vector2i(11, 4): ExtResource("2_xls3n"),
+Vector2i(11, 8): ExtResource("3_0hk1a"),
+Vector2i(13, 1): ExtResource("3_0hk1a"),
+Vector2i(14, 1): ExtResource("3_0hk1a"),
+Vector2i(15, 1): ExtResource("3_0hk1a")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("4_6xg7r")]({
+Vector2i(1, 3): ExtResource("10_xglcn"),
+Vector2i(2, 1): ExtResource("8_nf0u7"),
+Vector2i(3, 1): ExtResource("7_vtsmq"),
+Vector2i(3, 2): ExtResource("6_8vb42"),
+Vector2i(3, 4): ExtResource("9_cv1qq"),
+Vector2i(3, 5): ExtResource("9_cv1qq"),
+Vector2i(3, 6): ExtResource("5_k3h18"),
+Vector2i(4, 1): ExtResource("7_vtsmq"),
+Vector2i(4, 2): ExtResource("6_8vb42"),
+Vector2i(4, 6): ExtResource("5_k3h18"),
+Vector2i(6, 8): ExtResource("9_cv1qq"),
+Vector2i(7, 1): ExtResource("10_xglcn"),
+Vector2i(7, 4): ExtResource("6_8vb42"),
+Vector2i(7, 5): ExtResource("6_8vb42"),
+Vector2i(7, 7): ExtResource("9_cv1qq"),
+Vector2i(9, 2): ExtResource("9_cv1qq"),
+Vector2i(10, 1): ExtResource("9_cv1qq"),
+Vector2i(10, 4): ExtResource("6_8vb42"),
+Vector2i(10, 5): ExtResource("6_8vb42"),
+Vector2i(10, 8): ExtResource("10_xglcn"),
+Vector2i(12, 7): ExtResource("6_8vb42"),
+Vector2i(12, 8): ExtResource("7_vtsmq"),
+Vector2i(13, 3): ExtResource("5_k3h18"),
+Vector2i(13, 7): ExtResource("6_8vb42"),
+Vector2i(13, 8): ExtResource("7_vtsmq"),
+Vector2i(14, 3): ExtResource("5_k3h18"),
+Vector2i(14, 5): ExtResource("9_cv1qq"),
+Vector2i(14, 8): ExtResource("8_nf0u7"),
+Vector2i(16, 3): ExtResource("10_xglcn"),
+Vector2i(16, 6): ExtResource("10_xglcn")
+})
