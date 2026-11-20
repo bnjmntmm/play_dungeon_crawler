@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_qk0yb"]
+[ext_resource type="Resource" path="res://custom_data/proud_river_87/animal/animal_proud_river_87.tres" id="2_yc4p3"]
+[ext_resource type="Resource" path="res://custom_data/happy_river_96/animal/animal_happy_river_96.tres" id="3_sil56"]
+[ext_resource type="Resource" path="res://custom_data/gentle_thistle_19/animal/animal_gentle_thistle_19.tres" id="4_tvufg"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_inmft"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_96/obstacle/obstacle_giant_anchor_96.tres" id="6_xuhvn"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="7_uw10m"]
+
+[resource]
+script = ExtResource("7_uw10m")
+uuid = "1073090734536798539"
+display_name = "roter fuchs 76"
+tile_map_data = PackedByteArray("AAAEAAMAAAAAAAAAAQAFAAcAAAAAAAAAAQAKAAMAAAAAAAAAAQAOAAcAAAAAAAAAAQAHAAIAAQAAAAAAAQAHAAMAAQAAAAAAAQAHAAQAAQAAAAAAAQAHAAUAAQAAAAAAAQAKAAcAAQAAAAAAAQAKAAYAAQAAAAAAAQAKAAUAAQAAAAAAAQAKAAQAAQAAAAAAAQAHAAEAAQAAAAAAAQAKAAgAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_qk0yb")]({
+Vector2i(4, 3): ExtResource("2_yc4p3"),
+Vector2i(5, 7): ExtResource("3_sil56"),
+Vector2i(10, 3): ExtResource("4_tvufg"),
+Vector2i(14, 7): ExtResource("2_yc4p3")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_inmft")]({
+Vector2i(7, 1): ExtResource("6_xuhvn"),
+Vector2i(7, 2): ExtResource("6_xuhvn"),
+Vector2i(7, 3): ExtResource("6_xuhvn"),
+Vector2i(7, 4): ExtResource("6_xuhvn"),
+Vector2i(7, 5): ExtResource("6_xuhvn"),
+Vector2i(10, 4): ExtResource("6_xuhvn"),
+Vector2i(10, 5): ExtResource("6_xuhvn"),
+Vector2i(10, 6): ExtResource("6_xuhvn"),
+Vector2i(10, 7): ExtResource("6_xuhvn"),
+Vector2i(10, 8): ExtResource("6_xuhvn")
+})

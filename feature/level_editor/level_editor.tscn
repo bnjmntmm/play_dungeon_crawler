@@ -209,6 +209,48 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_try_hover")
 text = "Ausprobieren"
 icon = ExtResource("4_play")
 
+[node name="PaletteLoadingOverlay" type="Control" parent="." unique_id=1473898467]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="PaletteLoadingOverlay" unique_id=1556433065]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.19607843, 0.19607843, 0.19607843, 0.92156863)
+
+[node name="Badge" type="PanelContainer" parent="PaletteLoadingOverlay" unique_id=102165726]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -22.0
+offset_right = 120.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PaletteLoadingLabel" type="Label" parent="PaletteLoadingOverlay/Badge" unique_id=841941128]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Lädt Objekte …"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn/ToolRow/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Workspace/PanelContainer/PaletteColumn/EraserButton2" to="." method="_on_eraser_button_2_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/PanelContainer/Footer/IdentityBox/NewCodeButton" to="." method="_on_new_code_button_pressed"]

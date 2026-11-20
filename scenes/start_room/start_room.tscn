@@ -4,8 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://dad5rvg2vb10d" path="res://scenes/player/player.tscn" id="1_7m6vu"]
 [ext_resource type="TileSet" uid="uid://vdu1ji6k73dm" path="res://assets/resources/tile_sets/placeholder_tileset.tres" id="1_vd8nb"]
 [ext_resource type="PackedScene" uid="uid://db0lumpc20jpc" path="res://scenes/level_door/level_door.tscn" id="4_vd8nb"]
-[ext_resource type="PackedScene" uid="uid://cwsa6npfl25dv" path="res://scenes/level_gen/dynamic_level_complete.tscn" id="5_6jrso"]
-[ext_resource type="PackedScene" uid="uid://cusdp1hq5coda" path="res://scenes/gallery/gallery.tscn" id="6_k1xoi"]
 [ext_resource type="PackedScene" uid="uid://b5d5wutgrruw2" path="res://scenes/ui/scene_fader/scene_fader.tscn" id="7_6jrso"]
 [ext_resource type="Texture2D" uid="uid://dbw4rrh6uhu1k" path="res://assets/sprites/world_sprites/Spawn_Animal.png" id="7_e2b43"]
 [ext_resource type="PackedScene" uid="uid://brw30a03c54k3" path="res://scenes/tileset_placeables/animal_scene.tscn" id="8_k1xoi"]
@@ -115,13 +113,13 @@ shape = SubResource("RectangleShape2D_gupwr")
 [node name="LevelDoorUp" parent="." unique_id=120435420 instance=ExtResource("4_vd8nb")]
 position = Vector2(576, 32)
 is_teleport_door = true
-teleport_destination = ExtResource("5_6jrso")
+teleport_scene_path = "res://scenes/level_gen/dynamic_level_complete.tscn"
 
 [node name="LevelDoorDown" parent="." unique_id=821743303 instance=ExtResource("4_vd8nb")]
 position = Vector2(576, 608)
 rotation = 3.1415927
 is_teleport_door = true
-teleport_destination = ExtResource("6_k1xoi")
+teleport_scene_path = "res://scenes/gallery/gallery.tscn"
 
 [node name="Fences" type="Node2D" parent="." unique_id=362173895]
 

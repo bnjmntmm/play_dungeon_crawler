@@ -8,11 +8,6 @@ const CUSTOM_DATA_PATH: String = "res://custom_data"
 const PREVIEW_SCENE_PATH: String = "res://feature/level_editor/level_preview.tscn"
 signal saved(code: String)
 
-const CONFIG_EXTENSIONS: PackedStringArray = ["tres", "res"]
-
-## Folder name that holds obstacle PNGs, e.g. custom_data/<name>/obstacle/rock.png
-const OBSTACLE_FOLDER: String = "obstacle"
-
 ## Red, because the bright green zones looked like the place to put things.
 const SAFE_COLOR: Color = Color(0.95, 0.2, 0.15, 0.35)
 const HOVER_COLOR: Color = Color(1, 1, 1, 0.35)
@@ -30,6 +25,8 @@ const MAX_LISTED_MATCHES: int = 4
 @onready var room_root: Node2D = %RoomRoot
 @onready var kid_id_edit: LineEdit = %KidIdEdit
 @onready var status_label: Label = %StatusLabel
+@onready var palette_loading_label: Label = %PaletteLoadingLabel
+@onready var palette_loading_overlay: Control = %PaletteLoadingOverlay
 
 var draft: LevelDraft = LevelDraft.new()
 var selected_config: BaseConfig
@@ -51,7 +48,15 @@ var last_message: String = ""
 var last_message_time: int = 0
 var notify_layer: Control
 var _name_cleaner: RegEx
-var _reported_invalid: Dictionary[String, bool] = {}
+const PaletteLoadJob = preload("res://feature/level_editor/palette_load_job.gd")
+var _palette_job: RefCounted
+var _palette_cache: Dictionary = {}
+var _palette_buttons: Dictionary[String, Button] = {}
+var _palette_seen: Dictionary[String, bool] = {}
+var _palette_loaded: int = 0
+var _pending_palette_selection: String = ""
+var _palette_loading: bool = false
+var _palette_refresh_pending: bool = false
 
 ## Inside the Godot editor LevelEditorTool calls initialize(), so opening this scene stays harmless.
 func _ready() -> void:
@@ -59,6 +64,9 @@ func _ready() -> void:
 		initialize()
 
 func _exit_tree() -> void:
+	if _palette_job:
+		_palette_job.cancel()
+		_palette_job.wait()
 	_stop_preview()
 
 func initialize() -> void:
@@ -163,30 +171,104 @@ func _create_cell_rect(cell: Vector2i, color: Color) -> ColorRect:
 # ---------------------------------------------------------------------------
 
 func build_palette() -> void:
-	scan_new_obstacles()
-	for grid: GridContainer in [animal_grid, obstacle_grid]:
-		for button: Node in grid.get_children():
-			button.free()
-	for config: BaseConfig in _collect_configs(CUSTOM_DATA_PATH):
-		var is_animal: bool = config is AnimalConfig
-		var button: Button = Button.new()
+	if not is_visible_in_tree():
+		return
+	if _palette_loading:
+		_palette_refresh_pending = true
+		return
+	_palette_loading = true
+	_palette_loaded = 0
+	_palette_seen.clear()
+	palette_loading_label.text = "Lädt Objekte …"
+	palette_loading_overlay.show()
+	_palette_job = PaletteLoadJob.new()
+	_palette_job.start(CUSTOM_DATA_PATH, _palette_cache.duplicate(true))
+
+func _process(_delta: float) -> void:
+	if _palette_job == null:
+		return
+	var finished: bool = _palette_job.is_finished()
+	var entries: Array[Dictionary] = _palette_job.take_pending(2)
+	for entry: Dictionary in entries:
+		_palette_loaded += 1
+		var config: BaseConfig = entry.config
+		if config == null:
+			continue
+		if entry.has("image"):
+			config.sprite = ImageTexture.create_from_image(entry.image)
+		if entry.new_obstacle:
+			if not entry.has("image") or ResourceSaver.save(config, entry.path) != OK:
+				push_warning("Could not create obstacle: %s" % entry.path)
+				continue
+			config.take_over_path(entry.path)
+			entry.stamp = Vector2i(FileAccess.get_modified_time(entry.path), FileAccess.get_file_as_bytes(entry.path).size())
+		_palette_seen[entry.path] = true
+		# Keep only metadata/resources, not the decoded CPU image.
+		_palette_cache[entry.path] = {"stamp": entry.stamp, "png_stamp": entry.get("png_stamp"), "config": config}
+		_update_palette_button(entry.path, config)
+	var total: int = _palette_job.total()
+	if total > 0 or finished:
+		palette_loading_label.text = "Lädt %d/%d Objekte" % [_palette_loaded, total]
+	# Drain the queue before completing, including the worker's final batch.
+	if not finished or not entries.is_empty():
+		return
+	_palette_job.wait()
+	_palette_job = null
+	for path: String in _palette_buttons.keys():
+		if not _palette_seen.has(path):
+			_palette_buttons[path].free()
+			_palette_buttons.erase(path)
+			if selected_config and selected_config.resource_path == path:
+				_select_config(null)
+	for path: String in _palette_cache.keys():
+		if not _palette_seen.has(path):
+			_palette_cache.erase(path)
+	_palette_loading = false
+	palette_loading_overlay.hide()
+	if not _pending_palette_selection.is_empty() and is_visible_in_tree():
+		var path: String = _pending_palette_selection
+		_pending_palette_selection = ""
+		select_config_path(path)
+	if _palette_refresh_pending:
+		_palette_refresh_pending = false
+		build_palette()
+
+func _update_palette_button(path: String, config: BaseConfig) -> void:
+	var is_animal: bool = config is AnimalConfig
+	var grid: GridContainer = animal_grid if is_animal else obstacle_grid
+	var button: Button = _palette_buttons.get(path)
+	if button and button.get_parent() != grid:
+		button.free()
+		button = null
+	if button == null:
+		button = Button.new()
 		button.toggle_mode = true
 		button.button_group = palette_group
-		button.icon = config.sprite
 		button.expand_icon = true
 		button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		button.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 		button.custom_minimum_size = Vector2(120, 120)
-		button.text = _get_config_name(config)
 		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		button.tooltip_text = button.text
 		_style_palette_button(button, ANIMAL_COLOR if is_animal else OBSTACLE_COLOR)
-		button.set_meta("config_path", config.resource_path)
-		button.pressed.connect(_select_config.bind(config))
-		(animal_grid if is_animal else obstacle_grid).add_child(button)
-		if selected_config and selected_config.resource_path == config.resource_path:
-			button.button_pressed = true
-			selected_config = config
+		button.set_meta("config_path", path)
+		button.pressed.connect(_on_palette_button_pressed.bind(button))
+		grid.add_child(button)
+		_palette_buttons[path] = button
+	button.set_meta("config", config)
+	button.icon = config.sprite
+	button.text = _get_config_name(config)
+	button.tooltip_text = button.text
+	if selected_config and selected_config.resource_path == path:
+		button.button_pressed = true
+		selected_config = config
+	if _pending_palette_selection == path and is_visible_in_tree():
+		_pending_palette_selection = ""
+		button.button_pressed = true
+		_select_config(config)
+
+func _on_palette_button_pressed(button: Button) -> void:
+	_pending_palette_selection = ""
+	_select_config(button.get_meta("config") as BaseConfig)
 
 func _get_config_name(config: BaseConfig) -> String:
 	if config is AnimalConfig and not (config as AnimalConfig).display_name.is_empty():
@@ -212,75 +294,14 @@ func _style_palette_button(button: Button, color: Color) -> void:
 
 ## Selects a palette entry by file, e.g. the animal a kid just saved in the other tab.
 func select_config_path(path: String) -> void:
+	if not is_visible_in_tree() or _palette_loading:
+		_pending_palette_selection = path
+		return
 	for grid: GridContainer in [animal_grid, obstacle_grid]:
 		for button: Button in grid.get_children():
 			if button.get_meta("config_path") == path:
 				button.button_pressed = true
 				button.pressed.emit()
-
-## Creates a BaseConfig for every valid PNG in an obstacle folder that has none yet.
-## Returns how many were created, so a refresh button can report it later.
-func scan_new_obstacles() -> int:
-	var created: int = _scan_dir_for_obstacles(CUSTOM_DATA_PATH)
-	if created > 0 and Engine.is_editor_hint():
-		EditorInterface.get_resource_filesystem().scan()
-	return created
-
-func _scan_dir_for_obstacles(dir_path: String) -> int:
-	var created: int = 0
-	if dir_path.get_file() == OBSTACLE_FOLDER:
-		created += _create_missing_obstacles(dir_path)
-	for sub_dir: String in DirAccess.get_directories_at(dir_path):
-		if sub_dir != "level" and sub_dir != "animal":
-			created += _scan_dir_for_obstacles(dir_path.path_join(sub_dir))
-	return created
-
-func _create_missing_obstacles(dir_path: String) -> int:
-	# What already has a config here: by source_png, or by a .tres with the same file name as the PNG.
-	var known_pngs: Dictionary[String, bool] = {}
-	var known_names: Dictionary[String, bool] = {}
-	for file: String in DirAccess.get_files_at(dir_path):
-		if file.get_extension() not in CONFIG_EXTENSIONS:
-			continue
-		known_names[file.get_basename()] = true
-		var config: BaseConfig = ResourceLoader.load(dir_path.path_join(file), "", ResourceLoader.CACHE_MODE_IGNORE) as BaseConfig
-		if config and not config.source_png.is_empty():
-			known_pngs[config.source_png] = true
-
-	var created: int = 0
-	for file: String in DirAccess.get_files_at(dir_path):
-		if file.get_extension().to_lower() != "png":
-			continue
-		var png_path: String = dir_path.path_join(file)
-		if known_pngs.has(png_path) or known_names.has(file.get_basename()):
-			continue
-		var config: BaseConfig = BaseConfig.new()
-		config.uuid = str(ResourceUID.create_id())  # unused, just needs a value
-		config.source_png = png_path
-		if not config.refresh_sprite():
-			if not _reported_invalid.has(png_path):
-				_reported_invalid[png_path] = true
-				push_warning("Obstacle image could not be loaded: %s" % png_path)
-			continue
-		var config_path: String = dir_path.path_join(file.get_basename() + ".tres")
-		if ResourceSaver.save(config, config_path) != OK:
-			push_warning("Could not save obstacle config: %s" % config_path)
-			continue
-		created += 1
-	return created
-
-func _collect_configs(dir_path: String) -> Array[BaseConfig]:
-	var configs: Array[BaseConfig] = []
-	for sub_dir: String in DirAccess.get_directories_at(dir_path):
-		if sub_dir != "level":
-			configs.append_array(_collect_configs(dir_path.path_join(sub_dir)))
-	for file: String in DirAccess.get_files_at(dir_path):
-		if file.get_extension() in CONFIG_EXTENSIONS:
-			## REPLACE keeps placed configs valid while picking up changes from the animal tab.
-			var config: BaseConfig = ResourceLoader.load(dir_path.path_join(file), "", ResourceLoader.CACHE_MODE_REPLACE) as BaseConfig
-			if config:
-				configs.append(config)
-	return configs
 
 func _select_config(config: BaseConfig) -> void:
 	selected_config = config
@@ -528,7 +549,10 @@ func _write_preview_level() -> bool:
 ## The game runs as its own process, so the draft stays open here while a kid plays.
 func _start_preview() -> void:
 	_stop_preview()
-	var arguments: PackedStringArray = ["--path", ProjectSettings.globalize_path("res://"), PREVIEW_SCENE_PATH]
+	var arguments: PackedStringArray = [
+		"--path", ProjectSettings.globalize_path("res://"), PREVIEW_SCENE_PATH,
+		"--", "--level-editor-preview",
+	]
 	preview_pid = OS.create_process(OS.get_executable_path(), arguments)
 	if preview_pid == -1:
 		_set_status("Ausprobieren hat nicht geklappt. Sag dem Dev-Team Bescheid.")
@@ -642,6 +666,4 @@ func _notify(message: String) -> void:
 
 
 func _on_eraser_button_2_pressed() -> void:
-	var created: int = scan_new_obstacles()
 	build_palette()
-	_set_status("%d neue Hindernisse gefunden." % created)

@@ -1,8 +1,10 @@
 extends Node2D
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+# The random animals need the library before their own _ready callbacks run.
+func _enter_tree() -> void:
 	GameManager.reset_run()
+
+func _ready() -> void:
 	GameManager.force_fade(false)
 	if MusicManager.is_playing():
 		MusicManager.play_ambience()

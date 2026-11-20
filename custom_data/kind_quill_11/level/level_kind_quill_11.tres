@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_lm5w8"]
+[ext_resource type="Resource" path="res://custom_data/kind_quill_11/animal/animal_kind_quill_11.tres" id="2_5cbnx"]
+[ext_resource type="Resource" path="res://custom_data/zany_orchid_76/animal/animal_zany_orchid_76.tres" id="3_6jfn5"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="4_dpjrw"]
+[ext_resource type="Resource" path="res://custom_data/merry_lantern_14/obstacle/obstacle_merry_lantern_14.tres" id="5_gf62x"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="6_buqxe"]
+
+[resource]
+script = ExtResource("6_buqxe")
+uuid = "7500874008536213302"
+display_name = "kind quill 11"
+tile_map_data = PackedByteArray("AAAHAAQAAAAAAAAAAQADAAcAAAAAAAAAAQADAAIAAAAAAAAAAQALAAYAAAAAAAAAAQAEAAQAAQAAAAAAAQAOAAIAAQAAAAAAAQAOAAcAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_lm5w8")]({
+Vector2i(3, 2): ExtResource("3_6jfn5"),
+Vector2i(3, 7): ExtResource("3_6jfn5"),
+Vector2i(7, 4): ExtResource("2_5cbnx"),
+Vector2i(11, 6): ExtResource("2_5cbnx")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("4_dpjrw")]({
+Vector2i(4, 4): ExtResource("5_gf62x"),
+Vector2i(14, 2): ExtResource("5_gf62x"),
+Vector2i(14, 7): ExtResource("5_gf62x")
+})

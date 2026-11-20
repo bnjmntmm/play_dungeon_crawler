@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_wqnwl"]
+[ext_resource type="Resource" path="res://custom_data/tiny_rocket_91/animal/animal_tiny_rocket_91.tres" id="2_ag0qg"]
+[ext_resource type="Resource" path="res://custom_data/lazy_acorn_64/animal/animal_lazy_acorn_64.tres" id="3_ys0br"]
+[ext_resource type="Resource" path="res://custom_data/smooth_nugget_41/animal/animal_smooth_nugget_41.tres" id="4_i1id8"]
+[ext_resource type="Resource" path="res://custom_data/calm_clover_72/animal/animal_calm_clover_72.tres" id="5_0mu15"]
+[ext_resource type="Resource" path="res://custom_data/rapid_zephyr_52/animal/animal_rapid_zephyr_52.tres" id="6_jotrn"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="7_7jlaq"]
+[ext_resource type="Resource" path="res://custom_data/proud_jungle_54/obstacle/obstacle_proud_jungle_54.tres" id="8_gqmw2"]
+[ext_resource type="Resource" path="res://custom_data/cozy_quill_37/obstacle/obstacle_cozy_quill_37.tres" id="9_2v8tp"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="10_0nik2"]
+
+[resource]
+script = ExtResource("10_0nik2")
+uuid = "7286815607468966087"
+display_name = "Lorenzi"
+tile_map_data = PackedByteArray("AAALAAUAAAAAAAAAAQAEAAQAAAAAAAAAAQAKAAIAAAAAAAAAAQAHAAMAAAAAAAAAAQAGAAcAAAAAAAAAAQAHAAUAAQAAAAAAAQALAAMAAQAAAAAAAQADAAMAAQAAAAAAAQAMAAcAAQAAAAAAAQAEAAYAAQAAAAAAAQAOAAUAAQAAAAAAAQAFAAMAAQAAAAAAAQAJAAYAAQAAAAAAAQAOAAIAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_wqnwl")]({
+Vector2i(4, 4): ExtResource("3_ys0br"),
+Vector2i(6, 7): ExtResource("6_jotrn"),
+Vector2i(7, 3): ExtResource("5_0mu15"),
+Vector2i(10, 2): ExtResource("4_i1id8"),
+Vector2i(11, 5): ExtResource("2_ag0qg")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("7_7jlaq")]({
+Vector2i(3, 3): ExtResource("8_gqmw2"),
+Vector2i(4, 6): ExtResource("8_gqmw2"),
+Vector2i(5, 3): ExtResource("9_2v8tp"),
+Vector2i(7, 5): ExtResource("8_gqmw2"),
+Vector2i(9, 6): ExtResource("9_2v8tp"),
+Vector2i(11, 3): ExtResource("8_gqmw2"),
+Vector2i(12, 7): ExtResource("8_gqmw2"),
+Vector2i(14, 2): ExtResource("9_2v8tp"),
+Vector2i(14, 5): ExtResource("8_gqmw2")
+})

@@ -19,8 +19,17 @@ extends Resource
 func refresh_sprite() -> bool:
 	if source_png.is_empty():
 		return false
-	var img := Image.load_from_file(source_png)
-	if img == null or img.is_empty():
+	# The editor runtime can read the editable PNG directly. Export templates must
+	# load its imported Texture2D because source image files are not directly available.
+	if OS.has_feature("editor_runtime"):
+		var image := Image.load_from_file(source_png)
+		if image == null or image.is_empty():
+			return false
+		sprite = ImageTexture.create_from_image(image)
+		return true
+
+	var loaded_texture := load(source_png) as Texture2D
+	if loaded_texture == null:
 		return false
-	sprite = ImageTexture.create_from_image(img)
+	sprite = loaded_texture
 	return true

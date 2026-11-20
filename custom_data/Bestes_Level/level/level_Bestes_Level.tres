@@ -1,0 +1,61 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_ojguo"]
+[ext_resource type="Resource" path="res://custom_data/golden_quill_83/animal/animal_golden_quill_83.tres" id="2_patni"]
+[ext_resource type="Resource" path="res://custom_data/happy_river_96/animal/animal_happy_river_96.tres" id="3_oxjsk"]
+[ext_resource type="Resource" path="res://custom_data/golden_lantern_54/animal/animal_golden_lantern_54.tres" id="4_1qw5r"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="5_put17"]
+[ext_resource type="Resource" path="res://custom_data/lazy_cricket_15/obstacle/obstacle_lazy_cricket_15.tres" id="6_tvbvh"]
+[ext_resource type="Resource" path="res://custom_data/snowy_anchor_60/obstacle/obstacle_snowy_anchor_60.tres" id="7_i47i2"]
+[ext_resource type="Resource" path="res://custom_data/giant_anchor_96/obstacle/obstacle_giant_anchor_96.tres" id="8_wrh7g"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="9_3drdk"]
+
+[resource]
+script = ExtResource("9_3drdk")
+uuid = "5325139527225098451"
+display_name = "Bestes Level"
+tile_map_data = PackedByteArray("AAAJAAQAAAAAAAAAAQAIAAQAAAAAAAAAAQAJAAUAAAAAAAAAAQAIAAUAAAAAAAAAAQABAAEAAAAAAAAAAQABAAgAAAAAAAAAAQAQAAEAAAAAAAAAAQAQAAgAAAAAAAAAAQAIAAcAAQAAAAAAAQAJAAcAAQAAAAAAAQAHAAcAAQAAAAAAAQAGAAcAAQAAAAAAAQAKAAcAAQAAAAAAAQALAAcAAQAAAAAAAQAPAAMAAQAAAAAAAQAPAAQAAQAAAAAAAQAPAAYAAQAAAAAAAQAPAAUAAQAAAAAAAQAKAAIAAQAAAAAAAQAJAAIAAQAAAAAAAQAIAAIAAQAAAAAAAQAHAAIAAQAAAAAAAQACAAMAAQAAAAAAAQACAAQAAQAAAAAAAQACAAUAAQAAAAAAAQACAAYAAQAAAAAAAQADAAIAAQAAAAAAAQAFAAIAAQAAAAAAAQAGAAIAAQAAAAAAAQAOAAIAAQAAAAAAAQAMAAIAAQAAAAAAAQALAAIAAQAAAAAAAQAPAAIAAQAAAAAAAQACAAIAAQAAAAAAAQACAAcAAQAAAAAAAQADAAcAAQAAAAAAAQAFAAcAAQAAAAAAAQAMAAcAAQAAAAAAAQAOAAcAAQAAAAAAAQAPAAcAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_ojguo")]({
+Vector2i(1, 1): ExtResource("3_oxjsk"),
+Vector2i(1, 8): ExtResource("3_oxjsk"),
+Vector2i(8, 4): ExtResource("2_patni"),
+Vector2i(8, 5): ExtResource("2_patni"),
+Vector2i(9, 4): ExtResource("2_patni"),
+Vector2i(9, 5): ExtResource("2_patni"),
+Vector2i(16, 1): ExtResource("4_1qw5r"),
+Vector2i(16, 8): ExtResource("4_1qw5r")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("5_put17")]({
+Vector2i(2, 2): ExtResource("8_wrh7g"),
+Vector2i(2, 3): ExtResource("7_i47i2"),
+Vector2i(2, 4): ExtResource("7_i47i2"),
+Vector2i(2, 5): ExtResource("7_i47i2"),
+Vector2i(2, 6): ExtResource("7_i47i2"),
+Vector2i(2, 7): ExtResource("8_wrh7g"),
+Vector2i(3, 2): ExtResource("8_wrh7g"),
+Vector2i(3, 7): ExtResource("8_wrh7g"),
+Vector2i(5, 2): ExtResource("8_wrh7g"),
+Vector2i(5, 7): ExtResource("8_wrh7g"),
+Vector2i(6, 2): ExtResource("8_wrh7g"),
+Vector2i(6, 7): ExtResource("6_tvbvh"),
+Vector2i(7, 2): ExtResource("6_tvbvh"),
+Vector2i(7, 7): ExtResource("6_tvbvh"),
+Vector2i(8, 2): ExtResource("6_tvbvh"),
+Vector2i(8, 7): ExtResource("6_tvbvh"),
+Vector2i(9, 2): ExtResource("6_tvbvh"),
+Vector2i(9, 7): ExtResource("6_tvbvh"),
+Vector2i(10, 2): ExtResource("6_tvbvh"),
+Vector2i(10, 7): ExtResource("6_tvbvh"),
+Vector2i(11, 2): ExtResource("8_wrh7g"),
+Vector2i(11, 7): ExtResource("6_tvbvh"),
+Vector2i(12, 2): ExtResource("8_wrh7g"),
+Vector2i(12, 7): ExtResource("8_wrh7g"),
+Vector2i(14, 2): ExtResource("8_wrh7g"),
+Vector2i(14, 7): ExtResource("8_wrh7g"),
+Vector2i(15, 2): ExtResource("8_wrh7g"),
+Vector2i(15, 3): ExtResource("6_tvbvh"),
+Vector2i(15, 4): ExtResource("6_tvbvh"),
+Vector2i(15, 5): ExtResource("6_tvbvh"),
+Vector2i(15, 6): ExtResource("6_tvbvh"),
+Vector2i(15, 7): ExtResource("8_wrh7g")
+})

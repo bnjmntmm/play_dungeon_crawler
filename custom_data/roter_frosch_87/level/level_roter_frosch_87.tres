@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="LevelConfig" format=4]
+
+[ext_resource type="Script" path="res://assets/scripts/config/AnimalConfig.gd" id="1_3lbut"]
+[ext_resource type="Resource" path="res://custom_data/eager_zephyr_32/animal/animal_eager_zephyr_32.tres" id="2_e87eu"]
+[ext_resource type="Resource" path="res://custom_data/lucky_pretzel_82/animal/animal_lucky_pretzel_82.tres" id="3_no4jh"]
+[ext_resource type="Resource" path="res://custom_data/tiny_tulip_53/animal/animal_tiny_tulip_53.tres" id="4_cw503"]
+[ext_resource type="Resource" path="res://custom_data/speedy_harbor_96/animal/animal_speedy_harbor_96.tres" id="5_36h0r"]
+[ext_resource type="Script" path="res://assets/scripts/config/BaseConfig.gd" id="6_i2rls"]
+[ext_resource type="Resource" path="res://custom_data/proud_jungle_54/obstacle/obstacle_proud_jungle_54.tres" id="7_uvmk4"]
+[ext_resource type="Script" path="res://assets/scripts/config/LevelConfig.gd" id="8_dpewv"]
+
+[resource]
+script = ExtResource("8_dpewv")
+uuid = "4184294487576208866"
+display_name = "roter frosch 87"
+tile_map_data = PackedByteArray("AAAGAAMAAAAAAAAAAQAMAAYAAAAAAAAAAQADAAcAAAAAAAAAAQAEAAUAAAAAAAAAAQAMAAIAAAAAAAAAAQAIAAQAAAAAAAAAAQAGAAgAAQAAAAAAAQAFAAgAAQAAAAAAAQAEAAgAAQAAAAAAAQAMAAgAAQAAAAAAAQANAAgAAQAAAAAAAQAOAAgAAQAAAAAAAQAOAAIAAQAAAAAAAQADAAIAAQAAAAAAAQAGAAQAAQAAAAAAAQAMAAUAAQAAAAAAAQA=")
+animal_resource_data = Dictionary[Vector2i, ExtResource("1_3lbut")]({
+Vector2i(3, 7): ExtResource("4_cw503"),
+Vector2i(4, 5): ExtResource("4_cw503"),
+Vector2i(6, 3): ExtResource("2_e87eu"),
+Vector2i(8, 4): ExtResource("5_36h0r"),
+Vector2i(12, 2): ExtResource("4_cw503"),
+Vector2i(12, 6): ExtResource("3_no4jh")
+})
+obstacle_resource_data = Dictionary[Vector2i, ExtResource("6_i2rls")]({
+Vector2i(3, 2): ExtResource("7_uvmk4"),
+Vector2i(4, 8): ExtResource("7_uvmk4"),
+Vector2i(5, 8): ExtResource("7_uvmk4"),
+Vector2i(6, 4): ExtResource("7_uvmk4"),
+Vector2i(6, 8): ExtResource("7_uvmk4"),
+Vector2i(12, 5): ExtResource("7_uvmk4"),
+Vector2i(12, 8): ExtResource("7_uvmk4"),
+Vector2i(13, 8): ExtResource("7_uvmk4"),
+Vector2i(14, 2): ExtResource("7_uvmk4"),
+Vector2i(14, 8): ExtResource("7_uvmk4")
+})
